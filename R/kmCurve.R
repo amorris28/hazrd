@@ -7,7 +7,8 @@
 #' @param inverse Boolean indicating whether to inverse (x * -1) the PHS scores to reverse the direction of effect.
 #' @param ideal Boolean indicating whether to add the idealized survival curve.
 #' @importFrom readr read_tsv
-#' @importFrom survival coxph Surv
+#' @importFrom tidyr pivot_longer
+#' @importFrom survival coxph Surv survfit
 #' @import dplyr
 #' @import ggplot2
 #' @import tibble

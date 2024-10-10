@@ -16,7 +16,7 @@ phsHist <- function(model_file, metadata_file, inverse) {
 
   metadata <- read_tsv(metadata_file) # Phenotype data
 
-  inverse <- as.logical(args[3])
+  inverse <- as.logical(inverse)
   #########################################
   # Import PHS data
 
