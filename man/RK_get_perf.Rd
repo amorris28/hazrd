@@ -4,7 +4,16 @@
 \alias{RK_get_perf}
 \title{Performance Metrics for Polygenic Hazard Score}
 \usage{
-RK_get_perf(lp, Age, status, ref = NULL, swc_switch = TRUE, swc_caco = NULL)
+RK_get_perf(
+  lp,
+  Age,
+  status,
+  ref = NULL,
+  swc_switch = TRUE,
+  swc_caco = NULL,
+  swc_popnumcases = NULL,
+  swc_popnumcontrols = NULL
+)
 }
 \arguments{
 \item{lp}{Linear predictor}
@@ -18,6 +27,10 @@ RK_get_perf(lp, Age, status, ref = NULL, swc_switch = TRUE, swc_caco = NULL)
 \item{swc_switch}{Boolean to enable weighting}
 
 \item{swc_caco}{Vector indicating case control status (optional)}
+
+\item{swc_popnumcases}{Number of cases (optional)}
+
+\item{swc_popnumcontrols}{Number of controls (optional)}
 }
 \value{
 A list of performance metrics

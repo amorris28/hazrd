@@ -6,11 +6,13 @@
 #' @param ref Reference values (optional)
 #' @param swc_switch Boolean to enable weighting
 #' @param swc_caco Vector indicating case control status (optional)
+#' @param swc_popnumcases Number of cases (optional)
+#' @param swc_popnumcontrols Number of controls (optional)
 #' @return A list of performance metrics
 #' @examples
 #' perf_metrics <- RK_get_perf(lp, Age, status)
 #' @export
-RK_get_perf <- function(lp, Age, status, ref = NULL, swc_switch = TRUE, swc_caco = NULL) {
+RK_get_perf <- function(lp, Age, status, ref = NULL, swc_switch = TRUE, swc_caco = NULL, swc_popnumcases = NULL, swc_popnumcontrols = NULL) {
   if (is.null(swc_caco)) {
     swc_caco <- status
   }
@@ -30,8 +32,6 @@ RK_get_perf <- function(lp, Age, status, ref = NULL, swc_switch = TRUE, swc_caco
   swc_numcases <- sum(swc_caco == 1)
   swc_numcontrols <- sum(swc_caco == 0)
   
-  swc_popnumcases <- 9024
-  swc_popnumcontrols <- 1953203
   swc_wvec <- swc_caco * (swc_popnumcases / swc_numcases) + (!swc_caco) * (swc_popnumcontrols / swc_numcontrols)
   
   tmp_df <- data.frame(Age = Age, status = status, lp = lp, wvec = swc_wvec)
