@@ -59,6 +59,7 @@ RK_get_perf <- function(lp, Age, status, ref = NULL, swc_switch = TRUE, swc_caco
   
   names(hr_list) <- hr_names
   perf_list <- c(perf_list, hr_list)
+  perf_list <- stack(perf_list)[, c(2, 1)]
   
   return(perf_list)
 }
