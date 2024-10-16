@@ -8,6 +8,7 @@ get_hr(
   phs,
   age,
   status,
+  data = NULL,
   upper_quantile = 0.8,
   lower_quantile = 0.2,
   swc = FALSE,
@@ -16,21 +17,23 @@ get_hr(
 )
 }
 \arguments{
-\item{phs}{Polygenic hazard score vector}
+\item{phs}{a vector of polygenic hazard scores for subjects or a string specifying the column name in \code{data} containing these values}
 
-\item{age}{Age vector}
+\item{age}{a vector of age of either an event (e.g., diagnosis) in cases or of censoring (e.g., last observation) in controls or a string specifying the column name in \code{data} containing these values}
 
-\item{status}{Status vector (0 = censored, 1 = event)}
+\item{status}{a vector of case-control status (0 = censored, 1 = event) or a string specifying the column name in \code{data} containing these values}
 
-\item{upper_quantile}{Status vector (0 = censored, 1 = event)}
+\item{data}{an optional data.frame containing the variables phs, age, and status}
 
-\item{lower_quantile}{Status vector (0 = censored, 1 = event)}
+\item{upper_quantile}{an optional vector specifying the upper quantile of the hazard ratio. The default is \code{0.80}.}
 
-\item{swc}{Boolean to enable sample weight correction}
+\item{lower_quantile}{an optional vector specifying the lower quantile of the hazard ratio. The default is \code{0.20}.}
 
-\item{swc_popnumcases}{Number of cases in reference population for sample weight correction. Required if swc = \code{TRUE}.}
+\item{swc}{logical. if \code{TRUE} performs sample weight correction}
 
-\item{swc_popnumcontrols}{Number of controls in reference population for sample weight correction. Required if swc = \code{TRUE}.}
+\item{swc_popnumcases}{an optional integer specifying the number of cases in a reference population for sample weight correction. Required if swc = \code{TRUE}.}
+
+\item{swc_popnumcontrols}{an optional integer specifying the number of controls in a reference population for sample weight correction. Required if swc = \code{TRUE}.}
 }
 \value{
 A numeric hazard ratio
