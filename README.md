@@ -39,7 +39,7 @@ First, navigate to where you want to create the R package project directory. Ope
 usethis::create_package("my_package")
 ```
 
-Next, navigate to your package directory (`cd my_package`) and develop your package by adding code to the `R/` directory. Here is a simple example of how to structure an `.R` script within the `R/` directory.
+Next, navigate to your package directory (`cd my_package`) and develop your package by adding code to the `R/` directory. Here is a simple example of how to structure an `.R` script within the `R/` directory called `my_function.R`.
 
 ``` r
 #' This is the Title of the Help Page for my_function
@@ -57,7 +57,7 @@ my_function <- function(x, y) {
 }
 ```
 
-Once you have created some files in the `R/` directory, you can automatically generate documentation using either `roxygen2::roxygenise` or `devtools::document`. `document` is generally better to use and actually calls `roxygenise` as part of its testing. You can either call it without any arguments from the root directory of your R package or you can specify the path to the package as the first argument.
+Once you have created some files in the `R/` directory, you can automatically generate documentation using either `roxygen2::roxygenise` or `devtools::document`. `document` is generally preferred and actually calls `roxygenise` as part of its testing. You can either call it without any arguments from the root directory of your R package or you can specify the path to the package as the first argument.
 
 ``` r
 devtools::document("path_to_your_package")
