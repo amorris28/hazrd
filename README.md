@@ -11,6 +11,36 @@ You can install the development version of hazRd from [GitHub](https://github.co
 devtools::install_github("amorris28/hazRd")
 ```
 
+## Getting Started
+
+First, generate some test data.
+
+``` r
+library(tidyverse)
+library(hazRd)
+
+n = 1000
+status = rbinom(n, 1 ,0.2)
+
+test_data = tibble(id = as.factor(seq_len(n)),
+                  phs  = rnorm(n) + (1 * status),
+                  status = as.factor(status),
+                  Age = sample(60:100, n, replace = TRUE))
+
+```
+
+Next, plot the histogram of PHSes by case/control status.
+
+``` r
+
+ggplot(test_data, aes(phs, after_stat(density), fill = status)) +
+    geom_histogram(binwidth = 0.5, alpha = 0.8, position = "identity") +
+    scale_fill_manual(values = c("#132B43", "#56B1F7"), name = "Status") +
+    theme_minimal() +
+    labs(x = "PHS", y = "Density")
+
+```
+
 ## Example
 
 This is a basic example of some of the main functions:
