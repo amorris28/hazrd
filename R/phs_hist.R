@@ -24,7 +24,7 @@ phs_hist <- function(df, normalize = FALSE, scale = FALSE, inverse = FALSE) {
         theme_minimal() +
         labs(x = "PHS", y = "Density")
 } else {
-    phs_hist ggplot(df, aes(phs, fill = status)) +
+    phs_hist = ggplot(df, aes(phs, fill = status)) +
         geom_histogram(binwidth = 0.5, alpha = 0.8, position = "identity") +
         scale_fill_manual(values = c("#132B43", "#56B1F7"), name = "Status") +
         theme_minimal() +
