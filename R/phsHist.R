@@ -1,39 +1,35 @@
 #' Plot Histogram of Cases and Control by PHS
 #'
-#' This function takes PHS scores and case/control status and plots a histogram..
+#' This function takes PHS scores and case/control status and plots a histogram.
 #'
-#' @param model_file Path to the PHS file (tab delimited, no header, first column ID, second column PHS score)
-#' @param metadata_file Path to the metadata file (tab delimited with column names bfile_id, age, status)
-#' @param inverse Boolean indicating whether to inverse (x * -1) the PHS scores to reverse the direction of effect.
-#' @importFrom readr read_tsv
+#' @param df Data.frame or tibble containing a column for `phs` and a column for `status`. All other columns ignored.
+#' @param normalize Boolean indicating whether to normalize the histogram to area = 1. This is replaces the y axis with denisty instead of count. Helpful to compare distributions with very different counts. Default = `FALSE`.
+#' @param scale Boolean indicating whether to center and scale the PHS scores to unit variance. Default = `FALSE`.
+#' @param inverse Boolean indicating whether to inverse (x * -1) the PHS scores to reverse the direction of effect. Default = `FALSE`.
 #' @import ggplot2
 #' @return A ggplot object
 #' @examples
-#' phs_hist <- phsHist(model_file, metadata_file, inverse)
+#' phs_hist <- phs_hist(df)
 #' @export
-phsHist <- function(model_file, metadata_file, inverse) {
-  model <- basename(model_file) # filename for output
+phs_hist <- function(df, normalize = FALSE, scale = FALSE, inverse = FALSE) {
 
-  metadata <- read_tsv(metadata_file) # Phenotype data
+  if (scale) { df$phs <- scale(df$phs, center = TRUE, scale = TRUE) }
 
-  inverse <- as.logical(inverse)
-  #########################################
-  # Import PHS data
+  if (inverse) { df$phs <- df$phs * -1 }
 
-  phs <- read_tsv(model_file, col_names = c("bfile_id", "phs"))
-
-  phs$phs <- scale(phs$phs, center = TRUE, scale = TRUE)
-
-  if (inverse) { phs$phs <- phs$phs * -1 }
-
-  combined_data <- metadata %>%
-    left_join(phs, by = "bfile_id") %>%
-    filter(!(is.na(phs)))
-
-  phs_hist <- ggplot(combined_data, aes(x = phs, group = status, fill = as.character(status))) +
-    geom_histogram() +
-    scale_fill_manual(values = c("#132B43", "#56B1F7")) +
-    theme_minimal()
+  if (normalize) {
+    phs_hist = ggplot(df, aes(phs, after_stat(density), fill = status)) +
+        geom_histogram(binwidth = 0.5, alpha = 0.8, position = "identity") +
+      scale_fill_manual(values = c("#132B43", "#56B1F7"), name = "Status") +
+        theme_minimal() +
+        labs(x = "PHS", y = "Density")
+} else {
+    phs_hist ggplot(df, aes(phs, fill = status)) +
+        geom_histogram(binwidth = 0.5, alpha = 0.8, position = "identity") +
+        scale_fill_manual(values = c("#132B43", "#56B1F7"), name = "Status") +
+        theme_minimal() +
+        labs(x = "PHS", y = "Count")
+}
 
   return(phs_hist)
 }
