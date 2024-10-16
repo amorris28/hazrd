@@ -19,19 +19,18 @@ get_hr <- function(phs, age, status, upper_quantile = 0.80, lower_quantile = 0.2
     if (is.null(swc_popnumcases) || is.null(swc_popnumcontrols)) {
      stop("Sample weight correction requires 'swc_popnumcases' and 'swc_popnumcontrols'.")
     }
+    swc_numcases <- sum(status == 1)
+    swc_numcontrols <- sum(status == 0)
+  
+    swc_wvec <- status * (swc_popnumcases / swc_numcases) + (!status) * (swc_popnumcontrols / swc_numcontrols)
   }
 
   num_critvals <- c(quantile(phs, upper_quantile), Inf)
   den_critvals <- c(-Inf, quantile(phs, lower_quantile))
   
-  swc_numcases <- sum(status == 1)
-  swc_numcontrols <- sum(status == 0)
-  
-  swc_wvec <- status * (swc_popnumcases / swc_numcases) + (!status) * (swc_popnumcontrols / swc_numcontrols)
-  
   tmp_df <- data.frame(age = age, status = status, phs = phs, wvec = swc_wvec)
   
-  if (swc_switch == TRUE) {
+  if (swc) {
     cxph <- coxph(Surv(Age, status) ~ phs, data = tmp_df, weights = swc_wvec)
   } else {
     cxph <- coxph(Surv(Age, status) ~ phs, data = tmp_df)
