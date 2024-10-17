@@ -1,45 +1,73 @@
+hazRd
+================
 
-# hazRd
-
-The goal of hazRd is to simplify and standardize the development and testing of polygenic hazard score models.
+The goal of hazRd is to simplify and standardize the development and
+testing of polygenic hazard score models.
 
 ## Installation
 
-You can install the development version of hazRd from [GitHub](https://github.com/) with:
+You can install the development version of hazRd from
+[GitHub](https://github.com/) with:
 
 ``` r
 devtools::install_github("amorris28/hazRd")
 ```
 
-## Example
+## Getting Started
 
-This is a basic example of some of the main functions:
+First, generate some test data.
 
 ``` r
 library(hazRd)
-## Plot a histogram of case and controls by PHS score
-phs_hist <- phsHist(model_file, metadata_file, inverse = TRUE)
-## Plot a Kaplain-Meier curve
-km_curve <- kmCurve(model_file, metadata_file, inverse = TRUE, ideal = FALSE)
-## Get standard performance metrics (such as concordance index and hazard ratio)
-perf_metrics <- RK_get_perf(lp, Age, status)
+
+n = 1000
+status = rbinom(n, 1, 0.2)
+
+test_data = data.frame(id = as.factor(seq_len(n)),
+                  phs  = rnorm(n) + (1 * status),
+                  status = status,
+                  age = sample(60:100, n, replace = TRUE))
 ```
+
+Next, plot the histogram of PHSes by case/control status.
+
+``` r
+phs_hist(test_data, normalize = TRUE)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+Finally, calculate the hazard ratio comparing the mean of the top 20% of
+PHSes to the mean of the bottom 20% (i.e., `HR80_20`).
+
+``` r
+get_hr("phs", "age", "status", data = test_data)
+```
+
+    ## [1] 9.88826
 
 ## Developer Instructions
 
-These are general instructions for how to create and document an R package.
+These are general instructions for how to create and document an R
+package.
 
 ``` r
 install.packages(c("usethis", "devtools", "roxygen2"))
 ```
 
-First, navigate to where you want to create the R package project directory. Open up an `R` console and run the `create_package` command. The first argument will be the name of the package and the name of the directory that is created within your current working directory.
+First, navigate to where you want to create the R package project
+directory. Open up an `R` console and run the `create_package` command.
+The first argument will be the name of the package and the name of the
+directory that is created within your current working directory.
 
 ``` r
 usethis::create_package("my_package")
 ```
 
-Next, navigate to your package directory (`cd my_package`) and develop your package by adding code to the `R/` directory. Here is a simple example of how to structure an `.R` script within the `R/` directory called `my_function.R`.
+Next, navigate to your package directory (`cd my_package`) and develop
+your package by adding code to the `R/` directory. Here is a simple
+example of how to structure an `.R` script within the `R/` directory
+called `my_function.R`.
 
 ``` r
 #' This is the Title of the Help Page for my_function
@@ -57,7 +85,12 @@ my_function <- function(x, y) {
 }
 ```
 
-Once you have created some files in the `R/` directory, you can automatically generate documentation using either `roxygen2::roxygenise` or `devtools::document`. `document` is generally preferred and actually calls `roxygenise` as part of its testing. You can either call it without any arguments from the root directory of your R package or you can specify the path to the package as the first argument.
+Once you have created some files in the `R/` directory, you can
+automatically generate documentation using either `roxygen2::roxygenise`
+or `devtools::document`. `document` is generally preferred and actually
+calls `roxygenise` as part of its testing. You can either call it
+without any arguments from the root directory of your R package or you
+can specify the path to the package as the first argument.
 
 ``` r
 devtools::document("path_to_your_package")

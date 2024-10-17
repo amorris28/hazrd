@@ -18,7 +18,7 @@ phs_hist <- function(df, normalize = FALSE, scale = FALSE, inverse = FALSE) {
   if (inverse) { df$phs <- df$phs * -1 }
 
   if (normalize) {
-    phs_hist = ggplot(df, aes(phs, after_stat(density), fill = status)) +
+    phs_hist = ggplot(df, aes(phs, after_stat(density), fill = as.factor(status))) +
         geom_histogram(binwidth = 0.5, alpha = 0.8, position = "identity") +
       scale_fill_manual(values = c("#132B43", "#56B1F7"), name = "Status") +
         theme_minimal() +
