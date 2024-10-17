@@ -47,7 +47,7 @@ Next, navigate to your package directory (`cd my_package`) and develop your pack
 #' This is a description of what this function does.
 #'
 #' @param x Description of what the "x" parameter expects, default value, whether it is optional
-#' @param y Description of what the "y" parameter expects, etc. (optional)
+#' @param y Description of what the "y" parameter expects, etc.
 #' @return Description of what this function returns
 #' @examples
 #' my_results <- my_function(x = 1, y = 2)
