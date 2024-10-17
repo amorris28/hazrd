@@ -38,13 +38,13 @@ phs_hist(test_data, normalize = TRUE)
 ![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 Finally, calculate the hazard ratio comparing the mean of the top 20% of
-PHSes to the mean of the bottom 20% (i.e., the $HR_{80_20}$).
+PHSes to the mean of the bottom 20% (i.e., `HR80_20`).
 
 ``` r
 get_hr("phs", "age", "status", data = test_data)
 ```
 
-    ## [1] 4.378955
+    ## [1] 7.926481
 
 ## Example
 
