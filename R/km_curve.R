@@ -14,9 +14,9 @@
 #' @import tibble
 #' @return A ggplot2 plot of a K-M curve
 #' @examples
-#' km_curve <- kmCurve(model_file, metadata_file, inverse = TRUE, ideal = FALSE)
+#' km_curve <- km_curve(model_file, metadata_file, inverse = TRUE, ideal = FALSE)
 #' @export
-kmCurve <- function(model_file, metadata_file, inverse = FALSE, ideal = FALSE) {
+km_curve <- function(model_file, metadata_file, inverse = FALSE, ideal = FALSE) {
   
   model <- basename(model_file) # filename for output
   metadata <- read_tsv(metadata_file) # Phenotype data

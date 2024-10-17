@@ -5,9 +5,9 @@
 #' @param Xvars Matrix of predictors
 #' @return Vector of coefficients from the lasso-regularized Cox regression model
 #' @examples
-#' beta <- RK_get_regPHS(Age, status, Xvars)
+#' beta <- reg_phs(Age, status, Xvars)
 #' @export
-RK_get_regPHS <- function(Age, status, Xvars) {
+reg_phs <- function(Age, status, Xvars) {
   require(survival)
   require(glmnet)
   
