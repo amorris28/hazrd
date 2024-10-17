@@ -1,7 +1,7 @@
 #' Return hazard ratio for Polygenic Hazard Score
 #'
 #' @param phs a vector of polygenic hazard scores for subjects or a string specifying the column name in `data` containing these values
-#' @param age a vector of age of either an event (e.g., diagnosis) in cases or of censoring (e.g., last observation) in controls or a string specifying the column name in `data` containing these values
+#' @param age a vector of ages or a string specifying the column name in `data` containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation).
 #' @param status a vector of case-control status (0 = censored, 1 = event) or a string specifying the column name in `data` containing these values
 #' @param data an optional data.frame containing the variables phs, age, and status
 #' @param upper_quantile an optional vector specifying the upper quantile of the hazard ratio. The default is `0.80`.
@@ -14,8 +14,15 @@
 #' @examples
 #' HR80_20 <- get_hr(phs, age, status)
 #' @export
-get_hr <- function(phs, age, status, data = NULL, upper_quantile = 0.80, lower_quantile = 0.20, swc = FALSE, swc_popnumcases = NULL, swc_popnumcontrols = NULL) {  
-
+get_hr <- function(phs, 
+                   age, 
+                   status, 
+                   data = NULL, 
+                   upper_quantile = 0.80, 
+                   lower_quantile = 0.20, 
+                   swc = FALSE, 
+                   swc_popnumcases = NULL, 
+                   swc_popnumcontrols = NULL) {  
 
   if (is.character(phs)) {
     phs = data[[phs]]
@@ -37,9 +44,22 @@ get_hr <- function(phs, age, status, data = NULL, upper_quantile = 0.80, lower_q
     swc_wvec <- status * (swc_popnumcases / swc_numcases) + (!status) * (swc_popnumcontrols / swc_numcontrols)
   }
 
-  num_critvals <- c(quantile(phs, upper_quantile), Inf)
-  den_critvals <- c(-Inf, quantile(phs, lower_quantile))
-  
+  if (length(upper_quantile) == 1) {
+    num_critvals <- c(quantile(phs, upper_quantile), Inf)
+  } else if (length(upper_quantile) == 2) {
+    num_critvals <- c(quantile(phs, upper_quantile[1]), quantile(phs, upper_quantile[2]))
+  } else {
+    stop("'upper_quantile' must be length 1 or 2")
+  }
+
+  if (length(lower_quantile) == 1) {
+    den_critvals <- c(-Inf, quantile(phs, lower_quantile))
+  } else if (length(lower_quantile) == 2) {
+    den_critvals <- c(quantile(phs, lower_quantile[1]), quantile(phs, lower_quantile[2]))
+  } else {
+    stop("'lower_quantile' must be length 1 or 2")
+  }
+
   tmp_df <- data.frame(age = age, status = status, phs = phs)
   
   if (swc) {

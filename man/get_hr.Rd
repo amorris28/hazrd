@@ -19,7 +19,7 @@ get_hr(
 \arguments{
 \item{phs}{a vector of polygenic hazard scores for subjects or a string specifying the column name in \code{data} containing these values}
 
-\item{age}{a vector of age of either an event (e.g., diagnosis) in cases or of censoring (e.g., last observation) in controls or a string specifying the column name in \code{data} containing these values}
+\item{age}{a vector of ages or a string specifying the column name in \code{data} containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation).}
 
 \item{status}{a vector of case-control status (0 = censored, 1 = event) or a string specifying the column name in \code{data} containing these values}
 
