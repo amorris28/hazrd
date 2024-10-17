@@ -44,21 +44,7 @@ PHSes to the mean of the bottom 20% (i.e., `HR80_20`).
 get_hr("phs", "age", "status", data = test_data)
 ```
 
-    ## [1] 7.926481
-
-## Example
-
-This is a basic example of some of the main functions:
-
-``` r
-library(hazRd)
-## Plot a histogram of case and controls by PHS score
-phs_hist <- phsHist(model_file, metadata_file, inverse = TRUE)
-## Plot a Kaplain-Meier curve
-km_curve <- kmCurve(model_file, metadata_file, inverse = TRUE, ideal = FALSE)
-## Get standard performance metrics (such as concordance index and hazard ratio)
-perf_metrics <- RK_get_perf(lp, Age, status)
-```
+    ## [1] 9.88826
 
 ## Developer Instructions
 
