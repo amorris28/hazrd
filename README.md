@@ -24,9 +24,9 @@ n = 1000
 status = rbinom(n, 1, 0.2)
 
 test_data = data.frame(id = as.factor(seq_len(n)),
-                  phs  = rnorm(n) + (1 * status),
-                  status = status,
-                  age = sample(60:100, n, replace = TRUE))
+                       phs  = rnorm(n) + (1 * status),
+                       status = status,
+                       age = sample(60:100, n, replace = TRUE))
 ```
 
 Next, plot the histogram of PHSes by case/control status.
@@ -41,10 +41,8 @@ Finally, calculate the hazard ratio comparing the mean of the top 20% of
 PHSes to the mean of the bottom 20% (i.e., `HR80_20`).
 
 ``` r
-get_hr("phs", "age", "status", data = test_data)
+HR80_20 = get_hr("phs", "age", "status", data = test_data)
 ```
-
-    ## [1] 9.88826
 
 ## Developer Instructions
 
