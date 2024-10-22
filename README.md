@@ -19,6 +19,7 @@ First, generate some test data.
 
 ``` r
 library(hazRd)
+set.seed(49942138)
 
 n = 1000
 status = rbinom(n, 1, 0.2)
