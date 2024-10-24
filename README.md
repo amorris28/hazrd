@@ -39,12 +39,15 @@ phs_hist(test_data, normalize = TRUE)
 
 ![](README_files/figure-gfm/phs_hist-1.png)<!-- -->
 
-Finally, calculate the hazard ratio comparing the mean of the top 20% of
+Then, calculate the hazard ratio comparing the mean of the top 20% of
 PHSes to the mean of the bottom 20% (i.e., `HR80_20`).
 
 ``` r
 HR80_20 = get_hr("phs", "age", "status", data = test_data)
 ```
+
+Finally, plot the Kaplan-Meier curves with confidence intervals for
+centiles of interest.
 
 ``` r
 curves = data.frame(lower = c(0,   0.2, 0.8,  0.98),
