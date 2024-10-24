@@ -2,24 +2,36 @@
 % Please edit documentation in R/km_curve.R
 \name{km_curve}
 \alias{km_curve}
-\title{Plot Kaplan-Meier curve}
+\title{Return Kaplan-Meier curve}
 \usage{
-km_curve(model_file, metadata_file, inverse = FALSE, ideal = FALSE)
+km_curve(
+  data,
+  upper,
+  lower,
+  age_range = 40:100,
+  scale = FALSE,
+  inverse = FALSE,
+  ideal = FALSE
+)
 }
 \arguments{
-\item{model_file}{Path to the PHS file (tab delimited, no header, first column ID, second column PHS score)}
+\item{data}{a data.frame containing a column for \code{phs}, \code{age}, and \code{status}}
 
-\item{metadata_file}{Path to the metadata file (tab delimited with column names bfile_id, age, status)}
+\item{upper}{a single number specifying the upper end of the quantile. e.g., 1.0}
 
-\item{inverse}{Boolean indicating whether to inverse (x * -1) the PHS scores to reverse the direction of effect.}
+\item{lower}{a single number specifying the lower end of the quantile. e.g., 0.8}
 
-\item{ideal}{Boolean indicating whether to add the idealized survival curve.}
+\item{age_range}{a vector of ages over which curves should be calculated. Default = 40:100}
+
+\item{scale}{logical. if \code{TRUE} centers and scales the PHS scores to unit variance. Default = \code{FALSE}.}
+
+\item{inverse}{logical. if \code{TRUE} calculates the inverse (x * -1) the PHS scores to reverse the direction of effect. Default = \code{FALSE}.}
 }
 \value{
 A ggplot2 plot of a K-M curve
 }
 \description{
-This function processes PHS data and generates a K-M plot.
+This function returns a single Kaplan-Meier curve for plotting.
 }
 \examples{
 km_curve <- km_curve(model_file, metadata_file, inverse = TRUE, ideal = FALSE)

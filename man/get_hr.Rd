@@ -25,9 +25,9 @@ get_hr(
 
 \item{data}{an optional data.frame containing the variables phs, age, and status}
 
-\item{upper_quantile}{an optional vector specifying the upper quantile of the hazard ratio. The default is \code{0.80}.}
+\item{upper_quantile}{an optional vector specifying the upper quantile of the hazard ratio. The default is \code{0.80}. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., \code{c(0.80, 0.98)}).}
 
-\item{lower_quantile}{an optional vector specifying the lower quantile of the hazard ratio. The default is \code{0.20}.}
+\item{lower_quantile}{an optional vector specifying the lower quantile of the hazard ratio. The default is \code{0.20}. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., \code{c(0.3, 0.7)}).}
 
 \item{swc}{logical. if \code{TRUE} performs sample weight correction}
 

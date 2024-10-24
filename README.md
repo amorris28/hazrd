@@ -18,6 +18,7 @@ devtools::install_github("amorris28/hazRd")
 First, generate some test data.
 
 ``` r
+library(ggplot2)
 library(hazRd)
 set.seed(49942138)
 
@@ -27,7 +28,7 @@ status = rbinom(n, 1, 0.2)
 test_data = data.frame(id = as.factor(seq_len(n)),
                        phs  = rnorm(n) + (1 * status),
                        status = status,
-                       age = sample(60:100, n, replace = TRUE))
+                       age = sample(40:100, n, replace = TRUE))
 ```
 
 Next, plot the histogram of PHSes by case/control status.
@@ -36,7 +37,7 @@ Next, plot the histogram of PHSes by case/control status.
 phs_hist(test_data, normalize = TRUE)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](README_files/figure-gfm/phs_hist-1.png)<!-- -->
 
 Finally, calculate the hazard ratio comparing the mean of the top 20% of
 PHSes to the mean of the bottom 20% (i.e., `HR80_20`).
@@ -44,6 +45,51 @@ PHSes to the mean of the bottom 20% (i.e., `HR80_20`).
 ``` r
 HR80_20 = get_hr("phs", "age", "status", data = test_data)
 ```
+
+``` r
+curves = data.frame(lower = c(0,   0.2, 0.8,  0.98),
+                    upper = c(0.2, 0.7, 0.98, 1))
+
+label_generator = function(x, y) {
+    x = x * 100
+    y = y * 100
+    out = paste0("PHS ", x, "-", y, "th centile")
+    return(out)
+}
+
+km_curves = data.frame()
+for (i in seq_len(nrow(curves))) {
+    curven <- km_curve(data = test_data, 
+                   upper = curves$upper[i], 
+                   lower = curves$lower[i], 
+                   age_range = 40:100, 
+                   scale = FALSE, 
+                   inverse = FALSE)
+    curven$label = label_generator(curves$lower[i], curves$upper[i])
+    km_curves = rbind(km_curves, curven)
+}
+
+
+ggplot(km_curves, aes(x = time, 
+                      y = estimate,
+                      ymin = conf.low,
+                      ymax = conf.high,
+                      col = label,
+                      fill = label)) +
+    geom_ribbon(alpha = 0.1,
+                color = 0) +
+    geom_step() +
+    theme_minimal() +
+    xlim(min(40), max(100)) + 
+    ylim(0, 1) +
+    labs(x = "Age", y = "PCa-free Survival") +
+    scale_color_brewer(palette = "Set1",
+                       name = "Centile") +
+    scale_fill_brewer(palette = "Set1",
+                       name = "Centile")
+```
+
+![](README_files/figure-gfm/km_curve-1.png)<!-- -->
 
 ## Developer Instructions
 
