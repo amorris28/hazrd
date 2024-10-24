@@ -1,18 +1,18 @@
 ---
-title: "hazRd"
+title: "hazrd"
 output: github_document
 editor_options: 
   chunk_output_type: console
 ---
 
-The goal of hazRd is to simplify and standardize the development and testing of polygenic hazard score models.
+The goal of hazrd is to simplify and standardize the development and testing of polygenic hazard score models.
 
 ## Installation
 
-You can install the development version of hazRd from [GitHub](https://github.com/) with:
+You can install the development version of hazrd from [GitHub](https://github.com/) with:
 
 ```{r, eval=FALSE}
-devtools::install_github("amorris28/hazRd")
+devtools::install_github("amorris28/hazrd")
 ```
 
 ## Getting Started
@@ -21,7 +21,7 @@ First, generate some test data.
 
 ```{r}
 library(ggplot2)
-library(hazRd)
+library(hazrd)
 set.seed(49942138)
 
 n = 1000
