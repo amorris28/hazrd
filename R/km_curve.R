@@ -1,12 +1,13 @@
-#' Plot Kaplan-Meier curve
+#' Return Kaplan-Meier curve
 #'
-#' This function processes PHS data and generates a K-M plot.
+#' This function returns a single Kaplan-Meier curve for plotting.
 #'
-#' @param model_file Path to the PHS file (tab delimited, no header, first column ID, second column PHS score)
-#' @param metadata_file Path to the metadata file (tab delimited with column names bfile_id, age, status)
-#' @param inverse Boolean indicating whether to inverse (x * -1) the PHS scores to reverse the direction of effect.
-#' @param ideal Boolean indicating whether to add the idealized survival curve.
-#' @importFrom readr read_tsv
+#' @param data a data.frame containing a column for `phs`, `age`, and `status`
+#' @param upper a single number specifying the upper end of the quantile. e.g., 1.0
+#' @param lower a single number specifying the lower end of the quantile. e.g., 0.8
+#' @param age_range a vector of ages over which curves should be calculated. Default = 40:100
+#' @param scale logical. if `TRUE` centers and scales the PHS scores to unit variance. Default = `FALSE`.
+#' @param inverse logical. if `TRUE` calculates the inverse (x * -1) the PHS scores to reverse the direction of effect. Default = `FALSE`.
 #' @importFrom tidyr pivot_longer
 #' @importFrom survival coxph Surv survfit
 #' @import dplyr
@@ -16,51 +17,26 @@
 #' @examples
 #' km_curve <- km_curve(model_file, metadata_file, inverse = TRUE, ideal = FALSE)
 #' @export
-km_curve <- function(model_file, metadata_file, inverse = FALSE, ideal = FALSE) {
-  
-  model <- basename(model_file) # filename for output
-  metadata <- read_tsv(metadata_file) # Phenotype data
+km_curve <- function(data, upper, lower, age_range = 40:100, scale = FALSE, inverse = FALSE, ideal = FALSE) {
+  scale <- as.logical(scale)
   inverse <- as.logical(inverse)
+    
+  if (scale) { data$phs <- scale(data$phs, center = TRUE, scale = TRUE) }
+  if (inverse) { data$phs <- data$phs * -1 }
   
-  #########################################
-  # Import PHS data
+  critvals <- c(quantile(data$phs, lower), quantile(data$phs, upper))
+
+  ix <- which(data$phs >= critvals[1] & data$phs <= critvals[2])
   
-  phs <- read_tsv(model_file, col_names = c("bfile_id", "phs"))
-  
-  phs$phs <- scale(phs$phs, center = TRUE, scale = TRUE)
-  
-  if (inverse) { phs$phs <- phs$phs * -1 }
-  
-  combined_data <- metadata %>%
-    left_join(phs, by = "bfile_id") %>%
-    filter(!(is.na(phs)))
-  
-  # Fit model
-  
-  agevals <- 40:100
-  reference_PHS <- combined_data$phs
-  prctile_list <- c(0, 0.2, 0.7, 0.8, 0.98, 1)
-  prctile_labels <- c('0-20th', '20-70th', '70-80th', '80-98th', '98-100th')
-  
-  combined_data$percentile <- with(combined_data, 
-                                   cut(phs, breaks = quantile(phs, probs = prctile_list), 
-                                       labels = prctile_labels, 
-                                       include.lowest = TRUE))
-  
-  cox_model <- coxph(Surv(age, status) ~ phs, data = combined_data)
+  cox_model <- coxph(Surv(age, status) ~ phs, data = data)
   
   bt <- cox_model$coefficients[["phs"]]
   
-  combined_data <- combined_data %>% 
-    filter(percentile %in% c('0-20th', '20-70th', '80-98th', '98-100th'))
+  quantile_data <- data[ix, ]
   
-  median_tibble <- combined_data %>% 
-    group_by(percentile) %>% 
-    summarize(median_phs = median(phs))
-  
-  median_phs_individual <- quantile(reference_PHS, 0.50)
-  critvalvec <- median_tibble$median_phs
-  
+  median_phs_quantile = quantile(quantile_data$phs, 0.50)
+  median_phs_all <- quantile(data$phs, 0.50)
+
   #########################
   # Calculate idealized curves
   #
@@ -68,27 +44,25 @@ km_curve <- function(model_file, metadata_file, inverse = FALSE, ideal = FALSE) 
   # https://github.com/cmig-research-group/phs/blob/master/phs_model_example/phs_generate_new_demo.m
   a <- 0.0700 / 100
   b <- 0.0753
-  pcainc <- a * exp(b * (agevals - 40)) # this is the population incidence rate for PCa
-  H0 <- a / b * exp(b * (agevals - 40)) # compute baseline hazard
+  pcainc <- a * exp(b * (age_range - min(age_range))) # this is the population incidence rate for PCa
+  H0 <- a / b * exp(b * (age_range - min(age_range))) # compute baseline hazard
   H0 <- H0 - H0[1] # assume cumulative hazard == 0 before age 40
   
-  H <- matrix(nrow = length(H0), ncol = length(critvalvec))
-  S <- matrix(nrow = length(H0), ncol = length(critvalvec))
+  H <- vector(length = length(H0))
+  S <- vector(length = length(H0))
+
+  H <- H0 * exp(bt * median_phs_quantile - bt * median_phs_all)
+  S <- exp(-H)
   
-  for (cnt in seq_along(critvalvec)) {
-    H[, cnt] <- H0 * exp(bt * critvalvec[cnt] - bt * median_phs_individual[[1]])
-    S[, cnt] <- exp(-H[, cnt])
-  }
-  
-  S_tibble <- as_tibble(S, .name_repair = ~ as.character(median_tibble$percentile))
-  S_tibble$agevals <- agevals
-  S_tibble <- S_tibble %>%
-    pivot_longer(-agevals, names_to = "percentile")
+  S_tibble <- as_tibble(S)
+  S_tibble$age_range <- age_range
+  # S_tibble <- S_tibble %>%
+  #   pivot_longer(-agevals, names_to = "percentile")
   
   ##########################
   
   # Plot K-M curves for centiles
-  mod <- survfit(Surv(age, status) ~ percentile, data = combined_data)
+  mod <- survfit(Surv(age, status) ~ 1, data = quantile_data)
   
   tidy_strata <- function(strata) {
     temp <- c()
@@ -105,27 +79,23 @@ km_curve <- function(model_file, metadata_file, inverse = FALSE, ideal = FALSE) 
                      estimate = mod$surv,
                      std.error = mod$std.err,
                      conf.high = mod$upper,
-                     conf.low = mod$lower,
-                     strata = tidy_strata(mod$strata))
+                     conf.low = mod$lower)
   
-  key <- tibble(strata = unique(mod_data$strata),
-                percentile = unique(S_tibble$percentile))
-  
-  mod_data <- mod_data %>% 
-    left_join(key, by = 'strata')
-  
-  kmcurve <- ggplot(mod_data, aes(x = time, y = estimate, color = percentile)) +
+ggplot(mod_data, aes(x = time, y = estimate)) +
+    geom_ribbon(aes(ymin = conf.low, ymax = conf.high),
+                alpha = 0.5) +
     geom_step() +
     theme_minimal() +
-    xlim(40, 100) + 
-    scale_color_brewer(palette = "Set1") +
+    xlim(min(age_range), max(age_range)) + 
+    ylim(0, 1.1) +
     labs(x = "Age", y = "PCa-free Survival")
 
   if ( ideal ) {
     kmcurve = kmcurve + 
-	geom_line(aes(x = agevals, y = value, color = percentile), data = mod_data, S_tibble)
+	geom_line(aes(x = age_range, y = value), S_tibble)
   }
-  
+  kmcurve =
+      select(mod_data, time, estimate, conf.high, conf.low)
   return(kmcurve)
   
 #  combined_data <- combined_data %>% 
