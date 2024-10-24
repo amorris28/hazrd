@@ -1,10 +1,10 @@
-Package: hazRd
+Package: hazrd
 Title: Polygenic Hazard Score with Cox Proportional Hazards Model
 Version: 0.1.0
 Authors@R: 
-    person(given = "YourFirstName", 
-           family = "YourLastName", 
-           email = "your_email@example.com", 
+    person(given = "Andrew", 
+           family = "Morris", 
+           email = "andrewmorris@mailbox.org", 
            role = c("aut", "cre"))
 Description: Tools to compute polygenic hazard scores using Cox proportional hazards model and lasso regularization via glmnet.
 Depends: 
