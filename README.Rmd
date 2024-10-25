@@ -84,7 +84,7 @@ ggplot(km_curves, aes(x = time,
     theme_minimal() +
     xlim(min(40), max(100)) + 
     ylim(0, 1) +
-    labs(x = "Age", y = "PCa-free Survival") +
+    labs(x = "Age", y = "Disease-free Survival") +
     scale_color_brewer(palette = "Set1",
                        name = "Centile") +
     scale_fill_brewer(palette = "Set1",
