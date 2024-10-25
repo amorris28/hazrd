@@ -5,7 +5,10 @@
 \title{Return Kaplan-Meier curve}
 \usage{
 km_curve(
-  data,
+  data = NULL,
+  phs = "phs",
+  age = "age",
+  status = "status",
   upper,
   lower,
   age_range = 40:100,
@@ -15,7 +18,13 @@ km_curve(
 )
 }
 \arguments{
-\item{data}{a data.frame containing a column for \code{phs}, \code{age}, and \code{status}}
+\item{data}{an optional data.frame containing the variables for phs, age, and status}
+
+\item{phs}{an optional string specifying the column name in \code{data} containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"}
+
+\item{age}{an optional string specifying the column name in \code{data} containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"}
+
+\item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"}
 
 \item{upper}{a single number specifying the upper end of the quantile. e.g., 1.0}
 
@@ -28,11 +37,18 @@ km_curve(
 \item{inverse}{logical. if \code{TRUE} calculates the inverse (x * -1) the PHS scores to reverse the direction of effect. Default = \code{FALSE}.}
 }
 \value{
-A ggplot2 plot of a K-M curve
+A data.frame containing ages, the K-M curve, and the upper and lower confidence intervals
 }
 \description{
 This function returns a single Kaplan-Meier curve for plotting.
+Output includes age, the K-M estimate at each age, and  the upper and lower confidence intervals
 }
 \examples{
-km_curve <- km_curve(model_file, metadata_file, inverse = TRUE, ideal = FALSE)
+km_curve <- km_curve(df, inverse = TRUE, ideal = FALSE)
+ggplot(km_curve, aes(x = time,
+                     y = estimate,
+                     ymin = conf.low,
+                     ymax = conf.high)) +
+   geom_ribbon() +
+   geom_step()
 }
