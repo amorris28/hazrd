@@ -40,10 +40,13 @@ phs_hist(test_data, normalize = TRUE)
 ![](README_files/figure-gfm/phs_hist-1.png)<!-- -->
 
 Then, calculate the hazard ratio comparing the mean of the top 20% of
-PHSes to the mean of the bottom 20% (i.e., `HR80_20`).
+PHSes to the mean of the bottom 20% (i.e., `HR80_20`). Similarly,
+calculated the odds ratio at age 70 between the top 20% and bottom 20%
+of PHses.
 
 ``` r
 HR80_20 = get_hr("phs", "age", "status", data = test_data)
+OR80_20 = get_or(test_data, or_age = 70)
 ```
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for
