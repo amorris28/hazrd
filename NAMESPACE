@@ -2,6 +2,7 @@
 
 export(cum_inc)
 export(get_hr)
+export(get_or)
 export(get_phs_age)
 export(km_curve)
 export(phs_hist)
