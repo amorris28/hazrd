@@ -7,10 +7,10 @@
 #' 'status', but any arbitrary column names can be used if named explicitly.
 #'
 #' @param data an optional data.frame containing the variables for phs, age, and status
-#' @param or_age an integer specifying the age at which the odds ratio should be calculated
 #' @param phs an optional string specifying the column name in `data` containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"
 #' @param age an optional string specifying the column name in `data` containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"
 #' @param status an optional string specifying the column name in `data` containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"
+#' @param or_age an integer specifying the age at which the odds ratio should be calculated
 #' @param upper_quantile an optional vector specifying the upper quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., `c(0.80, 0.98)`). If only one value is provided, then the PHS scores between that number and Infinite are included. The default is `0.80`. 
 #' @param lower_quantile an optional vector specifying the lower quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., `c(0.3, 0.7)`). If only one value is provided, then the PHS scores between -Infinite and that number are included. The default is `0.20`. 
 #' @return A numeric odds ratio
@@ -18,10 +18,10 @@
 #' OR80_20 <- get_hr(data, or_age = 70)
 #' @export
 get_or <- function(data = NULL, 
-                   or_age,
                    phs = "phs", 
                    age = "age", 
                    status = "status", 
+                   or_age,
                    upper_quantile = 0.80, 
                    lower_quantile = 0.20) {  
 

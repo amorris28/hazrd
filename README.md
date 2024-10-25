@@ -45,7 +45,7 @@ calculated the odds ratio at age 70 between the top 20% and bottom 20%
 of PHses.
 
 ``` r
-HR80_20 = get_hr("phs", "age", "status", data = test_data)
+HR80_20 = get_hr(test_data)
 OR80_20 = get_or(test_data, or_age = 70)
 ```
 

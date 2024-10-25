@@ -2,18 +2,31 @@
 % Please edit documentation in R/phs_hist.R
 \name{phs_hist}
 \alias{phs_hist}
-\title{Plot Histogram of Cases and Control by PHS}
+\title{Plot Histogram of Cases and Controls by PHS}
 \usage{
-phs_hist(df, normalize = FALSE, scale = FALSE, inverse = FALSE)
+phs_hist(
+  data = NULL,
+  phs = "phs",
+  status = "status",
+  normalize = FALSE,
+  scale = FALSE,
+  inverse = FALSE
+)
 }
 \arguments{
-\item{df}{Data.frame or tibble containing a column for \code{phs} and a column for \code{status}. All other columns ignored.}
+\item{data}{an optional data.frame containing the variables for phs, age, and status}
 
-\item{normalize}{Boolean indicating whether to normalize the histogram to area = 1. This is replaces the y axis with denisty instead of count. Helpful to compare distributions with very different counts. Default = \code{FALSE}.}
+\item{phs}{an optional string specifying the column name in \code{data} containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"}
+
+\item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"}
+
+\item{normalize}{Boolean indicating whether to normalize the histogram to area = 1. This replaces the y axis with denisty instead of count. Helpful to compare distributions with very different counts. Default = \code{FALSE}.}
 
 \item{scale}{Boolean indicating whether to center and scale the PHS scores to unit variance. Default = \code{FALSE}.}
 
 \item{inverse}{Boolean indicating whether to inverse (x * -1) the PHS scores to reverse the direction of effect. Default = \code{FALSE}.}
+
+\item{age}{an optional string specifying the column name in \code{data} containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"}
 }
 \value{
 A ggplot object
@@ -22,5 +35,5 @@ A ggplot object
 This function takes PHS scores and case/control status and plots a histogram.
 }
 \examples{
-phs_hist <- phs_hist(df)
+phs_hist <- phs_hist(df, normalize = TRUE)
 }

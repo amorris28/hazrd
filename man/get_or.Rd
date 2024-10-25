@@ -6,10 +6,10 @@
 \usage{
 get_or(
   data = NULL,
-  or_age,
   phs = "phs",
   age = "age",
   status = "status",
+  or_age,
   upper_quantile = 0.8,
   lower_quantile = 0.2
 )
@@ -17,13 +17,13 @@ get_or(
 \arguments{
 \item{data}{an optional data.frame containing the variables for phs, age, and status}
 
-\item{or_age}{an integer specifying the age at which the odds ratio should be calculated}
-
 \item{phs}{an optional string specifying the column name in \code{data} containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"}
 
 \item{age}{an optional string specifying the column name in \code{data} containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"}
 
 \item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"}
+
+\item{or_age}{an integer specifying the age at which the odds ratio should be calculated}
 
 \item{upper_quantile}{an optional vector specifying the upper quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., \code{c(0.80, 0.98)}). If only one value is provided, then the PHS scores between that number and Infinite are included. The default is \code{0.80}.}
 
