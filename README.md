@@ -7,11 +7,20 @@ testing of polygenic hazard score models.
 ## Installation
 
 You can install the development version of hazrd from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/) by cloning the repository:
+
+``` bash
+git clone git@github.com:amorris28/hazrd.git
+```
+
+and then opening `R` and installing the package:
 
 ``` r
-devtools::install_github("amorris28/hazrd")
+devtools::install("hazrd")
 ```
+
+Replace `"hazrd"` with the path to the repository on your local
+computer.
 
 ## Getting Started
 
