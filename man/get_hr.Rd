@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_hr.R
 \name{get_hr}
 \alias{get_hr}
-\title{Returns a hazard ratio for Polygenic Hazard Scores}
+\title{Returns a hazard ratio and 95\% CI for Polygenic Hazard Scores}
 \usage{
 get_hr(
   data = NULL,
@@ -13,7 +13,9 @@ get_hr(
   lower_quantile = 0.2,
   swc = FALSE,
   swc_popnumcases = NULL,
-  swc_popnumcontrols = NULL
+  swc_popnumcontrols = NULL,
+  boot = FALSE,
+  B = 1000
 )
 }
 \arguments{
@@ -34,17 +36,24 @@ get_hr(
 \item{swc_popnumcases}{an optional integer specifying the number of cases in a reference population for sample weight correction. Required if swc = \code{TRUE}.}
 
 \item{swc_popnumcontrols}{an optional integer specifying the number of controls in a reference population for sample weight correction. Required if swc = \code{TRUE}.}
+
+\item{boot}{logical. if \code{TRUE} performs bootstrap and returns 95\% confidence intervals. Default = \code{FALSE}.}
+
+\item{B}{Number of bootstrap iterations to run. Required if boot = \code{TRUE}. Default = 1000.}
 }
 \value{
-A numeric hazard ratio
+A numeric hazard ratio or a list containing HR and the 95\% confidence intervals from bootstrap
 }
 \description{
-This function calculate the hazard ratio.
+This function calculates the hazard ratio and optionally performs
+bootstrap resampling to return 95\% confidence intervals.
 The data can either be provided as a data.frame with columns containing
 the phs, age, and status of each individual or separate vectors containing
 each of these values. The columns in \code{data} default to 'phs', 'age', and
 'status', but any arbitrary column names can be used if named explicitly.
 }
 \examples{
-HR80_20 <- get_hr(phs, age, status)
+
+HR80_20 <- get_hr(df, boot = TRUE, B = 300)
+
 }

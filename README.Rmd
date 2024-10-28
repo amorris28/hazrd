@@ -22,7 +22,7 @@ First, generate some test data.
 ```{r}
 library(ggplot2)
 library(hazrd)
-set.seed(49942138)
+set.seed(46495809)
 
 n = 1000
 status = rbinom(n, 1, 0.2)
@@ -39,11 +39,18 @@ Next, plot the histogram of PHSes by case/control status.
 phs_hist(test_data, normalize = TRUE)
 ```
 
-Then, calculate the hazard ratio comparing the mean of the top 20% of PHSes to the mean of the bottom 20% (i.e., `HR80_20`). Similarly, calculated the odds ratio at age 70 between the top 20% and bottom 20% of PHses.
+Then, calculate the hazard ratio comparing the mean of the top 20% of PHSes to the mean of the bottom 20% (i.e., `HR80_20`). We can also generate 95% confidence intervals using bootstrapping.
 
 ```{r}
-HR80_20 = get_hr(test_data)
+HR80_20 = get_hr(test_data, boot = TRUE, B = 300)
+print(HR80_20)
+```
+
+Similarly, calculate the odds ratio at age 70 between the top 20% and bottom 20% of PHSes.
+
+```{r}
 OR80_20 = get_or(test_data, or_age = 70)
+print(OR80_20)
 ```
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for centiles of interest.

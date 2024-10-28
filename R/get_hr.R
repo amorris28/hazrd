@@ -1,6 +1,7 @@
-#' Returns a hazard ratio for Polygenic Hazard Scores
+#' Returns a hazard ratio and 95% CI for Polygenic Hazard Scores
 #' 
-#' This function calculate the hazard ratio.
+#' This function calculates the hazard ratio and optionally performs
+#' bootstrap resampling to return 95% confidence intervals.
 #' The data can either be provided as a data.frame with columns containing
 #' the phs, age, and status of each individual or separate vectors containing
 #' each of these values. The columns in `data` default to 'phs', 'age', and
@@ -15,10 +16,15 @@
 #' @param swc logical. if `TRUE` performs sample weight correction
 #' @param swc_popnumcases an optional integer specifying the number of cases in a reference population for sample weight correction. Required if swc = `TRUE`.
 #' @param swc_popnumcontrols an optional integer specifying the number of controls in a reference population for sample weight correction. Required if swc = `TRUE`.
-#' @return A numeric hazard ratio
-#' @import survival
+#' @param boot logical. if \code{TRUE} performs bootstrap and returns 95% confidence intervals. Default = \code{FALSE}.
+#' @param B Number of bootstrap iterations to run. Required if boot = `TRUE`. Default = 1000.
+#' 
+#' @return A numeric hazard ratio or a list containing HR and the 95% confidence intervals from bootstrap
+#' 
 #' @examples
-#' HR80_20 <- get_hr(df)
+#' 
+#' HR80_20 <- get_hr(df, boot = TRUE, B = 300)
+#' 
 #' @export
 get_hr <- function(data = NULL,
                    phs = "phs",
@@ -28,61 +34,46 @@ get_hr <- function(data = NULL,
                    lower_quantile = 0.20,
                    swc = FALSE,
                    swc_popnumcases = NULL,
-                   swc_popnumcontrols = NULL) {
-
-  if (is.character(phs)) {
-    phs = data[[phs]]
-  }
-  if (is.character(age)) {
-    age = data[[age]]
-  }
-  if (is.character(status)) {
-    status = data[[status]]
-  }
-
-  if (swc) {
-    if (is.null(swc_popnumcases) || is.null(swc_popnumcontrols)) {
-     stop("Sample weight correction requires 'swc_popnumcases' and 'swc_popnumcontrols'.")
-    }
-    swc_numcases <- sum(status == 1)
-    swc_numcontrols <- sum(status == 0)
-  
-    swc_wvec <- status * (swc_popnumcases / swc_numcases) + (!status) * (swc_popnumcontrols / swc_numcontrols)
-  }
-
-  if (length(upper_quantile) == 1) {
-    num_critvals <- c(quantile(phs, upper_quantile), Inf)
-  } else if (length(upper_quantile) == 2) {
-    num_critvals <- c(quantile(phs, upper_quantile[1]), quantile(phs, upper_quantile[2]))
-  } else {
-    stop("'upper_quantile' must be length 1 or 2")
-  }
-
-  if (length(lower_quantile) == 1) {
-    den_critvals <- c(-Inf, quantile(phs, lower_quantile))
-  } else if (length(lower_quantile) == 2) {
-    den_critvals <- c(quantile(phs, lower_quantile[1]), quantile(phs, lower_quantile[2]))
-  } else {
-    stop("'lower_quantile' must be length 1 or 2")
-  }
-
-  tmp_df <- data.frame(age = age, status = status, phs = phs)
-  
-  if (swc) {
-    cxph <- coxph(Surv(age, status) ~ phs, data = tmp_df, weights = swc_wvec)
-  } else {
-    cxph <- coxph(Surv(age, status) ~ phs, data = tmp_df)
-  }
-  
-  beta = as.numeric(cxph$coefficients)
-  
-  ix_num <- which(phs >= num_critvals[1] & phs <= num_critvals[2])
-  ix_den <- which(phs >= den_critvals[1] & phs <= den_critvals[2])
+                   swc_popnumcontrols = NULL,
+                   boot = FALSE,
+                   B = 1000) {
     
-  beta_phs <- beta * phs
-  beta_phs_num <- mean(beta_phs[ix_num])
-  beta_phs_den <- mean(beta_phs[ix_den])
-  HR <- exp(beta_phs_num - beta_phs_den)
-  
-  return(HR)
+    if (is.character(phs)) {
+        phs = data[[phs]]
+    }
+    if (is.character(age)) {
+        age = data[[age]]
+    }
+    if (is.character(status)) {
+        status = data[[status]]
+    }
+    
+    df <- data.frame(age = age, 
+                     status = status, 
+                     phs = phs)
+    
+    HR = calc_hr(df, 
+                   upper_quantile, 
+                   lower_quantile,
+                   swc,
+                   swc_popnumcases,
+                   swc_popnumcontrols)
+    
+    if (boot == TRUE) {
+        iters = matrix(NA, nrow = B)
+        for (b in (1:B)){
+            indices = sample(nrow(df), replace = TRUE)
+            tmp_df = df[indices, ]
+            iters[b] = calc_hr(tmp_df, 
+                                 upper_quantile, 
+                                 lower_quantile,
+                                 swc,
+                                 swc_popnumcases,
+                                 swc_popnumcontrols)
+        }
+        quantiles = quantile(iters, c(0.025, 0.975))
+        return(list("HR" = HR, "lower_CI" = quantiles[[1]], "upper_CI" = quantiles[[2]]))
+    }
+    return(HR)
+    
 }
