@@ -51,16 +51,12 @@ get_or <- function(data = NULL,
                  lower_quantile)
     
     if (boot == TRUE) {
-        iters = matrix(NA, nrow = B)
-        for (b in (1:B)){
-            indices = sample(nrow(df), replace = TRUE)
-            tmp_df = df[indices, ]
-            iters[b] = calc_or(tmp_df, 
-                               or_age,
-                               upper_quantile, 
-                               lower_quantile)
-        }
-        quantiles = quantile(iters, c(0.025, 0.975))
+        quantiles = boot_ci(df,
+                            B,
+                            calc_or,
+                            or_age,
+                            upper_quantile,
+                            lower_quantile)
         return(list("OR" = OR, "lower_CI" = quantiles[[1]], "upper_CI" = quantiles[[2]]))
     }
     return(OR)
