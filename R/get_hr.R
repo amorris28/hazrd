@@ -18,17 +18,17 @@
 #' @return A numeric hazard ratio
 #' @import survival
 #' @examples
-#' HR80_20 <- get_hr(phs, age, status)
+#' HR80_20 <- get_hr(df)
 #' @export
-get_hr <- function(data = NULL, 
-                   phs = "phs", 
-                   age = "age", 
-                   status = "status", 
-                   upper_quantile = 0.80, 
-                   lower_quantile = 0.20, 
-                   swc = FALSE, 
-                   swc_popnumcases = NULL, 
-                   swc_popnumcontrols = NULL) {  
+get_hr <- function(data = NULL,
+                   phs = "phs",
+                   age = "age",
+                   status = "status",
+                   upper_quantile = 0.80,
+                   lower_quantile = 0.20,
+                   swc = FALSE,
+                   swc_popnumcases = NULL,
+                   swc_popnumcontrols = NULL) {
 
   if (is.character(phs)) {
     phs = data[[phs]]
