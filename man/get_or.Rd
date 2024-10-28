@@ -11,7 +11,9 @@ get_or(
   status = "status",
   or_age,
   upper_quantile = 0.8,
-  lower_quantile = 0.2
+  lower_quantile = 0.2,
+  boot = FALSE,
+  B = 1000
 )
 }
 \arguments{
@@ -28,6 +30,10 @@ get_or(
 \item{upper_quantile}{an optional vector specifying the upper quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., \code{c(0.80, 0.98)}). If only one value is provided, then the PHS scores between that number and Infinite are included. The default is \code{0.80}.}
 
 \item{lower_quantile}{an optional vector specifying the lower quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., \code{c(0.3, 0.7)}). If only one value is provided, then the PHS scores between -Infinite and that number are included. The default is \code{0.20}.}
+
+\item{boot}{logical. if \code{TRUE} performs bootstrap and returns 95\% confidence intervals. Default = \code{FALSE}.}
+
+\item{B}{Number of bootstrap iterations to run. Required if boot = \code{TRUE}. Default = 1000.}
 }
 \value{
 A numeric odds ratio
@@ -40,5 +46,7 @@ each of these values. The columns in \code{data} default to 'phs', 'age', and
 'status', but any arbitrary column names can be used if named explicitly.
 }
 \examples{
-OR80_20 <- get_hr(data, or_age = 70)
+
+OR80_20 <- get_or(data, or_age = 70)
+
 }

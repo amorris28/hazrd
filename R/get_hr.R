@@ -53,11 +53,11 @@ get_hr <- function(data = NULL,
                      phs = phs)
     
     HR = calc_hr(df, 
-                   upper_quantile, 
-                   lower_quantile,
-                   swc,
-                   swc_popnumcases,
-                   swc_popnumcontrols)
+                 upper_quantile, 
+                 lower_quantile,
+                 swc,
+                 swc_popnumcases,
+                 swc_popnumcontrols)
     
     if (boot == TRUE) {
         iters = matrix(NA, nrow = B)
@@ -65,11 +65,11 @@ get_hr <- function(data = NULL,
             indices = sample(nrow(df), replace = TRUE)
             tmp_df = df[indices, ]
             iters[b] = calc_hr(tmp_df, 
-                                 upper_quantile, 
-                                 lower_quantile,
-                                 swc,
-                                 swc_popnumcases,
-                                 swc_popnumcontrols)
+                               upper_quantile, 
+                               lower_quantile,
+                               swc,
+                               swc_popnumcases,
+                               swc_popnumcontrols)
         }
         quantiles = quantile(iters, c(0.025, 0.975))
         return(list("HR" = HR, "lower_CI" = quantiles[[1]], "upper_CI" = quantiles[[2]]))
