@@ -70,11 +70,18 @@ Similarly, calculate the odds ratio at age 70 between the top 20% and
 bottom 20% of PHSes.
 
 ``` r
-OR80_20 = get_or(test_data, or_age = 70)
+OR80_20 = get_or(test_data, or_age = 70, boot = TRUE, B = 300)
 print(OR80_20)
 ```
 
+    ## $OR
     ## [1] 0.858156
+    ## 
+    ## $lower_CI
+    ## [1] 0.4219104
+    ## 
+    ## $upper_CI
+    ## [1] 1.869373
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for
 centiles of interest.
