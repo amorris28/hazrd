@@ -11,10 +11,10 @@
 #' 
 #' @examples
 #' 
-#' quantiles <- boot_ci(df, B, calc_or, or_age, upper_quantile, lower_quantile)
+#' quantiles <- boot_confint(df, B, calc_or, or_age, upper_quantile, lower_quantile)
 #' 
 #' @export
-boot_ci = function(df, 
+boot_confint = function(df, 
                    B,
                    f,
                    ...) {

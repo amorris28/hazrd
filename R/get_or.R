@@ -51,12 +51,12 @@ get_or <- function(data = NULL,
                  lower_quantile)
     
     if (boot == TRUE) {
-        quantiles = boot_ci(df,
-                            B,
-                            calc_or,
-                            or_age,
-                            upper_quantile,
-                            lower_quantile)
+        quantiles = boot_confint(df,
+                                B,
+                                calc_or,
+                                or_age,
+                                upper_quantile,
+                                lower_quantile)
         return(list("OR" = OR, "lower_CI" = quantiles[[1]], "upper_CI" = quantiles[[2]]))
     }
     return(OR)

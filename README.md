@@ -90,6 +90,23 @@ print(OR80_20)
     ## $upper_CI
     ## [1] 1.869373
 
+Return the concordance index with 95% confidence intervals from a coxph
+fit:
+
+``` r
+concord_index = get_ci(test_data,  boot = TRUE, B = 300)
+print(concord_index)
+```
+
+    ## $CI
+    ## [1] 0.7125285
+    ## 
+    ## $lower_CI
+    ## [1] 0.6734051
+    ## 
+    ## $upper_CI
+    ## [1] 0.7486092
+
 Finally, plot the Kaplan-Meier curves with confidence intervals for
 centiles of interest.
 

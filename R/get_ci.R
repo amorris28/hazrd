@@ -1,7 +1,7 @@
-#' Returns a hazard ratio and 95% CI for Polygenic Hazard Scores
+#' Returns a concordance index
 #' 
-#' This function calculates the hazard ratio and optionally performs
-#' bootstrap resampling to return 95% confidence intervals.
+#' This function returns the concordance index from a coxph fit and optionally
+#' performs bootstrap resampling to return 95% confidence intervals.
 #' The data can either be provided as a data.frame with columns containing
 #' the phs, age, and status of each individual or separate vectors containing
 #' each of these values. The columns in `data` default to 'phs', 'age', and
@@ -11,8 +11,6 @@
 #' @param phs an optional string specifying the column name in `data` containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"
 #' @param age an optional string specifying the column name in `data` containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"
 #' @param status an optional string specifying the column name in `data` containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"
-#' @param upper_quantile an optional vector specifying the upper quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., `c(0.80, 0.98)`). If only one value is provided, then the PHS scores between that number and Infinite are included. The default is `0.80`. 
-#' @param lower_quantile an optional vector specifying the lower quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., `c(0.3, 0.7)`). If only one value is provided, then the PHS scores between -Infinite and that number are included. The default is `0.20`. 
 #' @param swc logical. if `TRUE` performs sample weight correction
 #' @param swc_popnumcases an optional integer specifying the number of cases in a reference population for sample weight correction. Required if swc = `TRUE`.
 #' @param swc_popnumcontrols an optional integer specifying the number of controls in a reference population for sample weight correction. Required if swc = `TRUE`.
@@ -23,10 +21,10 @@
 #' 
 #' @examples
 #' 
-#' HR80_20 <- get_hr(df, boot = TRUE, B = 300)
+#' CI <- get_ci(df, boot = TRUE, B = 300)
 #' 
 #' @export
-get_hr <- function(data = NULL,
+get_ci <- function(data = NULL,
                    phs = "phs",
                    age = "age",
                    status = "status",
@@ -52,9 +50,7 @@ get_hr <- function(data = NULL,
                      status = status, 
                      phs = phs)
     
-    HR = calc_hr(df, 
-                 upper_quantile, 
-                 lower_quantile,
+    CI = calc_ci(df, 
                  swc,
                  swc_popnumcases,
                  swc_popnumcontrols)
@@ -62,14 +58,12 @@ get_hr <- function(data = NULL,
     if (boot == TRUE) {
         quantiles = boot_confint(df,
                                  B,
-                                 calc_hr,
-                                 upper_quantile,
-                                 lower_quantile,
+                                 calc_ci,
                                  swc,
                                  swc_popnumcases,
                                  swc_popnumcontrols)
-        return(list("HR" = HR, "lower_CI" = quantiles[[1]], "upper_CI" = quantiles[[2]]))
+        return(list("CI" = CI, "lower_CI" = quantiles[[1]], "upper_CI" = quantiles[[2]]))
     }
-    return(HR)
+    return(CI)
     
 }

@@ -60,6 +60,13 @@ OR80_20 = get_or(test_data, or_age = 70, boot = TRUE, B = 300)
 print(OR80_20)
 ```
 
+Return the concordance index with 95% confidence intervals from a coxph fit:
+
+```{r}
+concord_index = get_ci(test_data,  boot = TRUE, B = 300)
+print(concord_index)
+```
+
 Finally, plot the Kaplan-Meier curves with confidence intervals for centiles of interest.
 
 ```{r km_curve}
