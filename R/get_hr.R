@@ -22,9 +22,9 @@
 #' @return A numeric hazard ratio or a list containing HR and the 95% confidence intervals from bootstrap
 #' 
 #' @examples
-#' 
+#' \dontrun{
 #' HR80_20 <- get_hr(df, boot = TRUE, B = 300)
-#' 
+#' }
 #' @export
 get_hr <- function(data = NULL,
                    phs = "phs",

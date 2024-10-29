@@ -19,9 +19,9 @@
 #' @return A numeric odds ratio
 #' 
 #' @examples
-#' 
+#' \dontrun{
 #' OR80_20 <- get_or(data, or_age = 70)
-#' 
+#' }
 #' @export
 get_or <- function(data = NULL, 
                    phs = "phs", 

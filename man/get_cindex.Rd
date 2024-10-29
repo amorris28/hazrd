@@ -9,8 +9,6 @@ get_cindex(
   phs = "phs",
   age = "age",
   status = "status",
-  upper_quantile = 0.8,
-  lower_quantile = 0.2,
   swc = FALSE,
   swc_popnumcases = NULL,
   swc_popnumcontrols = NULL,
@@ -49,7 +47,7 @@ each of these values. The columns in \code{data} default to 'phs', 'age', and
 'status', but any arbitrary column names can be used if named explicitly.
 }
 \examples{
-
+\dontrun{
 c_index <- get_cindex(df, boot = TRUE, B = 300)
-
+}
 }

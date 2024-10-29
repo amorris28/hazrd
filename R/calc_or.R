@@ -2,17 +2,15 @@
 #' 
 #' Internal function. Not intended for users.
 #'
-#' @param df a data.frame containing the clumnes phs, age, and status
+#' @param df a data.frame containing the columns phs, age, and status
+#' @param or_age an integer specifying the age at which the odds ratio should be calculated
 #' @param upper_quantile a vector specifying the upper quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., `c(0.80, 0.98)`). If only one value is provided, then the PHS scores between that number and Infinite are included. The default is `0.80`. 
 #' @param lower_quantile a vector specifying the lower quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., `c(0.3, 0.7)`). If only one value is provided, then the PHS scores between -Infinite and that number are included. The default is `0.20`. 
 #' 
 #' @return A numeric odds ratio
 #' 
 #' @import survival
-#' 
-#' @examples
-#' 
-#' HR80_20 <- calc_or(df)
+#' @importFrom stats quantile
 #' 
 #' @export
 calc_or = function(df, 
@@ -42,16 +40,16 @@ calc_or = function(df,
     df %>% 
         filter(row_number() %in% c(ix_num, ix_den)) %>%
         mutate(quantile = ifelse(row_number() %in% ix_num, "upper", "lower")) %>% 
-        filter((status == 0 & age < or_age) | (status == 1 & age > or_age)) %>% 
-        mutate(uq_event = ifelse(status == 1 & quantile == "upper", 1, 0),
-               uq_censor = ifelse(status == 0 & quantile == "upper", 1, 0),
-               lq_event = ifelse(status == 1 & quantile == "lower", 1, 0),
-               lq_censor = ifelse(status == 0 & quantile == "lower", 1, 0)) %>%
-        select(uq_event, uq_censor, lq_event, lq_censor) %>%
-        summarize(uq_event = sum(uq_event),
-                  uq_censor = sum(uq_censor),
-                  lq_event = sum(lq_event),
-                  lq_censor = sum(lq_censor)) -> contingency_table
+        filter((.data$status == 0 & .data$age < or_age) | (.data$status == 1 & .data$age > or_age)) %>% 
+        mutate(uq_event = ifelse(.data$status == 1 & .data$quantile == "upper", 1, 0),
+               uq_censor = ifelse(.data$status == 0 & .data$quantile == "upper", 1, 0),
+               lq_event = ifelse(.data$status == 1 & .data$quantile == "lower", 1, 0),
+               lq_censor = ifelse(.data$status == 0 & .data$quantile == "lower", 1, 0)) %>%
+        select(.data$uq_event, .data$uq_censor, .data$lq_event, .data$lq_censor) %>%
+        summarize(uq_event = sum(.data$uq_event),
+                  uq_censor = sum(.data$uq_censor),
+                  lq_event = sum(.data$lq_event),
+                  lq_censor = sum(.data$lq_censor)) -> contingency_table
     
     OR = with(contingency_table, (uq_event / uq_censor) / (lq_event / lq_censor))
     return(OR)

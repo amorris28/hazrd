@@ -22,5 +22,7 @@ Estimated polygenic hazard score age
 Polygenic Hazard Score Age Calculation
 }
 \examples{
+\dontrun{
 phs_age <- get_phs_age(age, ref, riskgroup, estimate_age)
+}
 }

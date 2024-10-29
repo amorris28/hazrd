@@ -25,8 +25,6 @@ phs_hist(
 \item{scale}{Boolean indicating whether to center and scale the PHS scores to unit variance. Default = \code{FALSE}.}
 
 \item{inverse}{Boolean indicating whether to inverse (x * -1) the PHS scores to reverse the direction of effect. Default = \code{FALSE}.}
-
-\item{age}{an optional string specifying the column name in \code{data} containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"}
 }
 \value{
 A ggplot object
@@ -35,5 +33,7 @@ A ggplot object
 This function takes PHS scores and case/control status and plots a histogram.
 }
 \examples{
+\dontrun{
 phs_hist <- phs_hist(df, normalize = TRUE)
+}
 }

@@ -23,8 +23,3 @@ Internal function. Not intended for users. This function can return the 95\%
 confidence intervals for any statistic so long as the function passed to \code{f}
 returns a single value of that statistic.
 }
-\examples{
-
-quantiles <- boot_conf(df, B, calc_or, or_age, upper_quantile, lower_quantile)
-
-}

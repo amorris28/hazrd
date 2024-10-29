@@ -13,8 +13,7 @@ km_curve(
   lower,
   age_range = 40:100,
   scale = FALSE,
-  inverse = FALSE,
-  ideal = FALSE
+  inverse = FALSE
 )
 }
 \arguments{
@@ -44,11 +43,13 @@ This function returns a single Kaplan-Meier curve for plotting.
 Output includes age, the K-M estimate at each age, and  the upper and lower confidence intervals
 }
 \examples{
+\dontrun{
 km_curve <- km_curve(df, inverse = TRUE, ideal = FALSE)
 ggplot(km_curve, aes(x = time,
                      y = estimate,
                      ymin = conf.low,
                      ymax = conf.high)) +
-   geom_ribbon() +
-   geom_step()
+                     geom_ribbon() +
+                     geom_step()
+}
 }

@@ -9,11 +9,9 @@
 #' @param f the name of a function to perform bootstrapping on. 
 #' @param ... arguments to be passed on to `f()`.
 #' 
+#' @importFrom stats quantile
+#' 
 #' @return A list of confidence intervals
-#' 
-#' @examples
-#' 
-#' quantiles <- boot_conf(df, B, calc_or, or_age, upper_quantile, lower_quantile)
 #' 
 #' @export
 boot_conf = function(df, 

@@ -7,7 +7,9 @@
 calc_or(df, or_age, upper_quantile, lower_quantile)
 }
 \arguments{
-\item{df}{a data.frame containing the clumnes phs, age, and status}
+\item{df}{a data.frame containing the columns phs, age, and status}
+
+\item{or_age}{an integer specifying the age at which the odds ratio should be calculated}
 
 \item{upper_quantile}{a vector specifying the upper quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., \code{c(0.80, 0.98)}). If only one value is provided, then the PHS scores between that number and Infinite are included. The default is \code{0.80}.}
 
@@ -18,9 +20,4 @@ A numeric odds ratio
 }
 \description{
 Internal function. Not intended for users.
-}
-\examples{
-
-HR80_20 <- calc_or(df)
-
 }

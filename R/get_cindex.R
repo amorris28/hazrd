@@ -20,16 +20,14 @@
 #' @return A numeric hazard ratio or a list containing HR and the 95% confidence intervals from bootstrap
 #' 
 #' @examples
-#' 
+#' \dontrun{
 #' c_index <- get_cindex(df, boot = TRUE, B = 300)
-#' 
+#' }
 #' @export
 get_cindex <- function(data = NULL,
                        phs = "phs",
                        age = "age",
                        status = "status",
-                       upper_quantile = 0.80,
-                       lower_quantile = 0.20,
                        swc = FALSE,
                        swc_popnumcases = NULL,
                        swc_popnumcontrols = NULL,

@@ -14,18 +14,21 @@
 #' @param inverse logical. if `TRUE` calculates the inverse (x * -1) the PHS scores to reverse the direction of effect. Default = `FALSE`.
 #' @importFrom tidyr pivot_longer
 #' @importFrom survival coxph Surv survfit
+#' @importFrom stats quantile
 #' @import dplyr
 #' @import ggplot2
 #' @import tibble
 #' @return A data.frame containing ages, the K-M curve, and the upper and lower confidence intervals
 #' @examples
+#' \dontrun{
 #' km_curve <- km_curve(df, inverse = TRUE, ideal = FALSE)
 #' ggplot(km_curve, aes(x = time,
 #'                      y = estimate,
 #'                      ymin = conf.low,
 #'                      ymax = conf.high)) +
-#'    geom_ribbon() +
-#'    geom_step()
+#'                      geom_ribbon() +
+#'                      geom_step()
+#' }
 #' @export
 km_curve <- function(data = NULL,
                      phs = "phs",
@@ -35,12 +38,10 @@ km_curve <- function(data = NULL,
                      lower,
                      age_range = 40:100,
                      scale = FALSE,
-                     inverse = FALSE,
-                     ideal = FALSE) {
-    
+                     inverse = FALSE) {
+
     scale <- as.logical(scale)
     inverse <- as.logical(inverse)
-    ideal <- as.logical(ideal)
     
     if (is.character(phs)) {
         phs = data[[phs]]
@@ -70,16 +71,16 @@ km_curve <- function(data = NULL,
     # Plot K-M curves for centiles
     mod <- survfit(Surv(age, status) ~ 1, data = quantile_data)
     
-    mod_data <- tibble(time = mod$time,
-                       n.risk = mod$n.risk,
-                       n.event = mod$n.event,
-                       n.censor = mod$n.censor,
-                       estimate = mod$surv,
-                       std.error = mod$std.err,
-                       conf.high = mod$upper,
-                       conf.low = mod$lower)
+    mod_data <- data.frame(time = mod$time,
+                           n.risk = mod$n.risk,
+                           n.event = mod$n.event,
+                           n.censor = mod$n.censor,
+                           estimate = mod$surv,
+                           std.error = mod$std.err,
+                           conf.high = mod$upper,
+                           conf.low = mod$lower)
     
-    kmcurve = select(mod_data, time, estimate, conf.low, conf.high)
+    kmcurve = select(mod_data, .data$time, .data$estimate, .data$conf.low, .data$conf.high)
     return(kmcurve)
     
 }

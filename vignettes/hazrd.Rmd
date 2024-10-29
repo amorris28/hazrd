@@ -1,0 +1,113 @@
+---
+title: "hazrd"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{hazrd}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hazrd)
+library(ggplot2)
+set.seed(46495809)
+```
+
+## Getting started with `{hazrd}`
+
+First, generate some test data.
+
+```{r}
+
+n = 1000
+status = rbinom(n, 1, 0.2)
+
+test_data = data.frame(phs  = rnorm(n) + (1 * status),
+                       status = status,
+                       age = sample(40:100, n, replace = TRUE))
+```
+
+Next, plot the histogram of PHSes by case/control status.
+
+```{r phs_hist, fig.width=4}
+phs_hist(test_data, normalize = TRUE)
+```
+
+### Generating test statistics and confidence intervals
+
+Then, calculate the hazard ratio comparing the mean of the top 20% of PHSes to the mean of the bottom 20% (i.e., `HR80_20`). We can also generate 95% confidence intervals using bootstrapping.
+
+```{r}
+HR80_20 = get_hr(test_data, boot = TRUE, B = 300)
+print(HR80_20)
+```
+
+Similarly, calculate the odds ratio at age 70 between the top 20% and bottom 20% of PHSes.
+
+```{r}
+OR80_20 = get_or(test_data, or_age = 70, boot = TRUE, B = 300)
+print(OR80_20)
+```
+
+Return the concordance index with 95% confidence intervals from a coxph fit:
+
+```{r}
+c_index = get_cindex(test_data,  boot = TRUE, B = 300)
+print(c_index)
+```
+
+Finally, plot the Kaplan-Meier curves with confidence intervals for centiles of interest.
+
+```{r generate_km_curve, fig.width=4.5}
+curves = data.frame(lower = c(0,   0.2, 0.8,  0.98),
+                    upper = c(0.2, 0.7, 0.98, 1))
+
+label_generator = function(x, y) {
+    x = x * 100
+    y = y * 100
+    out = paste0("PHS ", x, "-", y, "th centile")
+    return(out)
+}
+
+km_curves = data.frame()
+for (i in seq_len(nrow(curves))) {
+    curven <- km_curve(data = test_data,  
+                       lower = curves$lower[i],
+                       upper = curves$upper[i], 
+                       age_range = 40:100, 
+                       scale = FALSE, 
+                       inverse = FALSE)
+    curven$label = label_generator(curves$lower[i], curves$upper[i])
+    km_curves = rbind(km_curves, curven)
+}
+
+
+ggplot(km_curves, aes(x = time, 
+                      y = estimate,
+                      ymin = conf.low,
+                      ymax = conf.high,
+                      col = label,
+                      fill = label)) +
+    geom_ribbon(alpha = 0.1,
+                color = 0) +
+    geom_step() +
+    theme_minimal() +
+    xlim(min(40), max(100)) + 
+    ylim(0, 1) +
+    labs(x = "Age", y = "Disease-free Survival") +
+    scale_color_brewer(palette = "Set1",
+                       name = "Centile") +
+    scale_fill_brewer(palette = "Set1",
+                       name = "Centile")
+```
+
+## More advanced topics
+
+

@@ -12,10 +12,7 @@
 #' @return A numeric hazard ratio
 #' 
 #' @import survival
-#' 
-#' @examples
-#' 
-#' HR80_20 <- calc_hr(df)
+#' @importFrom stats quantile
 #' 
 #' @export
 calc_hr = function(df, 

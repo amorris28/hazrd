@@ -23,6 +23,3 @@ A list with cumulative incidence and incidence data frames
 \description{
 Compute Cumulative Incidence
 }
-\examples{
-cuminc_data <- cum_inc("USA")
-}

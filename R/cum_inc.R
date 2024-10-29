@@ -4,8 +4,9 @@
 #' @param inc_file The incidence file name
 #' @param prop_file The proportions file name
 #' @return A list with cumulative incidence and incidence data frames
-#' @examples
-#' cuminc_data <- cum_inc("USA")
+#' @importFrom utils read.csv
+#' @importFrom stats lm
+#' @importFrom stats predict
 #' @export
 cum_inc <- function(country, inc_file = "prostate_cancer_incidence_country.csv", prop_file = "intermediate_high_proportions_CAP.csv") {
   incTable <- read.csv(inc_file)

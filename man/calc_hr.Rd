@@ -32,8 +32,3 @@ A numeric hazard ratio
 \description{
 Internal function. Not intended for users.
 }
-\examples{
-
-HR80_20 <- calc_hr(df)
-
-}
