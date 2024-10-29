@@ -34,8 +34,7 @@ set.seed(46495809)
 n = 1000
 status = rbinom(n, 1, 0.2)
 
-test_data = data.frame(id = as.factor(seq_len(n)),
-                       phs  = rnorm(n) + (1 * status),
+test_data = data.frame(phs  = rnorm(n) + (1 * status),
                        status = status,
                        age = sample(40:100, n, replace = TRUE))
 ```
@@ -100,11 +99,11 @@ label_generator = function(x, y) {
 km_curves = data.frame()
 for (i in seq_len(nrow(curves))) {
     curven <- km_curve(data = test_data, 
-                   upper = curves$upper[i], 
-                   lower = curves$lower[i], 
-                   age_range = 40:100, 
-                   scale = FALSE, 
-                   inverse = FALSE)
+                       upper = curves$upper[i], 
+                       lower = curves$lower[i], 
+                       age_range = 40:100, 
+                       scale = FALSE, 
+                       inverse = FALSE)
     curven$label = label_generator(curves$lower[i], curves$upper[i])
     km_curves = rbind(km_curves, curven)
 }
