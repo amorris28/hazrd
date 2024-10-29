@@ -2,7 +2,15 @@ hazrd
 ================
 
 The goal of hazrd is to simplify and standardize the development and
-testing of polygenic hazard score models.
+testing of polygenic hazard score models in an opinionated way based
+mainly on past work in the [PHS
+repo](https://github.com/cmig-research-group/phs). Currently, most of
+the functionality focuses on external validation of PHS models. This
+includes calculation of standard statistics (80-20 hazard ratios, 80-20
+odds ratios, and concordance index) and plotting of Kaplan-Meier curves
+and cumulative incidence curves. In the future, this will be expanded to
+model development, internal validation, imaging risk scores, multimodal
+hazard scores, and functions related to Digital Avatar.
 
 ## Installation
 
