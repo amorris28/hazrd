@@ -4,9 +4,11 @@ hazrd
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/amorris28/hazRd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/amorris28/hazRd/actions/workflows/R-CMD-check.yaml)
-<!-- badges: end --> The goal of hazrd is to simplify and standardize
-the development and testing of polygenic hazard score models in an
-opinionated way based mainly on past work in the [PHS
+<!-- badges: end -->
+
+The goal of hazrd is to simplify and standardize the development and
+testing of polygenic hazard score models in an opinionated way based
+mainly on past work in the [PHS
 repo](https://github.com/cmig-research-group/phs). Currently, most of
 the functionality focuses on external validation of PHS models. This
 includes calculation of standard statistics (80-20 hazard ratios, 80-20
