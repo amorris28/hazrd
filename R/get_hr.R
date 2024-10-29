@@ -60,15 +60,15 @@ get_hr <- function(data = NULL,
                  swc_popnumcontrols)
     
     if (boot == TRUE) {
-        quantiles = boot_confint(df,
-                                 B,
-                                 calc_hr,
-                                 upper_quantile,
-                                 lower_quantile,
-                                 swc,
-                                 swc_popnumcases,
-                                 swc_popnumcontrols)
-        return(list("HR" = HR, "lower_CI" = quantiles[[1]], "upper_CI" = quantiles[[2]]))
+        quantiles = boot_conf(df,
+                              B,
+                              calc_hr,
+                              upper_quantile,
+                              lower_quantile,
+                              swc,
+                              swc_popnumcases,
+                              swc_popnumcontrols)
+        return(list("HR" = HR, "conf.low" = quantiles[[1]], "conf.high" = quantiles[[2]]))
     }
     return(HR)
     

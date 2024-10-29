@@ -1,6 +1,8 @@
 #' Calculates the 95% confidence interval using boostrapping
 #' 
-#' Internal function. Not intended for users.
+#' Internal function. Not intended for users. This function can return the 95%
+#' confidence intervals for any statistic so long as the function passed to `f`
+#' returns a single value of that statistic.
 #'
 #' @param df a data.frame containing the clumnes phs, age, and status
 #' @param B number of bootstrap iterations to run.
@@ -11,13 +13,13 @@
 #' 
 #' @examples
 #' 
-#' quantiles <- boot_confint(df, B, calc_or, or_age, upper_quantile, lower_quantile)
+#' quantiles <- boot_conf(df, B, calc_or, or_age, upper_quantile, lower_quantile)
 #' 
 #' @export
-boot_confint = function(df, 
-                   B,
-                   f,
-                   ...) {
+boot_conf = function(df, 
+                     B,
+                     f,
+                     ...) {
     # f = match.fun(function_to_bootstrap)
     iters = matrix(NA, nrow = B)
     for (b in (1:B)){

@@ -37,50 +37,50 @@ km_curve <- function(data = NULL,
                      scale = FALSE,
                      inverse = FALSE,
                      ideal = FALSE) {
-
-  scale <- as.logical(scale)
-  inverse <- as.logical(inverse)
-  ideal <- as.logical(ideal)
-
-  if (is.character(phs)) {
-    phs = data[[phs]]
-  }
-  if (is.character(age)) {
-    age = data[[age]]
-  }
-  if (is.character(status)) {
-    status = data[[status]]
-  }
-
-  if (scale) { phs <- scale(phs, center = TRUE, scale = TRUE) }
-  if (inverse) { phs <- phs * -1 }
-  
-  critvals <- c(quantile(phs, lower), quantile(phs, upper))
-
-  ix <- which(phs >= critvals[1] & phs <= critvals[2])
-  
-  tmp_df <- data.frame(age, status, phs)
-
-  cox_model <- coxph(Surv(age, status) ~ phs, data = tmp_df)
-  
-  bt <- cox_model$coefficients[["phs"]]
-  
-  quantile_data <- tmp_df[ix, ]
-  
-  # Plot K-M curves for centiles
-  mod <- survfit(Surv(age, status) ~ 1, data = quantile_data)
-  
-  mod_data <- tibble(time = mod$time,
-                     n.risk = mod$n.risk,
-                     n.event = mod$n.event,
-                     n.censor = mod$n.censor,
-                     estimate = mod$surv,
-                     std.error = mod$std.err,
-                     conf.high = mod$upper,
-                     conf.low = mod$lower)
-  
-  kmcurve = select(mod_data, time, estimate, conf.high, conf.low)
-  return(kmcurve)
-  
+    
+    scale <- as.logical(scale)
+    inverse <- as.logical(inverse)
+    ideal <- as.logical(ideal)
+    
+    if (is.character(phs)) {
+        phs = data[[phs]]
+    }
+    if (is.character(age)) {
+        age = data[[age]]
+    }
+    if (is.character(status)) {
+        status = data[[status]]
+    }
+    
+    if (scale) { phs <- scale(phs, center = TRUE, scale = TRUE) }
+    if (inverse) { phs <- phs * -1 }
+    
+    critvals <- c(quantile(phs, lower), quantile(phs, upper))
+    
+    ix <- which(phs >= critvals[1] & phs <= critvals[2])
+    
+    tmp_df <- data.frame(age, status, phs)
+    
+    cox_model <- coxph(Surv(age, status) ~ phs, data = tmp_df)
+    
+    bt <- cox_model$coefficients[["phs"]]
+    
+    quantile_data <- tmp_df[ix, ]
+    
+    # Plot K-M curves for centiles
+    mod <- survfit(Surv(age, status) ~ 1, data = quantile_data)
+    
+    mod_data <- tibble(time = mod$time,
+                       n.risk = mod$n.risk,
+                       n.event = mod$n.event,
+                       n.censor = mod$n.censor,
+                       estimate = mod$surv,
+                       std.error = mod$std.err,
+                       conf.high = mod$upper,
+                       conf.low = mod$lower)
+    
+    kmcurve = select(mod_data, time, estimate, conf.low, conf.high)
+    return(kmcurve)
+    
 }
 

@@ -63,8 +63,8 @@ print(OR80_20)
 Return the concordance index with 95% confidence intervals from a coxph fit:
 
 ```{r}
-concord_index = get_ci(test_data,  boot = TRUE, B = 300)
-print(concord_index)
+c_index = get_cindex(test_data,  boot = TRUE, B = 300)
+print(c_index)
 ```
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for centiles of interest.
@@ -82,9 +82,9 @@ label_generator = function(x, y) {
 
 km_curves = data.frame()
 for (i in seq_len(nrow(curves))) {
-    curven <- km_curve(data = test_data, 
+    curven <- km_curve(data = test_data,  
+                       lower = curves$lower[i],
                        upper = curves$upper[i], 
-                       lower = curves$lower[i], 
                        age_range = 40:100, 
                        scale = FALSE, 
                        inverse = FALSE)

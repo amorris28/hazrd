@@ -15,10 +15,10 @@
 #' 
 #' @examples
 #' 
-#' HR80_20 <- calc_ci(df)
+#' c_index <- calc_cindex(df)
 #' 
 #' @export
-calc_ci = function(df, 
+calc_cindex = function(df, 
                    swc = FALSE,
                    swc_popnumcases = NULL,
                    swc_popnumcontrols = NULL) {
@@ -38,7 +38,7 @@ calc_ci = function(df,
         cxph <- coxph(Surv(age, status) ~ phs, data = df)
     }
     
-    CI = as.numeric(cxph$concordance['concordance'])
+    c_index = as.numeric(cxph$concordance['concordance'])
     
-    return(CI)
+    return(c_index)
 }

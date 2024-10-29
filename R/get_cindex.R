@@ -1,4 +1,4 @@
-#' Returns a concordance index
+#' Returns a concordance index from a coxph fit
 #' 
 #' This function returns the concordance index from a coxph fit and optionally
 #' performs bootstrap resampling to return 95% confidence intervals.
@@ -21,20 +21,20 @@
 #' 
 #' @examples
 #' 
-#' CI <- get_ci(df, boot = TRUE, B = 300)
+#' c_index <- get_cindex(df, boot = TRUE, B = 300)
 #' 
 #' @export
-get_ci <- function(data = NULL,
-                   phs = "phs",
-                   age = "age",
-                   status = "status",
-                   upper_quantile = 0.80,
-                   lower_quantile = 0.20,
-                   swc = FALSE,
-                   swc_popnumcases = NULL,
-                   swc_popnumcontrols = NULL,
-                   boot = FALSE,
-                   B = 1000) {
+get_cindex <- function(data = NULL,
+                       phs = "phs",
+                       age = "age",
+                       status = "status",
+                       upper_quantile = 0.80,
+                       lower_quantile = 0.20,
+                       swc = FALSE,
+                       swc_popnumcases = NULL,
+                       swc_popnumcontrols = NULL,
+                       boot = FALSE,
+                       B = 1000) {
     
     if (is.character(phs)) {
         phs = data[[phs]]
@@ -50,20 +50,20 @@ get_ci <- function(data = NULL,
                      status = status, 
                      phs = phs)
     
-    CI = calc_ci(df, 
-                 swc,
-                 swc_popnumcases,
-                 swc_popnumcontrols)
+    c_index = calc_cindex(df, 
+                          swc,
+                          swc_popnumcases,
+                          swc_popnumcontrols)
     
     if (boot == TRUE) {
-        quantiles = boot_confint(df,
-                                 B,
-                                 calc_ci,
-                                 swc,
-                                 swc_popnumcases,
-                                 swc_popnumcontrols)
-        return(list("CI" = CI, "lower_CI" = quantiles[[1]], "upper_CI" = quantiles[[2]]))
+        quantiles = boot_conf(df,
+                              B,
+                              calc_cindex,
+                              swc,
+                              swc_popnumcases,
+                              swc_popnumcontrols)
+        return(list("c_index" = c_index, "conf.low" = quantiles[[1]], "conf.high" = quantiles[[2]]))
     }
-    return(CI)
+    return(c_index)
     
 }

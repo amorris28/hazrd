@@ -67,10 +67,10 @@ print(HR80_20)
     ## $HR
     ## [1] 7.347802
     ## 
-    ## $lower_CI
+    ## $conf.low
     ## [1] 5.009186
     ## 
-    ## $upper_CI
+    ## $conf.high
     ## [1] 11.59092
 
 Similarly, calculate the odds ratio at age 70 between the top 20% and
@@ -84,27 +84,27 @@ print(OR80_20)
     ## $OR
     ## [1] 0.858156
     ## 
-    ## $lower_CI
+    ## $conf.low
     ## [1] 0.4219104
     ## 
-    ## $upper_CI
+    ## $conf.high
     ## [1] 1.869373
 
 Return the concordance index with 95% confidence intervals from a coxph
 fit:
 
 ``` r
-concord_index = get_ci(test_data,  boot = TRUE, B = 300)
-print(concord_index)
+c_index = get_cindex(test_data,  boot = TRUE, B = 300)
+print(c_index)
 ```
 
-    ## $CI
+    ## $c_index
     ## [1] 0.7125285
     ## 
-    ## $lower_CI
+    ## $conf.low
     ## [1] 0.6734051
     ## 
-    ## $upper_CI
+    ## $conf.high
     ## [1] 0.7486092
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for
@@ -123,9 +123,9 @@ label_generator = function(x, y) {
 
 km_curves = data.frame()
 for (i in seq_len(nrow(curves))) {
-    curven <- km_curve(data = test_data, 
+    curven <- km_curve(data = test_data,  
+                       lower = curves$lower[i],
                        upper = curves$upper[i], 
-                       lower = curves$lower[i], 
                        age_range = 40:100, 
                        scale = FALSE, 
                        inverse = FALSE)
