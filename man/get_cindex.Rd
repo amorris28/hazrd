@@ -9,11 +9,11 @@ get_cindex(
   phs = "phs",
   age = "age",
   status = "status",
+  CI = FALSE,
+  bootstrap_iterations = 1000,
   swc = FALSE,
   swc_popnumcases = NULL,
-  swc_popnumcontrols = NULL,
-  boot = FALSE,
-  B = 1000
+  swc_popnumcontrols = NULL
 )
 }
 \arguments{
@@ -25,15 +25,15 @@ get_cindex(
 
 \item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"}
 
+\item{CI}{logical. if \code{TRUE} performs bootstrap and returns 95\% confidence intervals. Default = \code{FALSE}.}
+
+\item{bootstrap_iterations}{Number of bootstrap iterations to run. Required if boot = \code{TRUE}. Default = 1000.}
+
 \item{swc}{logical. if \code{TRUE} performs sample weight correction}
 
 \item{swc_popnumcases}{an optional integer specifying the number of cases in a reference population for sample weight correction. Required if swc = \code{TRUE}.}
 
 \item{swc_popnumcontrols}{an optional integer specifying the number of controls in a reference population for sample weight correction. Required if swc = \code{TRUE}.}
-
-\item{boot}{logical. if \code{TRUE} performs bootstrap and returns 95\% confidence intervals. Default = \code{FALSE}.}
-
-\item{B}{Number of bootstrap iterations to run. Required if boot = \code{TRUE}. Default = 1000.}
 }
 \value{
 A numeric hazard ratio or a list containing HR and the 95\% confidence intervals from bootstrap

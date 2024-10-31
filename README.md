@@ -65,7 +65,7 @@ PHSes to the mean of the bottom 20% (i.e., `HR80_20`). We can also
 generate 95% confidence intervals using bootstrapping.
 
 ``` r
-HR80_20 = get_hr(test_data, boot = TRUE, B = 300)
+HR80_20 = get_hr(test_data, CI = TRUE, boot = 300)
 print(HR80_20)
 ```
 
@@ -82,24 +82,24 @@ Similarly, calculate the odds ratio at age 70 between the top 20% and
 bottom 20% of PHSes.
 
 ``` r
-OR80_20 = get_or(test_data, or_age = 70, boot = TRUE, B = 300)
+OR80_20 = get_or(test_data, or_age = 70, CI = TRUE, boot = 300)
 print(OR80_20)
 ```
 
     ## $OR
-    ## [1] 0.858156
+    ## [1] 0.7529412
     ## 
     ## $conf.low
-    ## [1] 0.4219104
+    ## [1] 0.4818517
     ## 
     ## $conf.high
-    ## [1] 1.869373
+    ## [1] 2.970312
 
 Return the concordance index with 95% confidence intervals from a coxph
 fit:
 
 ``` r
-c_index = get_cindex(test_data,  boot = TRUE, B = 300)
+c_index = get_cindex(test_data, CI = TRUE, boot = 300)
 print(c_index)
 ```
 
@@ -116,8 +116,10 @@ Finally, plot the Kaplan-Meier curves with confidence intervals for
 centiles of interest.
 
 ``` r
-curves = data.frame(lower = c(0,   0.2, 0.8,  0.98),
-                    upper = c(0.2, 0.7, 0.98, 1))
+curves = data.frame(curve0_20 = c(0,   0.2),
+                    curve20_70 = c(0.2, 0.7),
+                    curve80_98 = c(0.8, 0.98),
+                    curve98_100 = c(0.98, 1.0))
 
 label_generator = function(x, y) {
     x = x * 100
@@ -127,14 +129,13 @@ label_generator = function(x, y) {
 }
 
 km_curves = data.frame()
-for (i in seq_len(nrow(curves))) {
+for (i in seq_len(length(curves))) {
     curven <- km_curve(data = test_data,  
-                       lower = curves$lower[i],
-                       upper = curves$upper[i], 
+                       interval = curves[[i]],
                        age_range = 40:100, 
                        scale = FALSE, 
                        inverse = FALSE)
-    curven$label = label_generator(curves$lower[i], curves$upper[i])
+    curven$label = label_generator(curves[1, i], curves[2, i])
     km_curves = rbind(km_curves, curven)
 }
 
@@ -149,7 +150,7 @@ ggplot(km_curves, aes(x = time,
                 color = 0) +
     geom_step() +
     theme_minimal() +
-    xlim(min(40), max(100)) + 
+    xlim(40, 100) + 
     ylim(0, 1) +
     labs(x = "Age", y = "Disease-free Survival") +
     scale_color_brewer(palette = "Set1",

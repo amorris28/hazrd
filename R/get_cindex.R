@@ -11,11 +11,11 @@
 #' @param phs an optional string specifying the column name in `data` containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"
 #' @param age an optional string specifying the column name in `data` containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"
 #' @param status an optional string specifying the column name in `data` containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"
+#' @param CI logical. if \code{TRUE} performs bootstrap and returns 95% confidence intervals. Default = \code{FALSE}.
+#' @param bootstrap_iterations Number of bootstrap iterations to run. Required if boot = `TRUE`. Default = 1000.
 #' @param swc logical. if `TRUE` performs sample weight correction
 #' @param swc_popnumcases an optional integer specifying the number of cases in a reference population for sample weight correction. Required if swc = `TRUE`.
 #' @param swc_popnumcontrols an optional integer specifying the number of controls in a reference population for sample weight correction. Required if swc = `TRUE`.
-#' @param boot logical. if \code{TRUE} performs bootstrap and returns 95% confidence intervals. Default = \code{FALSE}.
-#' @param B Number of bootstrap iterations to run. Required if boot = `TRUE`. Default = 1000.
 #' 
 #' @return A numeric hazard ratio or a list containing HR and the 95% confidence intervals from bootstrap
 #' 
@@ -28,11 +28,11 @@ get_cindex <- function(data = NULL,
                        phs = "phs",
                        age = "age",
                        status = "status",
+                       CI = FALSE,
+                       bootstrap_iterations = 1000,
                        swc = FALSE,
                        swc_popnumcases = NULL,
-                       swc_popnumcontrols = NULL,
-                       boot = FALSE,
-                       B = 1000) {
+                       swc_popnumcontrols = NULL) {
     
     if (is.character(phs)) {
         phs = data[[phs]]
@@ -52,16 +52,15 @@ get_cindex <- function(data = NULL,
                           swc,
                           swc_popnumcases,
                           swc_popnumcontrols)
-    
-    if (boot == TRUE) {
+    quantiles = NULL
+    if (CI == TRUE) {
         quantiles = boot_conf(df,
-                              B,
+                              bootstrap_iterations,
                               calc_cindex,
                               swc,
                               swc_popnumcases,
                               swc_popnumcontrols)
-        return(list("c_index" = c_index, "conf.low" = quantiles[[1]], "conf.high" = quantiles[[2]]))
     }
-    return(c_index)
+    return(list("c_index" = c_index, "conf.low" = quantiles[[1]], "conf.high" = quantiles[[2]]))
     
 }

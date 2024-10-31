@@ -2,7 +2,7 @@
 #' 
 #' Internal function. Not intended for users.
 #'
-#' @param df a data.frame containing the clumnes phs, age, and status
+#' @param df a data.frame containing the columns phs, age, and status
 #' @param swc logical. if `TRUE` performs sample weight correction
 #' @param swc_popnumcases an optional integer specifying the number of cases in a reference population for sample weight correction. Required if swc = `TRUE`.
 #' @param swc_popnumcontrols an optional integer specifying the number of controls in a reference population for sample weight correction. Required if swc = `TRUE`.

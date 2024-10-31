@@ -9,13 +9,13 @@ get_hr(
   phs = "phs",
   age = "age",
   status = "status",
-  upper_quantile = 0.8,
-  lower_quantile = 0.2,
+  lower_interval = 0.2,
+  upper_interval = 0.8,
+  CI = FALSE,
+  bootstrap_iterations = 1000,
   swc = FALSE,
   swc_popnumcases = NULL,
-  swc_popnumcontrols = NULL,
-  boot = FALSE,
-  B = 1000
+  swc_popnumcontrols = NULL
 )
 }
 \arguments{
@@ -27,19 +27,19 @@ get_hr(
 
 \item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"}
 
-\item{upper_quantile}{an optional vector specifying the upper quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., \code{c(0.80, 0.98)}). If only one value is provided, then the PHS scores between that number and Infinite are included. The default is \code{0.80}.}
+\item{lower_interval}{a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be \code{-Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.30, 0.70)}). The default is \code{0.2}.}
 
-\item{lower_quantile}{an optional vector specifying the lower quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., \code{c(0.3, 0.7)}). If only one value is provided, then the PHS scores between -Infinite and that number are included. The default is \code{0.20}.}
+\item{upper_interval}{a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be \code{Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.80, 0.98)}). The default is \code{0.80}.}
+
+\item{CI}{logical. if \code{TRUE} performs bootstrap and returns 95\% confidence intervals. Default = \code{FALSE}.}
+
+\item{bootstrap_iterations}{Number of bootstrap iterations to run. Required if boot = \code{TRUE}. Default = 1000.}
 
 \item{swc}{logical. if \code{TRUE} performs sample weight correction}
 
 \item{swc_popnumcases}{an optional integer specifying the number of cases in a reference population for sample weight correction. Required if swc = \code{TRUE}.}
 
 \item{swc_popnumcontrols}{an optional integer specifying the number of controls in a reference population for sample weight correction. Required if swc = \code{TRUE}.}
-
-\item{boot}{logical. if \code{TRUE} performs bootstrap and returns 95\% confidence intervals. Default = \code{FALSE}.}
-
-\item{B}{Number of bootstrap iterations to run. Required if boot = \code{TRUE}. Default = 1000.}
 }
 \value{
 A numeric hazard ratio or a list containing HR and the 95\% confidence intervals from bootstrap

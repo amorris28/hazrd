@@ -3,8 +3,8 @@
 #' Internal function. Not intended for users.
 #'
 #' @param df a data.frame containing the clumnes phs, age, and status
-#' @param upper_quantile a vector specifying the upper quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., `c(0.80, 0.98)`). If only one value is provided, then the PHS scores between that number and Infinite are included. The default is `0.80`. 
-#' @param lower_quantile a vector specifying the lower quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., `c(0.3, 0.7)`). If only one value is provided, then the PHS scores between -Infinite and that number are included. The default is `0.20`. 
+#' @param lower_interval a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be `-Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.30, 0.70)`). The default is `0.2`. 
+#' @param upper_interval a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be `Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.80, 0.98)`). The default is `0.80`. 
 #' @param swc logical. if `TRUE` performs sample weight correction
 #' @param swc_popnumcases an optional integer specifying the number of cases in a reference population for sample weight correction. Required if swc = `TRUE`.
 #' @param swc_popnumcontrols an optional integer specifying the number of controls in a reference population for sample weight correction. Required if swc = `TRUE`.
@@ -16,8 +16,8 @@
 #' 
 #' @export
 calc_hr = function(df, 
-                   upper_quantile, 
-                   lower_quantile,
+                   lower_interval, 
+                   upper_interval,
                    swc = FALSE,
                    swc_popnumcases = NULL,
                    swc_popnumcontrols = NULL) {
@@ -31,20 +31,20 @@ calc_hr = function(df,
         swc_wvec <- df$status * (swc_popnumcases / swc_numcases) + (!df$status) * (swc_popnumcontrols / swc_numcontrols)
     }
     
-    if (length(upper_quantile) == 1) {
-        num_critvals <- c(quantile(df$phs, upper_quantile), Inf)
-    } else if (length(upper_quantile) == 2) {
-        num_critvals <- c(quantile(df$phs, upper_quantile[1]), quantile(df$phs, upper_quantile[2]))
+    if (length(lower_interval) == 1) {
+        den_critvals <- c(-Inf, quantile(df$phs, lower_interval))
+    } else if (length(lower_interval) == 2) {
+        den_critvals <- c(quantile(df$phs, lower_interval[1]), quantile(df$phs, lower_interval[2]))
     } else {
-        stop("'upper_quantile' must be length 1 or 2")
+        stop("'lower_interval' must be length 1 or 2")
     }
-    
-    if (length(lower_quantile) == 1) {
-        den_critvals <- c(-Inf, quantile(df$phs, lower_quantile))
-    } else if (length(lower_quantile) == 2) {
-        den_critvals <- c(quantile(df$phs, lower_quantile[1]), quantile(df$phs, lower_quantile[2]))
+
+        if (length(upper_interval) == 1) {
+        num_critvals <- c(quantile(df$phs, upper_interval), Inf)
+    } else if (length(upper_interval) == 2) {
+        num_critvals <- c(quantile(df$phs, upper_interval[1]), quantile(df$phs, upper_interval[2]))
     } else {
-        stop("'lower_quantile' must be length 1 or 2")
+        stop("'upper_interval' must be length 1 or 2")
     }
     
     if (swc) {
@@ -55,8 +55,8 @@ calc_hr = function(df,
     
     beta = as.numeric(cxph$coefficients)
     
-    ix_num <- which(df$phs >= num_critvals[1] & df$phs <= num_critvals[2])
     ix_den <- which(df$phs >= den_critvals[1] & df$phs <= den_critvals[2])
+    ix_num <- which(df$phs >= num_critvals[1] & df$phs <= num_critvals[2])
     
     beta_phs <- beta * df$phs
     beta_phs_num <- mean(beta_phs[ix_num])

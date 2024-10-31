@@ -9,8 +9,7 @@ km_curve(
   phs = "phs",
   age = "age",
   status = "status",
-  upper,
-  lower,
+  interval = c(-Inf, Inf),
   age_range = 40:100,
   scale = FALSE,
   inverse = FALSE
@@ -25,9 +24,7 @@ km_curve(
 
 \item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"}
 
-\item{upper}{a single number specifying the upper end of the quantile. e.g., 1.0}
-
-\item{lower}{a single number specifying the lower end of the quantile. e.g., 0.8}
+\item{interval}{a vector of length two specifying the lower  and upper quantiles of the interval. The default is \code{c(-Inf, Inf)}.}
 
 \item{age_range}{a vector of ages over which curves should be calculated. Default = 40:100}
 
@@ -40,7 +37,7 @@ A data.frame containing ages, the K-M curve, and the upper and lower confidence 
 }
 \description{
 This function returns a single Kaplan-Meier curve for plotting.
-Output includes age, the K-M estimate at each age, and  the upper and lower confidence intervals
+Output includes age, the K-M estimate at each age, and the upper and lower confidence intervals
 }
 \examples{
 \dontrun{

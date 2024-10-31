@@ -4,16 +4,16 @@
 \alias{calc_or}
 \title{Calculates the odds ratio for a dataset}
 \usage{
-calc_or(df, or_age, upper_quantile, lower_quantile)
+calc_or(df, or_age, lower_interval, upper_interval)
 }
 \arguments{
 \item{df}{a data.frame containing the columns phs, age, and status}
 
 \item{or_age}{an integer specifying the age at which the odds ratio should be calculated}
 
-\item{upper_quantile}{a vector specifying the upper quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., \code{c(0.80, 0.98)}). If only one value is provided, then the PHS scores between that number and Infinite are included. The default is \code{0.80}.}
+\item{lower_interval}{a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be \code{-Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.30, 0.70)}). The default is \code{0.2}.}
 
-\item{lower_quantile}{a vector specifying the lower quantile of the hazard ratio. Can also be supplied as a vector of length 2 to specify both the upper and lower limits of the quantile (e.g., \code{c(0.3, 0.7)}). If only one value is provided, then the PHS scores between -Infinite and that number are included. The default is \code{0.20}.}
+\item{upper_interval}{a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be \code{Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.80, 0.98)}). The default is \code{0.80}.}
 }
 \value{
 A numeric odds ratio

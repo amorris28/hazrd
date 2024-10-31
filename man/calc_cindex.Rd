@@ -7,7 +7,7 @@
 calc_cindex(df, swc = FALSE, swc_popnumcases = NULL, swc_popnumcontrols = NULL)
 }
 \arguments{
-\item{df}{a data.frame containing the clumnes phs, age, and status}
+\item{df}{a data.frame containing the columns phs, age, and status}
 
 \item{swc}{logical. if \code{TRUE} performs sample weight correction}
 

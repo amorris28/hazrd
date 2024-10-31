@@ -4,12 +4,12 @@
 \alias{boot_conf}
 \title{Calculates the 95\% confidence interval using boostrapping}
 \usage{
-boot_conf(df, B, f, ...)
+boot_conf(df, bootstrap_iterations, f, ...)
 }
 \arguments{
 \item{df}{a data.frame containing the clumnes phs, age, and status}
 
-\item{B}{number of bootstrap iterations to run.}
+\item{bootstrap_iterations}{number of bootstrap iterations to run.}
 
 \item{f}{the name of a function to perform bootstrapping on.}
 

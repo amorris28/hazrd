@@ -1,14 +1,13 @@
 #' Return Kaplan-Meier curve
 #'
 #' This function returns a single Kaplan-Meier curve for plotting.
-#' Output includes age, the K-M estimate at each age, and  the upper and lower confidence intervals
+#' Output includes age, the K-M estimate at each age, and the upper and lower confidence intervals
 #'
 #' @param data an optional data.frame containing the variables for phs, age, and status
 #' @param phs an optional string specifying the column name in `data` containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"
 #' @param age an optional string specifying the column name in `data` containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"
 #' @param status an optional string specifying the column name in `data` containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"
-#' @param upper a single number specifying the upper end of the quantile. e.g., 1.0
-#' @param lower a single number specifying the lower end of the quantile. e.g., 0.8
+#' @param interval a vector of length two specifying the lower  and upper quantiles of the interval. The default is `c(-Inf, Inf)`.
 #' @param age_range a vector of ages over which curves should be calculated. Default = 40:100
 #' @param scale logical. if `TRUE` centers and scales the PHS scores to unit variance. Default = `FALSE`.
 #' @param inverse logical. if `TRUE` calculates the inverse (x * -1) the PHS scores to reverse the direction of effect. Default = `FALSE`.
@@ -34,8 +33,7 @@ km_curve <- function(data = NULL,
                      phs = "phs",
                      age = "age",
                      status = "status",
-                     upper,
-                     lower,
+                     interval = c(-Inf, Inf),
                      age_range = 40:100,
                      scale = FALSE,
                      inverse = FALSE) {
@@ -56,7 +54,7 @@ km_curve <- function(data = NULL,
     if (scale) { phs <- scale(phs, center = TRUE, scale = TRUE) }
     if (inverse) { phs <- phs * -1 }
     
-    critvals <- c(quantile(phs, lower), quantile(phs, upper))
+    critvals <- c(quantile(phs, interval[1]), quantile(phs, interval[2]))
     
     ix <- which(phs >= critvals[1] & phs <= critvals[2])
     
