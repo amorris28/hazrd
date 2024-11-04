@@ -60,7 +60,7 @@ get_hr <- function(data = NULL,
                  swc_popnumcontrols)
     quantiles = NULL
     if (CI == TRUE) {
-        quantiles = boot_conf(df,
+        boot_out = boot_conf(df,
                               bootstrap_iterations,
                               calc_hr,
                               lower_interval,
@@ -69,6 +69,9 @@ get_hr <- function(data = NULL,
                               swc_popnumcases,
                               swc_popnumcontrols)
     }
-    return(list("HR" = HR, "conf.low" = quantiles[[1]], "conf.high" = quantiles[[2]]))
+    return(list("HR" = HR, 
+                "conf.low" = boot_out$quantiles[[1]], 
+                "conf.high" = boot_out$quantiles[[2]],
+                "iters" = boot_out$iters))
     
 }

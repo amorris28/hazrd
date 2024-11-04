@@ -54,13 +54,16 @@ get_cindex <- function(data = NULL,
                           swc_popnumcontrols)
     quantiles = NULL
     if (CI == TRUE) {
-        quantiles = boot_conf(df,
+        boot_out = boot_conf(df,
                               bootstrap_iterations,
                               calc_cindex,
                               swc,
                               swc_popnumcases,
                               swc_popnumcontrols)
     }
-    return(list("c_index" = c_index, "conf.low" = quantiles[[1]], "conf.high" = quantiles[[2]]))
+    return(list("c_index" = c_index, 
+                "conf.low" = boot_out$quantiles[[1]], 
+                "conf.high" = boot_out$quantiles[[2]],
+                "iters" = boot_out$iters))
     
 }

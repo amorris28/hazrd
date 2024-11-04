@@ -66,7 +66,7 @@ generate 95% confidence intervals using bootstrapping.
 
 ``` r
 HR80_20 = get_hr(test_data, CI = TRUE, boot = 300)
-print(HR80_20)
+print(HR80_20[1:3])
 ```
 
     ## $HR
@@ -78,12 +78,27 @@ print(HR80_20)
     ## $conf.high
     ## [1] 11.59092
 
+Each `get_` function also returns the output from each bootstrap
+iteration in `$iters` so that the user can plot these or calculate their
+own confidence intervals:
+
+``` r
+ggplot(mapping = aes(x = HR80_20$iters)) +
+    geom_histogram(binwidth = 1) +
+    geom_vline(xintercept = HR80_20$conf.low) +
+    geom_vline(xintercept = HR80_20$conf.high) +
+        theme_minimal() +
+        labs(x = "HR80_20", y = "Count")
+```
+
+![](README_files/figure-gfm/HR_histogram-1.png)<!-- -->
+
 Similarly, calculate the odds ratio at age 70 between the top 20% and
 bottom 20% of PHSes.
 
 ``` r
 OR80_20 = get_or(test_data, or_age = 70, CI = TRUE, boot = 300)
-print(OR80_20)
+print(OR80_20[1:3])
 ```
 
     ## $OR
@@ -100,7 +115,7 @@ fit:
 
 ``` r
 c_index = get_cindex(test_data, CI = TRUE, boot = 300)
-print(c_index)
+print(c_index[1:3])
 ```
 
     ## $c_index
@@ -211,7 +226,27 @@ can specify the path to the package as the first argument.
 devtools::document("path_to_your_package")
 ```
 
-Now, you can install the package locally using `devtools`.
+To verify there are no errors in the code or documentation, you can run
+`check`:
+
+``` r
+devtools::check()
+```
+
+There is a [known
+bug](https://stackoverflow.com/questions/63613301/r-cmd-check-note-unable-to-verify-current-time)
+where `check` returns 1 Note that says “unable to verify current time”.
+The workaround is to add `_R_CHECK_SYSTEM_CLOCK_=0` to your R
+environment file:
+
+``` r
+usethis::edit_r_environ()
+```
+
+Resolve this and any other Errors, Warnings, and Notes that come up from
+`check`.
+
+Finally, you can install the package locally using `devtools`:
 
 ``` r
 devtools::install("path_to_your_package")

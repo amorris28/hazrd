@@ -25,6 +25,6 @@ boot_conf = function(df,
         tmp_df = df[indices, ]
         iters[b] = f(tmp_df, ...)
     }
-    quantiles = quantile(iters, c(0.025, 0.975))
-    return(quantiles)
+    boot_out = list(quantiles = quantile(iters, c(0.025, 0.975)), iters = iters)
+    return(boot_out)
 }
