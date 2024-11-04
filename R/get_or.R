@@ -51,13 +51,16 @@ get_or <- function(data = NULL,
                  upper_interval)
     quantiles = NULL
     if (CI == TRUE) {
-        quantiles = boot_conf(df,
+        boot_out = boot_conf(df,
                               bootstrap_iterations,
                               calc_or,
                               or_age,
                               lower_interval,
                               upper_interval)
     }
-    return(list("OR" = OR, "conf.low" = quantiles[[1]], "conf.high" = quantiles[[2]]))
+    return(list("OR" = OR, 
+                "conf.low" = boot_out$quantiles[[1]], 
+                "conf.high" = boot_out$quantiles[[2]],
+                "iters" = boot_out$iters))
     
 }

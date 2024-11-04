@@ -2,12 +2,12 @@
 % Please edit documentation in R/boot_conf.R
 \name{boot_conf}
 \alias{boot_conf}
-\title{Calculates the 95\% confidence interval using boostrapping}
+\title{Calculates the 95\% confidence interval using bootstrapping}
 \usage{
 boot_conf(df, bootstrap_iterations, f, ...)
 }
 \arguments{
-\item{df}{a data.frame containing the clumnes phs, age, and status}
+\item{df}{a data.frame containing the columns phs, age, and status}
 
 \item{bootstrap_iterations}{number of bootstrap iterations to run.}
 
