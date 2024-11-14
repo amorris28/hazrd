@@ -42,14 +42,29 @@ First, generate some test data.
 ``` r
 library(ggplot2)
 library(hazrd)
-set.seed(46495809)
+set.seed(4649580)
 
-n = 1000
-status = rbinom(n, 1, 0.2)
+# n = 1000
+# status = rbinom(n, 1, 0.2)
+# 
+# test_data = data.frame(phs  = rnorm(n) + (1 * status),
+#                        status = status,
+#                        age = sample(40:100, n, replace = TRUE))
 
-test_data = data.frame(phs  = rnorm(n) + (1 * status),
-                       status = status,
-                       age = sample(40:100, n, replace = TRUE))
+n <- 1000
+age = runif(n, 40, 80) # generate random age at recruitment
+cens <- 15*runif(n)    # randomize years until censoring
+phs = rnorm(n)         # generate random PHS score
+h <- .02*exp(.04*(age-50)+0.8*(phs)) 
+                       # calculate risk with age and PHS score
+t <- -log(runif(n))/h  # calculate time of diagnosis
+status <- ifelse(t<=cens,1,0) 
+                       # if time of diagnosis is less than time of censoring
+                       # then "case", otherwise "control"
+t <- pmin(t, cens)     # choose the lesser of diagnosis time or censoring time
+age = age + t          # Add age of recruitment to age of diagnosis/censoring
+
+test_data = data.frame(phs, age, status)
 ```
 
 Next, plot the histogram of PHSes by case/control status.
@@ -70,13 +85,13 @@ print(HR80_20[1:3])
 ```
 
     ## $HR
-    ## [1] 7.347802
+    ## [1] 7.313878
     ## 
     ## $conf.low
-    ## [1] 5.009186
+    ## [1] 5.21903
     ## 
     ## $conf.high
-    ## [1] 11.59092
+    ## [1] 10.48366
 
 Each `get_` function also returns the output from each bootstrap
 iteration in `$iters` so that the user can plot these or calculate their
@@ -102,13 +117,13 @@ print(OR80_20[1:3])
 ```
 
     ## $OR
-    ## [1] 0.7529412
+    ## [1] 1.049869
     ## 
     ## $conf.low
-    ## [1] 0.4818517
+    ## [1] 0.4889092
     ## 
     ## $conf.high
-    ## [1] 2.970312
+    ## [1] 1.953307
 
 Return the concordance index with 95% confidence intervals from a coxph
 fit:
@@ -119,13 +134,13 @@ print(c_index[1:3])
 ```
 
     ## $c_index
-    ## [1] 0.7125285
+    ## [1] 0.7088213
     ## 
     ## $conf.low
-    ## [1] 0.6734051
+    ## [1] 0.6784394
     ## 
     ## $conf.high
-    ## [1] 0.7486092
+    ## [1] 0.7420726
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for
 centiles of interest.
