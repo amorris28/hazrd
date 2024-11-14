@@ -37,25 +37,17 @@ calc_or = function(df,
     ix_lower <- which(df$phs >= lower_critvals[1] & df$phs <= lower_critvals[2])
     ix_upper <- which(df$phs >= upper_critvals[1] & df$phs <= upper_critvals[2])
     
-    df %>% 
-        # Filter samples within the intervals of interest
-        filter(row_number() %in% c(ix_lower, ix_upper)) %>%
-        mutate(interval = ifelse(row_number() %in% ix_lower, "lower", "upper")) %>% 
-        # Remove samples that were censored before the OR age
-        filter(!(.data$status == 0 & .data$age < or_age)) %>% 
-        # Re-categorize diagnoses after OR age as controls
-        mutate(status = if_else(.data$status == 1 & .data$age > or_age, 0, .data$status)) %>% 
-        # Categorize individuals into a contingency table
-        mutate(upper_event = ifelse(.data$status == 1 & .data$interval == "upper", 1, 0),
-               upper_censor = ifelse(.data$status == 0 & .data$interval == "upper", 1, 0),
-               lower_event = ifelse(.data$status == 1 & .data$interval == "lower", 1, 0),
-               lower_censor = ifelse(.data$status == 0 & .data$interval == "lower", 1, 0)) %>%
-        select(.data$upper_event, .data$upper_censor, .data$lower_event, .data$lower_censor) %>%
-        summarize(upper_event = sum(.data$upper_event),
-                  upper_censor = sum(.data$upper_censor),
-                  lower_event = sum(.data$lower_event),
-                  lower_censor = sum(.data$lower_censor)) -> contingency_table
+    lower_model <- coxph(Surv(age, status) ~ 1, data = df[ix_lower,])
+    upper_model <- coxph(Surv(age, status) ~ 1, data = df[ix_upper,])
     
-    OR = with(contingency_table, (upper_event / upper_censor) / (lower_event / lower_censor))
+    lower_fit <- survfit(lower_model)
+    upper_fit <- survfit(upper_model)
+    
+    pp1 = approx(lower_fit$time, lower_fit$surv, xout = or_age)$y
+    odds1 = pp1 / (1 - pp1)
+    pp2 = approx(upper_fit$time, upper_fit$surv, xout = or_age)$y
+    odds2 = pp2 / (1 - pp2)
+    OR = odds1/odds2
     return(OR)
+        
 }

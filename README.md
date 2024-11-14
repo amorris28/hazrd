@@ -99,7 +99,7 @@ own confidence intervals:
 
 ``` r
 ggplot(mapping = aes(x = HR80_20$iters)) +
-    geom_histogram(binwidth = 1) +
+    geom_histogram(binwidth = 2/3) +
     geom_vline(xintercept = HR80_20$conf.low) +
     geom_vline(xintercept = HR80_20$conf.high) +
         theme_minimal() +
@@ -117,13 +117,24 @@ print(OR80_20[1:3])
 ```
 
     ## $OR
-    ## [1] 1.049869
+    ## [1] 8.181727
     ## 
     ## $conf.low
-    ## [1] 0.4889092
+    ## [1] 3.979154
     ## 
     ## $conf.high
-    ## [1] 1.953307
+    ## [1] 23.16976
+
+``` r
+ggplot(mapping = aes(x = OR80_20$iters)) +
+    geom_histogram(binwidth = 2) +
+    geom_vline(xintercept = OR80_20$conf.low) +
+    geom_vline(xintercept = OR80_20$conf.high) +
+        theme_minimal() +
+        labs(x = "OR80_20", y = "Count")
+```
+
+![](README_files/figure-gfm/OR_histogram-1.png)<!-- -->
 
 Return the concordance index with 95% confidence intervals from a coxph
 fit:
