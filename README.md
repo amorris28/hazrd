@@ -37,35 +37,24 @@ computer.
 
 ## Getting Started
 
-First, generate some test data.
+First, generate some test data. Here, we are using a simulated dataset
+that is included with the `hazrd` package.
 
 ``` r
 library(ggplot2)
 library(hazrd)
 set.seed(4649580)
 
-# n = 1000
-# status = rbinom(n, 1, 0.2)
-# 
-# test_data = data.frame(phs  = rnorm(n) + (1 * status),
-#                        status = status,
-#                        age = sample(40:100, n, replace = TRUE))
-
-n <- 1000
-age = runif(n, 40, 80) # generate random age at recruitment
-cens <- 15*runif(n)    # randomize years until censoring
-phs = rnorm(n)         # generate random PHS score
-h <- .02*exp(.04*(age-50)+0.8*(phs)) 
-                       # calculate risk with age and PHS score
-t <- -log(runif(n))/h  # calculate time of diagnosis
-status <- ifelse(t<=cens,1,0) 
-                       # if time of diagnosis is less than time of censoring
-                       # then "case", otherwise "control"
-t <- pmin(t, cens)     # choose the lesser of diagnosis time or censoring time
-age = age + t          # Add age of recruitment to age of diagnosis/censoring
-
-test_data = data.frame(phs, age, status)
+head(test_data)
 ```
+
+    ##          phs      age status
+    ## 1  1.2959195 61.20479      0
+    ## 2  0.7677172 52.15337      0
+    ## 3  1.8747000 56.05307      0
+    ## 4 -1.0106221 81.71140      0
+    ## 5 -0.7239738 61.37459      0
+    ## 6 -1.2076723 54.56741      0
 
 Next, plot the histogram of PHSes by case/control status.
 
@@ -85,13 +74,13 @@ print(HR80_20[1:3])
 ```
 
     ## $HR
-    ## [1] 7.313878
+    ## [1] 7.33684
     ## 
     ## $conf.low
-    ## [1] 5.21903
+    ## [1] 5.095274
     ## 
     ## $conf.high
-    ## [1] 10.48366
+    ## [1] 10.95351
 
 Each `get_` function also returns the output from each bootstrap
 iteration in `$iters` so that the user can plot these or calculate their
@@ -117,13 +106,13 @@ print(OR80_20[1:3])
 ```
 
     ## $OR
-    ## [1] 8.181727
+    ## [1] 4.864637
     ## 
     ## $conf.low
-    ## [1] 3.979154
+    ## [1] 2.809005
     ## 
     ## $conf.high
-    ## [1] 23.16976
+    ## [1] 12.92629
 
 ``` r
 ggplot(mapping = aes(x = OR80_20$iters)) +
@@ -145,13 +134,13 @@ print(c_index[1:3])
 ```
 
     ## $c_index
-    ## [1] 0.7088213
+    ## [1] 0.6709248
     ## 
     ## $conf.low
-    ## [1] 0.6784394
+    ## [1] 0.624443
     ## 
     ## $conf.high
-    ## [1] 0.7420726
+    ## [1] 0.7078686
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for
 centiles of interest.

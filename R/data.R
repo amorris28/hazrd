@@ -11,3 +11,17 @@
 #' }
 
 "phs_input_example"
+
+#' PHS Test Data
+#'
+#' A simulated dataset of PHS scores
+#'
+#' @format ## `test_data`
+#' A data frame with 1,000 rows and 3 columns:
+#' \describe{
+#'   \item{phs}{Polygenic hazard score}
+#'   \item{age}{Age of diagnosis or age of censoring for each subject}
+#'   \item{status}{Case/control status}
+#' }
+
+"test_data"
