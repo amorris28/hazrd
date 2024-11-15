@@ -49,7 +49,7 @@ get_or <- function(data = NULL,
                  or_age,
                  lower_interval, 
                  upper_interval)
-    quantiles = NULL
+    boot_out = NULL
     if (CI == TRUE) {
         boot_out = boot_conf(df,
                               bootstrap_iterations,

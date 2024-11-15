@@ -34,7 +34,8 @@ calc_hr = function(df,
     if (length(lower_interval) == 1) {
         den_critvals <- c(-Inf, quantile(df$phs, lower_interval))
     } else if (length(lower_interval) == 2) {
-        den_critvals <- c(quantile(df$phs, lower_interval[1]), quantile(df$phs, lower_interval[2]))
+        den_critvals <- c(ifelse(lower_interval[1] == Inf, Inf, quantile(df$phs, lower_interval[1])), 
+                          ifelse(lower_interval[2] == Inf, Inf, quantile(df$phs, lower_interval[2])))
     } else {
         stop("'lower_interval' must be length 1 or 2")
     }
@@ -42,7 +43,8 @@ calc_hr = function(df,
         if (length(upper_interval) == 1) {
         num_critvals <- c(quantile(df$phs, upper_interval), Inf)
     } else if (length(upper_interval) == 2) {
-        num_critvals <- c(quantile(df$phs, upper_interval[1]), quantile(df$phs, upper_interval[2]))
+        num_critvals <- c(ifelse(upper_interval[1] == Inf, Inf, quantile(df$phs, upper_interval[1])), 
+                          ifelse(upper_interval[2] == Inf, Inf, quantile(df$phs, upper_interval[2])))
     } else {
         stop("'upper_interval' must be length 1 or 2")
     }

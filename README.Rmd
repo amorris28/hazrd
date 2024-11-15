@@ -49,7 +49,7 @@ Then, calculate the hazard ratio comparing the mean of the top 20% of PHSes to t
 
 ```{r}
 HR80_20 = get_hr(test_data, CI = TRUE, boot = 300)
-print(HR80_20[1:3])
+str(HR80_20)
 ```
 
 Each `get_` function also returns the output from each bootstrap iteration in `$iters` so that the user can plot these or calculate their own confidence intervals:
@@ -57,6 +57,7 @@ Each `get_` function also returns the output from each bootstrap iteration in `$
 ```{r HR_histogram}
 ggplot(mapping = aes(x = HR80_20$iters)) +
     geom_histogram(binwidth = 2/3) +
+    geom_vline(xintercept = HR80_20$HR, color = "red") +
     geom_vline(xintercept = HR80_20$conf.low) +
     geom_vline(xintercept = HR80_20$conf.high) +
         theme_minimal() +
@@ -67,12 +68,13 @@ Similarly, calculate the odds ratio at age 70 between the top 20% and bottom 20%
 
 ```{r}
 OR80_20 = get_or(test_data, or_age = 70, CI = TRUE, boot = 300)
-print(OR80_20[1:3])
+str(OR80_20)
 ```
 
 ```{r OR_histogram}
 ggplot(mapping = aes(x = OR80_20$iters)) +
-    geom_histogram(binwidth = 2) +
+    geom_histogram(binwidth = 3/2) +
+    geom_vline(xintercept = OR80_20$OR, color = "red") +
     geom_vline(xintercept = OR80_20$conf.low) +
     geom_vline(xintercept = OR80_20$conf.high) +
         theme_minimal() +
@@ -83,7 +85,7 @@ Return the concordance index with 95% confidence intervals from a coxph fit:
 
 ```{r}
 c_index = get_cindex(test_data, CI = TRUE, boot = 300)
-print(c_index[1:3])
+str(c_index)
 ```
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for centiles of interest.

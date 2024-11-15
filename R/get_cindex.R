@@ -52,7 +52,7 @@ get_cindex <- function(data = NULL,
                           swc,
                           swc_popnumcases,
                           swc_popnumcontrols)
-    quantiles = NULL
+    boot_out = NULL
     if (CI == TRUE) {
         boot_out = boot_conf(df,
                               bootstrap_iterations,

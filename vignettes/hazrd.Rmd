@@ -22,16 +22,10 @@ set.seed(46495809)
 
 ## Getting started with `{hazrd}`
 
-First, generate some test data.
+Here is our test data included in the package.
 
 ```{r}
-
-n = 1000
-status = rbinom(n, 1, 0.2)
-
-test_data = data.frame(phs  = rnorm(n) + (1 * status),
-                       status = status,
-                       age = sample(40:100, n, replace = TRUE))
+head(test_data)
 ```
 
 Next, plot the histogram of PHSes by case/control status.
@@ -45,27 +39,27 @@ phs_hist(test_data, normalize = TRUE)
 Then, calculate the hazard ratio comparing the mean of the top 20% of PHSes to the mean of the bottom 20% (i.e., `HR80_20`). We can also generate 95% confidence intervals using bootstrapping.
 
 ```{r}
-HR80_20 = get_hr(test_data, CI = TRUE, boot = 300)
-print(HR80_20)
+get_hr(test_data, CI = TRUE, boot = 300) |> 
+    str()
 ```
 
 Similarly, calculate the odds ratio at age 70 between the top 20% and bottom 20% of PHSes.
 
 ```{r}
-OR80_20 = get_or(test_data, or_age = 70, CI = TRUE, boot = 300)
-print(OR80_20)
+get_or(test_data, or_age = 70, CI = TRUE, boot = 300) |> 
+    str()
 ```
 
 Return the concordance index with 95% confidence intervals from a coxph fit:
 
 ```{r}
-c_index = get_cindex(test_data,  CI = TRUE, boot = 300)
-print(c_index)
+get_cindex(test_data,  CI = TRUE, boot = 300) |> 
+    str()
 ```
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for centiles of interest.
 
-```{r generate_km_curve, fig.width=4.5}
+```{r plot_km_curves, fig.width=4.5}
 curves = data.frame(curve0_20 = c(0,   0.2),
                     curve20_70 = c(0.2, 0.7),
                     curve80_98 = c(0.8, 0.98),
@@ -116,7 +110,8 @@ ggplot(km_curves, aes(x = time,
 Each of the functions in this package (e.g., `get_hr`, `get_or`, `phs_hist`, etc.)  can accept data in several formats. If your `data.frame` contains standard columns `phs`, `age`, and `status`, then you can simply pass the data.frame object to the `data = ` argument:
 
 ```{r}
-get_hr(data = test_data)
+get_hr(data = test_data) |> 
+    str()
 ```
 
 If your data is stored in a data.frame with non-standard column names, e.g., `HazardScores`, `CaseControl`, and `AgeLastObs`,
@@ -134,7 +129,8 @@ then you can specify these column names as separate arguments:
 get_hr(data = test_data2, 
        phs = "HazardScores", 
        status = "CaseControl", 
-       age = "AgeLastObs")
+       age = "AgeLastObs") |> 
+    str()
 ```
 
 If any of your data is not in a data.frame, but is instead in separate vectors, you can provide these individually by name:
@@ -146,7 +142,8 @@ ageLastObs = test_data$age
 
 get_hr(phs = hazScore, 
        status = caseCon, 
-       age = ageLastObs)
+       age = ageLastObs) |> 
+    str()
 ```
 
 Lastly, you can do any combination of the above:
@@ -157,48 +154,53 @@ test_data3 = data.frame(phs = test_data$phs,
 Ages = test_data$age
 
 get_hr(data = test_data3,
-       #phs = "phs", # omitted because test_data3 already contains standard column "phs"
+       #phs = "phs", # omitted because test_data3 already contains column "phs"
        status = "CaseControl", 
-       age = Ages)
+       age = Ages) |> 
+    str()
 ```
 
 ### Hazard ratios and odds ratios
 
-#### Specifying quantiles
+#### Specifying intervals
 
-The `get_hr` function allows several options for customizing your hazard ratios. By default, it calculates the `HR80_20`, which compares the top 20% of PHSes to the bottom 20%. However, custom quantiles can be specified using the `upper_quantile` and `lower_quantile` arguments.
-
-```{r}
-get_hr(test_data,
-       upper_quantile = 0.8,
-       lower_quantile = 0.2)
-```
-
-These are the default arguments. If one value is passed to `upper_quantile` then it calculates the hazard ratio for the quantile `0.8:Inf`. Similarly, `lower_quantile` will use `-Inf:0.2`. However, two values can be specified as a vector to specify a particular range. For example, if you want the lower quantile to be the middle 40% of PHSes, you can specify `lower_quantile = c(0.3, 0.7)`. 
+The `get_hr` function allows several options for customizing your hazard ratios. By default, it calculates the `HR80_20`, which compares the top 20% of PHSes to the bottom 20%. However, custom intervals can be specified using the `upper_interval` and `lower_interval` arguments.
 
 ```{r}
 get_hr(test_data,
-       upper_quantile = c(0.8, Inf),
-       lower_quantile = c(0.3, 0.7))
+       lower_interval = 0.2,
+       upper_interval = 0.8) |> 
+    str()
 ```
 
-Quantile specifications are the same for odds ratios from `get_or` as for `get_hr`. The only difference is that the odds ratio must be calculated at a particular age, which is passed with the `or_age` argument:
+These are the default arguments. If one value is passed to `upper_interval` then it calculates the hazard ratio for the interval `0.8:Inf`. Similarly, `lower_interval` will use `-Inf:0.2`. However, two values can be specified as a vector to specify a particular range. For example, if you want the lower interval to be the middle 40% of PHSes, you can specify `lower_interval = c(0.3, 0.7)`. 
+
+```{r}
+get_hr(test_data,
+       lower_interval = c(0.3, 0.7),
+       upper_interval = c(0.8, Inf)) |> 
+    str()
+```
+
+interval specifications are the same for odds ratios from `get_or` as for `get_hr`. The only difference is that the odds ratio must be calculated at a particular age, which is passed with the `or_age` argument:
 
 ```{r}
 get_or(test_data,
        or_age = 70,
-       upper_quantile = c(0.8, Inf),
-       lower_quantile = c(0.3, 0.7))
+       lower_interval = c(0.3, 0.7),
+       upper_interval = c(0.8, Inf)) |> 
+    str()
 ```
 
 #### Confidence intervals from bootstrapping
 
-95% confidence intervals for the estimates from the `get_hr`, `get_or`,  and `get_cindex` functions can be generated by bootstrapping. This is done by by specifying `boot = TRUE` and providing a number of bootstrap iterations with `B = `. In this case, instead of a single value, `get_hr` returns a list containing the hazard ratio and the values for the upper and lower 95% confidence intervals.
+95% confidence intervals for the estimates from the `get_hr`, `get_or`,  and `get_cindex` functions can be generated by bootstrapping. This is done by by specifying `CI = TRUE` and providing a number of bootstrap iterations with `bootstrap_iterations = `. In this case, `get_hr` returns a list containing the hazard ratio and the values for the upper and lower 95% confidence intervals as well as all of the HR estimates from each bootstrap iteration in `iters`.
 
 ```{r}
 get_hr(test_data,
-       boot = TRUE,
-       B = 300)
+       CI = TRUE,
+       bootstrap_iterations = 300) |> 
+    str()
 ```
 
 #### Sample weight correction
@@ -209,21 +211,71 @@ This is an experimental feature and hasn't been tested. If you wish to perform s
 get_hr(test_data,
        swc = TRUE,
        swc_popnumcases = 28421,
-       swc_popnumcontrols = 398475)
+       swc_popnumcontrols = 398475) |> 
+    str()
 ```
 
 
 ### Plotting curves
 
-To plot Kaplan-Meier curves, you can use the `km_curve` function to return a single Kaplan-Meier curve for a given quantile group. Plotting must be performed manually once you have returned these curves.
+To plot Kaplan-Meier curves, you can use the `km_curve` function to return a single Kaplan-Meier curve for a given interval. Plotting must be performed manually once you have returned these curves.
 
 ```{r}
 curven <- km_curve(data = test_data,  
-                       lower = 0.80,
-                       upper = 1.00, 
+                       interval = c(0.80, 1.00), 
                        age_range = 40:100, 
                        scale = FALSE, 
                        inverse = FALSE)
 ```
 
-`lower` specifies the bottom of the quantile and `upper` specifies the top of the quantile. In this case, the K-M curve for the top 20% of samples (`0.8:1.0`) will be returned. In addition, `age_range` specifies the ages over which the curve should be generated. Can be on the order of `40:100` for age-at-diagnosis or similar. Alternatively, can be `0:10` for, for exmaple, age of conversion to AD after MCI diagnosis.
+`interval` specifies the lower and upper quantile of the interval. In this case, the K-M curve for the top 20% of samples (`0.8:1.0`) will be returned. In addition, `age_range` specifies the ages over which the curve should be generated. Can be on the order of `40:100` for age-at-diagnosis or similar. Alternatively, can be `0:10` for, for exmaple, age of conversion to AD after MCI diagnosis.
+
+We can generate multiple curves at various intervals and get them into a data.frame:
+
+```{r}
+curves = data.frame(curve0_20 = c(0,   0.2),
+                    curve20_70 = c(0.2, 0.7),
+                    curve80_98 = c(0.8, 0.98),
+                    curve98_100 = c(0.98, 1.0))
+
+label_generator = function(x, y) {
+    x = x * 100
+    y = y * 100
+    out = paste0("PHS ", x, "-", y, "th centile")
+    return(out)
+}
+
+km_curves = data.frame()
+for (i in seq_len(length(curves))) {
+    curven <- km_curve(data = test_data,  
+                       interval = curves[[i]],
+                       age_range = 40:100, 
+                       scale = FALSE, 
+                       inverse = FALSE)
+    curven$label = label_generator(curves[1, i], curves[2, i])
+    km_curves = rbind(km_curves, curven)
+}
+```
+
+And plot them:
+
+```{r plot_km_curves2, fig.width=4.5}
+ggplot(km_curves, aes(x = time, 
+                      y = estimate,
+                      ymin = conf.low,
+                      ymax = conf.high,
+                      col = label,
+                      fill = label)) +
+    geom_ribbon(alpha = 0.1,
+                color = 0) +
+    geom_step() +
+    theme_minimal() +
+    xlim(40, 100) + 
+    ylim(0, 1) +
+    labs(x = "Age", y = "Disease-free Survival") +
+    scale_color_brewer(palette = "Set1",
+                       name = "Centile") +
+    scale_fill_brewer(palette = "Set1",
+                       name = "Centile")
+```
+

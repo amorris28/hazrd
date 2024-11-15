@@ -70,17 +70,14 @@ generate 95% confidence intervals using bootstrapping.
 
 ``` r
 HR80_20 = get_hr(test_data, CI = TRUE, boot = 300)
-print(HR80_20[1:3])
+str(HR80_20)
 ```
 
-    ## $HR
-    ## [1] 7.33684
-    ## 
-    ## $conf.low
-    ## [1] 5.095274
-    ## 
-    ## $conf.high
-    ## [1] 10.95351
+    ## List of 4
+    ##  $ HR       : num 7.34
+    ##  $ conf.low : num 5.1
+    ##  $ conf.high: num 11
+    ##  $ iters    : num [1:300, 1] 8.06 6.28 9.3 11.93 4.92 ...
 
 Each `get_` function also returns the output from each bootstrap
 iteration in `$iters` so that the user can plot these or calculate their
@@ -89,6 +86,7 @@ own confidence intervals:
 ``` r
 ggplot(mapping = aes(x = HR80_20$iters)) +
     geom_histogram(binwidth = 2/3) +
+    geom_vline(xintercept = HR80_20$HR, color = "red") +
     geom_vline(xintercept = HR80_20$conf.low) +
     geom_vline(xintercept = HR80_20$conf.high) +
         theme_minimal() +
@@ -102,21 +100,19 @@ bottom 20% of PHSes.
 
 ``` r
 OR80_20 = get_or(test_data, or_age = 70, CI = TRUE, boot = 300)
-print(OR80_20[1:3])
+str(OR80_20)
 ```
 
-    ## $OR
-    ## [1] 4.864637
-    ## 
-    ## $conf.low
-    ## [1] 2.809005
-    ## 
-    ## $conf.high
-    ## [1] 12.92629
+    ## List of 4
+    ##  $ OR       : num 4.86
+    ##  $ conf.low : num 2.81
+    ##  $ conf.high: num 12.9
+    ##  $ iters    : num [1:300, 1] 3.23 4.41 3.41 17.88 4.01 ...
 
 ``` r
 ggplot(mapping = aes(x = OR80_20$iters)) +
-    geom_histogram(binwidth = 2) +
+    geom_histogram(binwidth = 3/2) +
+    geom_vline(xintercept = OR80_20$OR, color = "red") +
     geom_vline(xintercept = OR80_20$conf.low) +
     geom_vline(xintercept = OR80_20$conf.high) +
         theme_minimal() +
@@ -130,17 +126,14 @@ fit:
 
 ``` r
 c_index = get_cindex(test_data, CI = TRUE, boot = 300)
-print(c_index[1:3])
+str(c_index)
 ```
 
-    ## $c_index
-    ## [1] 0.6709248
-    ## 
-    ## $conf.low
-    ## [1] 0.624443
-    ## 
-    ## $conf.high
-    ## [1] 0.7078686
+    ## List of 4
+    ##  $ c_index  : num 0.671
+    ##  $ conf.low : num 0.624
+    ##  $ conf.high: num 0.708
+    ##  $ iters    : num [1:300, 1] 0.668 0.669 0.665 0.654 0.703 ...
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for
 centiles of interest.
