@@ -46,7 +46,7 @@ each of these values. The columns in \code{data} default to 'phs', 'age', and
 'status', but any arbitrary column names can be used if named explicitly.
 }
 \examples{
-\dontrun{
-OR80_20 <- get_or(data, or_age = 70)
-}
+
+OR80_20 <- get_or(test_data, or_age = 70)
+
 }

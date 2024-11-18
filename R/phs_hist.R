@@ -11,9 +11,9 @@
 #' @import ggplot2
 #' @return A ggplot object
 #' @examples
-#' \dontrun{
-#' phs_hist <- phs_hist(df, normalize = TRUE)
-#' }
+#' 
+#' phs_hist <- phs_hist(test_data, normalize = TRUE)
+#' 
 #' @export
 phs_hist <- function(data = NULL,
                      phs = "phs",

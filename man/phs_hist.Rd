@@ -33,7 +33,7 @@ A ggplot object
 This function takes PHS scores and case/control status and plots a histogram.
 }
 \examples{
-\dontrun{
-phs_hist <- phs_hist(df, normalize = TRUE)
-}
+
+phs_hist <- phs_hist(test_data, normalize = TRUE)
+
 }

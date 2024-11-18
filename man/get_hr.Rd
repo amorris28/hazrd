@@ -53,7 +53,7 @@ each of these values. The columns in \code{data} default to 'phs', 'age', and
 'status', but any arbitrary column names can be used if named explicitly.
 }
 \examples{
-\dontrun{
-HR80_20 <- get_hr(df, boot = TRUE, B = 300)
-}
+
+HR80_20 <- get_hr(test_data, CI = TRUE, bootstrap_iterations = 300)
+
 }

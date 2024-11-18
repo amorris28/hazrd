@@ -15,12 +15,12 @@
 #' @importFrom survival coxph Surv survfit
 #' @importFrom stats quantile
 #' @import dplyr
-#' @import ggplot2
 #' @import tibble
 #' @return A data.frame containing ages, the K-M curve, and the upper and lower confidence intervals
 #' @examples
+#' 
+#' km_curve <- km_curve(test_data)
 #' \dontrun{
-#' km_curve <- km_curve(df, inverse = TRUE, ideal = FALSE)
 #' ggplot(km_curve, aes(x = time,
 #'                      y = estimate,
 #'                      ymin = conf.low,
@@ -33,7 +33,7 @@ km_curve <- function(data = NULL,
                      phs = "phs",
                      age = "age",
                      status = "status",
-                     interval = c(-Inf, Inf),
+                     interval = c(0, 1),
                      age_range = 40:100,
                      scale = FALSE,
                      inverse = FALSE) {
