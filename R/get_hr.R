@@ -69,7 +69,10 @@ get_hr <- function(data = NULL,
                               swc_popnumcases,
                               swc_popnumcontrols)
     }
-    return(list("HR" = HR, 
+    return(list("index" = paste0("HR", 
+                                 scales::label_percent(suffix = "")(upper_interval), "_",
+                                 scales::label_percent(suffix = "")(lower_interval)),
+                "value" = HR, 
                 "conf.low" = boot_out$quantiles[[1]], 
                 "conf.high" = boot_out$quantiles[[2]],
                 "iters" = boot_out$iters))

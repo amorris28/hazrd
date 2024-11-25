@@ -76,9 +76,11 @@ km_curve <- function(data = NULL,
                            estimate = mod$surv,
                            std.error = mod$std.err,
                            conf.high = mod$upper,
-                           conf.low = mod$lower)
+                           conf.low = mod$lower,
+                           cumhaz = mod$cumhaz)
     
-    kmcurve = select(mod_data, .data$time, .data$estimate, .data$conf.low, .data$conf.high)
+    kmcurve = select(mod_data, .data$time, .data$estimate, .data$conf.low, 
+                     .data$conf.high, .data$cumhaz)
     return(kmcurve)
     
 }

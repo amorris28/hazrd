@@ -61,7 +61,8 @@ get_cindex <- function(data = NULL,
                               swc_popnumcases,
                               swc_popnumcontrols)
     }
-    return(list("c_index" = c_index, 
+    return(list("index" = "C_Index",
+                "value" = c_index, 
                 "conf.low" = boot_out$quantiles[[1]], 
                 "conf.high" = boot_out$quantiles[[2]],
                 "iters" = boot_out$iters))

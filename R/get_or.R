@@ -58,7 +58,10 @@ get_or <- function(data = NULL,
                               lower_interval,
                               upper_interval)
     }
-    return(list("OR" = OR, 
+    return(list("index" = paste0("OR", 
+                                 scales::label_percent(suffix = "")(upper_interval), "_",
+                                 scales::label_percent(suffix = "")(lower_interval)),
+                "value" = OR, 
                 "conf.low" = boot_out$quantiles[[1]], 
                 "conf.high" = boot_out$quantiles[[2]],
                 "iters" = boot_out$iters))
