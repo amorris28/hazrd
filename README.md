@@ -35,6 +35,19 @@ devtools::install("hazrd")
 Replace `"hazrd"` with the path to the repository on your local
 computer.
 
+Alternatively, you can clone the repo and then build a tar ball:
+
+``` r
+devtools::build("hazrd")
+```
+
+You can then import the resulting `.tar.gz` file to a remote cluster,
+such as TSD. And install it with:
+
+``` r
+install.packages("hazrd_0.1.0.tar.gz", repos = NULL, type="source")
+```
+
 ## Getting Started
 
 First, generate some test data. Here, we are using a simulated dataset
@@ -73,8 +86,9 @@ HR80_20 = get_hr(test_data, CI = TRUE, boot = 300)
 str(HR80_20)
 ```
 
-    ## List of 4
-    ##  $ HR       : num 7.34
+    ## List of 5
+    ##  $ index    : chr "HR80_20"
+    ##  $ value    : num 7.34
     ##  $ conf.low : num 5.1
     ##  $ conf.high: num 11
     ##  $ iters    : num [1:300, 1] 8.06 6.28 9.3 11.93 4.92 ...
@@ -103,8 +117,9 @@ OR80_20 = get_or(test_data, or_age = 70, CI = TRUE, boot = 300)
 str(OR80_20)
 ```
 
-    ## List of 4
-    ##  $ OR       : num 4.86
+    ## List of 5
+    ##  $ index    : chr "OR80_20"
+    ##  $ value    : num 4.86
     ##  $ conf.low : num 2.81
     ##  $ conf.high: num 12.9
     ##  $ iters    : num [1:300, 1] 3.23 4.41 3.41 17.88 4.01 ...
@@ -129,8 +144,9 @@ c_index = get_cindex(test_data, CI = TRUE, boot = 300)
 str(c_index)
 ```
 
-    ## List of 4
-    ##  $ c_index  : num 0.671
+    ## List of 5
+    ##  $ index    : chr "C_Index"
+    ##  $ value    : num 0.671
     ##  $ conf.low : num 0.624
     ##  $ conf.high: num 0.708
     ##  $ iters    : num [1:300, 1] 0.668 0.669 0.665 0.654 0.703 ...

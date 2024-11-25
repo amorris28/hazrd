@@ -27,6 +27,17 @@ devtools::install("hazrd")
 
 Replace `"hazrd"` with the path to the repository on your local computer.
 
+Alternatively, you can clone the repo and then build a tar ball:
+```{r, eval=FALSE}
+devtools::build("hazrd")
+```
+
+You can then import the resulting `.tar.gz` file to a remote cluster, such as TSD. And install it with:
+
+```{r, eval=FALSE}
+install.packages("hazrd_0.1.0.tar.gz", repos = NULL, type="source")
+```
+
 ## Getting Started
 
 First, generate some test data. Here, we are using a simulated dataset that is included with the `hazrd` package.
