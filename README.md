@@ -19,6 +19,8 @@ hazard scores, and functions related to Digital Avatar.
 
 ## Installation
 
+### Using `devtools`
+
 You can install the development version of hazrd from
 [GitHub](https://github.com/) by cloning the repository:
 
@@ -35,14 +37,19 @@ devtools::install("hazrd")
 Replace `"hazrd"` with the path to the repository on your local
 computer.
 
-Alternatively, you can clone the repo and then build a tar ball:
+### From source
+
+Alternatively, for a more convenient installation on a remote cluster,
+such as TSD, you can install from source using a tarball. Either
+download the latest `tar.gz` from the
+[releases](https://github.com/amorris28/hazrd/releases) page or clone
+the repo and then build a tar ball yourself:
 
 ``` r
 devtools::build("hazrd")
 ```
 
-You can then import the resulting `.tar.gz` file to a remote cluster,
-such as TSD. And install it with:
+You can then install the `.tar.gz` with `install.packages` in `R`:
 
 ``` r
 install.packages("hazrd_0.1.0.tar.gz", repos = NULL, type="source")
