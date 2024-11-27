@@ -14,7 +14,8 @@ Imports:
     dplyr,
     ggplot2,
     tibble,
-    tidyr
+    tidyr,
+    scales
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

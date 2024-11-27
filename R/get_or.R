@@ -18,6 +18,8 @@
 #' 
 #' @return A numeric odds ratio
 #' 
+#' @importFrom scales label_percent
+#' 
 #' @examples
 #' 
 #' OR80_20 <- get_or(test_data, or_age = 70)
@@ -32,7 +34,9 @@ get_or <- function(data = NULL,
                    upper_interval = 0.80, 
                    CI = FALSE,
                    bootstrap_iterations = 1000) {  
-    
+    if (missing(or_age)) {
+        stop("An age must be provided via 'or_age'")
+    }
     if (is.character(phs)) {
         phs = data[[phs]]
     }
@@ -45,10 +49,10 @@ get_or <- function(data = NULL,
     
     df <- data.frame(age, status, phs)
     
-    OR = calc_or(df, 
-                 or_age,
-                 lower_interval, 
-                 upper_interval)
+    OR = calc_or(df = df, 
+                 or_age = or_age,
+                 lower_interval = lower_interval, 
+                 upper_interval = upper_interval)
     boot_out = NULL
     if (CI == TRUE) {
         boot_out = boot_conf(df,
