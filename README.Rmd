@@ -50,7 +50,6 @@ First, generate some test data. Here, we are using a simulated dataset that is i
 ```{r}
 library(ggplot2)
 library(hazrd)
-set.seed(4649580)
 
 head(test_data)
 ```

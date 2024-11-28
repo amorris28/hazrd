@@ -63,7 +63,6 @@ that is included with the `hazrd` package.
 ``` r
 library(ggplot2)
 library(hazrd)
-set.seed(4649580)
 
 head(test_data)
 ```
@@ -97,8 +96,8 @@ str(HR80_20)
     ##  $ index    : chr "HR80_20"
     ##  $ value    : num 7.34
     ##  $ conf.low : num 5.1
-    ##  $ conf.high: num 11
-    ##  $ iters    : num [1:300, 1] 8.06 6.28 9.3 11.93 4.92 ...
+    ##  $ conf.high: num 11.2
+    ##  $ iters    : num [1:300, 1] 6.7 8.81 7.1 5.08 4.73 ...
 
 Each `get_` function also returns the output from each bootstrap
 iteration in `$iters` so that the user can plot these or calculate their
@@ -127,9 +126,9 @@ str(OR80_20)
     ## List of 5
     ##  $ index    : chr "OR80_20"
     ##  $ value    : num 4.86
-    ##  $ conf.low : num 2.81
-    ##  $ conf.high: num 12.9
-    ##  $ iters    : num [1:300, 1] 3.23 4.41 3.41 17.88 4.01 ...
+    ##  $ conf.low : num 2.43
+    ##  $ conf.high: num 10.6
+    ##  $ iters    : num [1:300, 1] 6.01 3.82 4.98 4.59 4.36 ...
 
 ``` r
 ggplot(mapping = aes(x = OR80_20$iters)) +
@@ -154,9 +153,9 @@ str(c_index)
     ## List of 5
     ##  $ index    : chr "C_Index"
     ##  $ value    : num 0.671
-    ##  $ conf.low : num 0.624
-    ##  $ conf.high: num 0.708
-    ##  $ iters    : num [1:300, 1] 0.668 0.669 0.665 0.654 0.703 ...
+    ##  $ conf.low : num 0.627
+    ##  $ conf.high: num 0.711
+    ##  $ iters    : num [1:300, 1] 0.681 0.664 0.688 0.676 0.673 ...
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for
 centiles of interest.

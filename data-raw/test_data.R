@@ -6,6 +6,7 @@
 #                        status = status,
 #                        age = sample(40:100, n, replace = TRUE))
 
+set.seed(4649580)
 n <- 1000
 age = runif(n, 40, 80) # generate random age at recruitment
 cens <- 15*runif(n)    # randomize years until censoring
