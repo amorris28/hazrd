@@ -68,12 +68,12 @@ head(test_data)
 ```
 
     ##          phs      age status
-    ## 1  1.2959195 61.20479      0
-    ## 2  0.7677172 52.15337      0
-    ## 3  1.8747000 56.05307      0
-    ## 4 -1.0106221 81.71140      0
-    ## 5 -0.7239738 61.37459      0
-    ## 6 -1.2076723 54.56741      0
+    ## 1  0.8425735 67.95011      1
+    ## 2  1.1151321 56.31356      0
+    ## 3 -0.3777455 72.94103      1
+    ## 4  0.1201511 82.01571      1
+    ## 5 -0.4041602 74.33629      1
+    ## 6 -0.4531890 77.15814      1
 
 Next, plot the histogram of PHSes by case/control status.
 
@@ -94,10 +94,10 @@ str(HR80_20)
 
     ## List of 5
     ##  $ index    : chr "HR80_20"
-    ##  $ value    : num 7.34
-    ##  $ conf.low : num 5.1
-    ##  $ conf.high: num 11.2
-    ##  $ iters    : num [1:300, 1] 6.7 8.81 7.1 5.08 4.73 ...
+    ##  $ value    : num 8.17
+    ##  $ conf.low : num 6.04
+    ##  $ conf.high: num 12.1
+    ##  $ iters    : num [1:300, 1] 7.9 5.74 7.28 7.17 8.95 ...
 
 Each `get_` function also returns the output from each bootstrap
 iteration in `$iters` so that the user can plot these or calculate their
@@ -125,10 +125,10 @@ str(OR80_20)
 
     ## List of 5
     ##  $ index    : chr "OR80_20"
-    ##  $ value    : num 4.86
-    ##  $ conf.low : num 2.43
-    ##  $ conf.high: num 10.6
-    ##  $ iters    : num [1:300, 1] 6.01 3.82 4.98 4.59 4.36 ...
+    ##  $ value    : num 8.52
+    ##  $ conf.low : num 4.93
+    ##  $ conf.high: num 17
+    ##  $ iters    : num [1:300, 1] 9.37 7.06 4.6 12.74 11.28 ...
 
 ``` r
 ggplot(mapping = aes(x = OR80_20$iters)) +
@@ -152,10 +152,10 @@ str(c_index)
 
     ## List of 5
     ##  $ index    : chr "C_Index"
-    ##  $ value    : num 0.671
-    ##  $ conf.low : num 0.627
-    ##  $ conf.high: num 0.711
-    ##  $ iters    : num [1:300, 1] 0.681 0.664 0.688 0.676 0.673 ...
+    ##  $ value    : num 0.708
+    ##  $ conf.low : num 0.681
+    ##  $ conf.high: num 0.734
+    ##  $ iters    : num [1:300, 1] 0.707 0.707 0.717 0.694 0.705 ...
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for
 centiles of interest.
@@ -203,6 +203,9 @@ ggplot(km_curves, aes(x = time,
     scale_fill_brewer(palette = "Set1",
                        name = "Centile")
 ```
+
+    ## Warning: Removed 15 rows containing missing values or values outside the scale range
+    ## (`geom_step()`).
 
 ![](README_files/figure-gfm/km_curve-1.png)<!-- -->
 

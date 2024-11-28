@@ -9,9 +9,9 @@
 set.seed(4649580)
 n <- 1000
 age = runif(n, 40, 80) # generate random age at recruitment
-cens <- 15*runif(n)    # randomize years until censoring
+cens <- 30 * runif(n)    # randomize years until censoring
 phs = rnorm(n)         # generate random PHS score
-h <- .02*exp(.04*(age-50)+0.8*(phs)) 
+h <- .02 * exp(.04 * (age - 50) + 0.8 * (phs)) 
 # calculate risk with age and PHS score
 t <- -log(runif(n))/h  # calculate time of diagnosis
 status <- ifelse(t<=cens,1,0) 
