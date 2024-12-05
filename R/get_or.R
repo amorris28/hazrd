@@ -68,6 +68,7 @@ get_or <- function(data = NULL,
                 "value" = OR, 
                 "conf.low" = boot_out$quantiles[[1]], 
                 "conf.high" = boot_out$quantiles[[2]],
+                "age" = or_age,
                 "iters" = boot_out$iters))
     
 }
