@@ -52,7 +52,7 @@ devtools::build("hazrd")
 You can then install the `.tar.gz` with `install.packages` in `R`:
 
 ``` r
-install.packages("hazrd_0.1.0.tar.gz", repos = NULL, type="source")
+install.packages("hazrd-0.1.0.tar.gz", repos = NULL, type="source")
 ```
 
 ## Getting Started
@@ -95,9 +95,9 @@ str(HR80_20)
     ## List of 5
     ##  $ index    : chr "HR80_20"
     ##  $ value    : num 8.17
-    ##  $ conf.low : num 6.04
-    ##  $ conf.high: num 12.1
-    ##  $ iters    : num [1:300, 1] 7.9 5.74 7.28 7.17 8.95 ...
+    ##  $ conf.low : num 5.92
+    ##  $ conf.high: num 11.2
+    ##  $ iters    : num [1:300, 1] 8.7 7.27 6.45 6.65 9.1 ...
 
 Each `get_` function also returns the output from each bootstrap
 iteration in `$iters` so that the user can plot these or calculate their
@@ -123,12 +123,13 @@ OR80_20 = get_or(test_data, or_age = 70, CI = TRUE, boot = 300)
 str(OR80_20)
 ```
 
-    ## List of 5
+    ## List of 6
     ##  $ index    : chr "OR80_20"
     ##  $ value    : num 8.52
-    ##  $ conf.low : num 4.93
-    ##  $ conf.high: num 17
-    ##  $ iters    : num [1:300, 1] 9.37 7.06 4.6 12.74 11.28 ...
+    ##  $ conf.low : num 5.21
+    ##  $ conf.high: num 18.1
+    ##  $ age      : num 70
+    ##  $ iters    : num [1:300, 1] 7.62 5.77 8.01 6.41 15.38 ...
 
 ``` r
 ggplot(mapping = aes(x = OR80_20$iters)) +
@@ -153,9 +154,9 @@ str(c_index)
     ## List of 5
     ##  $ index    : chr "C_Index"
     ##  $ value    : num 0.708
-    ##  $ conf.low : num 0.681
-    ##  $ conf.high: num 0.734
-    ##  $ iters    : num [1:300, 1] 0.707 0.707 0.717 0.694 0.705 ...
+    ##  $ conf.low : num 0.682
+    ##  $ conf.high: num 0.732
+    ##  $ iters    : num [1:300, 1] 0.694 0.702 0.707 0.699 0.706 ...
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for
 centiles of interest.

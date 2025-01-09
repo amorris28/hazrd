@@ -40,7 +40,7 @@ devtools::build("hazrd")
 You can then install the `.tar.gz` with `install.packages` in `R`:
 
 ```{r, eval=FALSE}
-install.packages("hazrd_0.1.0.tar.gz", repos = NULL, type="source")
+install.packages("hazrd-0.1.0.tar.gz", repos = NULL, type="source")
 ```
 
 ## Getting Started
