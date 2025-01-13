@@ -58,7 +58,7 @@ First, generate some test data. Here, we are using a simulated dataset that is i
 ```{r}
 library(ggplot2)
 library(hazrd)
-
+set.seed(20393440)
 head(test_data)
 ```
 
@@ -77,7 +77,7 @@ str(HR80_20)
 
 Each `get_` function also returns the output from each bootstrap iteration in `$iters` so that the user can plot these or calculate their own confidence intervals:
 
-```{r HR_histogram, cache=TRUE}
+```{r HR_histogram}
 ggplot(mapping = aes(x = HR80_20$iters)) +
     geom_histogram(binwidth = 2/3) +
     geom_vline(xintercept = HR80_20$HR, color = "red") +
@@ -94,7 +94,7 @@ OR80_20 = get_or(test_data, or_age = 70, CI = TRUE, boot = 300)
 str(OR80_20)
 ```
 
-```{r OR_histogram, cache=TRUE}
+```{r OR_histogram}
 ggplot(mapping = aes(x = OR80_20$iters)) +
     geom_histogram(binwidth = 3/2) +
     geom_vline(xintercept = OR80_20$OR, color = "red") +
