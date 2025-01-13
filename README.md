@@ -19,9 +19,21 @@ hazard scores, and functions related to Digital Avatar.
 
 ## Installation
 
+### Github
+
+To install the most recent release from Github, go to the
+[release](https://github.com/amorris28/hazrd/releases) page, scroll down
+to Assets, and download the “Source code (tar.gz)” file. Then, in `R`,
+run:
+
+``` r
+install.packages("hazrd-0.1.0.tar.gz", repos = NULL, type="source")
+```
+
 ### Using `devtools`
 
-You can install the development version of hazrd from
+For a more up-to-date installation with all of the changes since the
+last release, install the development version of hazrd from
 [GitHub](https://github.com/) by cloning the repository:
 
 ``` bash
@@ -37,13 +49,10 @@ devtools::install("hazrd")
 Replace `"hazrd"` with the path to the repository on your local
 computer.
 
-### From source
+#### On a remote cluster
 
-Alternatively, for a more convenient installation on a remote cluster,
-such as TSD, you can install from source using a tarball. Either
-download the latest `tar.gz` from the
-[releases](https://github.com/amorris28/hazrd/releases) page or clone
-the repo and then build a tar ball yourself:
+To install the development version on a remote cluster, such as TSD,
+build a tarball from your local clone of the Github repo:
 
 ``` r
 devtools::build("hazrd")
@@ -52,7 +61,7 @@ devtools::build("hazrd")
 You can then install the `.tar.gz` with `install.packages` in `R`:
 
 ``` r
-install.packages("hazrd-0.1.0.tar.gz", repos = NULL, type="source")
+install.packages("hazrd_0.1.0.tar.gz", repos = NULL, type="source")
 ```
 
 ## Getting Started
@@ -95,9 +104,9 @@ str(HR80_20)
     ## List of 5
     ##  $ index    : chr "HR80_20"
     ##  $ value    : num 8.17
-    ##  $ conf.low : num 5.92
-    ##  $ conf.high: num 11.2
-    ##  $ iters    : num [1:300, 1] 8.7 7.27 6.45 6.65 9.1 ...
+    ##  $ conf.low : num 6.15
+    ##  $ conf.high: num 11.3
+    ##  $ iters    : num [1:300, 1] 6.06 7.21 7.76 7.23 9.27 ...
 
 Each `get_` function also returns the output from each bootstrap
 iteration in `$iters` so that the user can plot these or calculate their
@@ -126,10 +135,10 @@ str(OR80_20)
     ## List of 6
     ##  $ index    : chr "OR80_20"
     ##  $ value    : num 8.52
-    ##  $ conf.low : num 5.21
-    ##  $ conf.high: num 18.1
+    ##  $ conf.low : num 4.69
+    ##  $ conf.high: num 18.2
     ##  $ age      : num 70
-    ##  $ iters    : num [1:300, 1] 7.62 5.77 8.01 6.41 15.38 ...
+    ##  $ iters    : num [1:300, 1] 7.05 8.42 9.08 5.51 8.67 ...
 
 ``` r
 ggplot(mapping = aes(x = OR80_20$iters)) +
@@ -154,9 +163,9 @@ str(c_index)
     ## List of 5
     ##  $ index    : chr "C_Index"
     ##  $ value    : num 0.708
-    ##  $ conf.low : num 0.682
-    ##  $ conf.high: num 0.732
-    ##  $ iters    : num [1:300, 1] 0.694 0.702 0.707 0.699 0.706 ...
+    ##  $ conf.low : num 0.68
+    ##  $ conf.high: num 0.735
+    ##  $ iters    : num [1:300, 1] 0.679 0.695 0.701 0.703 0.706 ...
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for
 centiles of interest.
