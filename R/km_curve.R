@@ -11,11 +11,10 @@
 #' @param age_range a vector of ages over which curves should be calculated. Default = 40:100
 #' @param scale logical. if `TRUE` centers and scales the PHS scores to unit variance. Default = `FALSE`.
 #' @param inverse logical. if `TRUE` calculates the inverse (x * -1) the PHS scores to reverse the direction of effect. Default = `FALSE`.
-#' @importFrom tidyr pivot_longer
+#' 
 #' @importFrom survival coxph Surv survfit
 #' @importFrom stats quantile
-#' @import dplyr
-#' @import tibble
+#' 
 #' @return A data.frame containing ages, the K-M curve, and the upper and lower confidence intervals
 #' @examples
 #' 
@@ -69,19 +68,15 @@ km_curve <- function(data = NULL,
     # Plot K-M curves for centiles
     mod <- survfit(Surv(age, status) ~ 1, data = quantile_data)
     
-    mod_data <- data.frame(time = mod$time,
-                           n.risk = mod$n.risk,
-                           n.event = mod$n.event,
-                           n.censor = mod$n.censor,
+    kmcurve <- data.frame(time = mod$time,
+                           # n.risk = mod$n.risk,
+                           # n.event = mod$n.event,
+                           # n.censor = mod$n.censor,
                            estimate = mod$surv,
-                           std.error = mod$std.err,
-                           conf.high = mod$upper,
+                           # std.error = mod$std.err,
                            conf.low = mod$lower,
+                           conf.high = mod$upper,
                            cumhaz = mod$cumhaz)
-    
-    kmcurve = select(mod_data, .data$time, .data$estimate, .data$conf.low, 
-                     .data$conf.high, .data$cumhaz)
     return(kmcurve)
-    
 }
 

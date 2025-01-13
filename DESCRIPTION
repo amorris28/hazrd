@@ -11,10 +11,7 @@ Depends:
     R (>= 3.5.0)
 Imports: 
     survival,
-    dplyr,
     ggplot2,
-    tibble,
-    tidyr,
     scales
 License: MIT + file LICENSE
 Encoding: UTF-8
