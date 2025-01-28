@@ -229,16 +229,19 @@ command line:
 ``` r
 #########################################
 # First argument: PHS file
-# tab delimited file, no header, first column ID, second column PHS score
-# filename used as prefix for output
+# tab delimited file, with or without header, first column ID, second column PHS score
+# file basename used as prefix for output
+#
 # Second argument: metadata file
-# tab delimited file with column names id, age, status. Additional
-# columns will be ignored.
+# tab delimited file with or without header, first column id,  second column age, 
+# third column status (0 or 1). Additional columns will be ignored.
+#
 # Third argument: 
 # boolean (i.e., TRUE or FALSE) indicating whether to inverse (x * -1) the PHS scores
 # to reverse the direction of effect.
+#
 # Fourth argument:
-# relative path to output directory, e.g., "reports/"
+# path to output directory, e.g., "reports/"
 # if the directory does not exist it will be created
 
 ########################################
@@ -257,7 +260,7 @@ model_file = args[1] # PHS file
 # model = gsub("\\_.*","", basename(args[1])) # filename for output
 model = gsub("\\..*","", basename(args[1])) # filename for output
 
-metadata = read.table(args[2]) # Phenotype data
+metadata = read.table(args[2], col.names = c("id", "age", "status")) # Phenotype data
 
 inverse = args[3]
 
@@ -267,6 +270,8 @@ output = args[4]
 # Import PHS data
 
 phs = read.table(model_file, col.names = c("id", "phs"))
+
+print(head(phs))
 
 phs$phs = scale(phs$phs, center = TRUE, scale = TRUE)
 
