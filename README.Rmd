@@ -157,6 +157,143 @@ ggplot(km_curves, aes(x = time,
                        name = "Centile")
 ```
 
+## Example Script
+
+Here is an example script to run the entire hazrd analysis from the command line:
+
+```
+Rscript hazrd_script.R phs.tsv metadata.tsv FALSE reports/
+```
+
+```{r, eval=FALSE}
+#########################################
+# First argument: PHS file
+# tab delimited file, no header, first column ID, second column PHS score
+# filename used as prefix for output
+# Second argument: metadata file
+# tab delimited file with column names id, age, status. Additional
+# columns will be ignored.
+# Third argument: 
+# boolean (i.e., TRUE or FALSE) indicating whether to inverse (x * -1) the PHS scores
+# to reverse the direction of effect.
+# Fourth argument:
+# relative path to output directory, e.g., "reports/"
+# if the directory does not exist it will be created
+
+########################################
+# Load packages
+library(hazrd)
+library(ggplot2)
+
+
+#######################################
+# parse arguments
+
+args = commandArgs(trailingOnly=TRUE)
+
+model_file = args[1] # PHS file
+
+# model = gsub("\\_.*","", basename(args[1])) # filename for output
+model = gsub("\\..*","", basename(args[1])) # filename for output
+
+metadata = read.table(args[2]) # Phenotype data
+
+inverse = args[3]
+
+output = args[4]
+
+#########################################
+# Import PHS data
+
+phs = read.table(model_file, col.names = c("id", "phs"))
+
+phs$phs = scale(phs$phs, center = TRUE, scale = TRUE)
+
+if (inverse) {phs$phs = phs$phs * -1}
+
+combined_data = merge(metadata, phs, by = "id")
+
+combined_data = combined_data[!(is.na(combined_data$phs)), ]
+
+#########################################
+# Analyze PHS data
+
+# PHS Histogram
+phs_hist = 
+	phs_hist(combined_data, normalize = TRUE) +
+	labs(title = model) + theme(aspect.ratio=1)
+
+ggsave(paste0(output, model, "_hist.png"), phs_hist, 
+       units = "px", height = 1300, width = 1300, create.dir = TRUE)
+
+# Performance metrics
+
+
+HR80_20 = get_hr(combined_data, CI = TRUE, boot = 300)
+ages = c(60, 70, 80)
+OR80_20 = lapply(ages, function(x) {get_or(combined_data, or_age = x, CI = TRUE, boot = 300)})
+c_index = get_cindex(combined_data, CI = TRUE, boot = 300)
+
+HR80_20$age = NA
+c_index$age = NA
+indices = list(HR80_20, OR80_20[[1]], OR80_20[[2]], OR80_20[[3]], c_index)
+
+perform = do.call(rbind.data.frame, lapply(indices, function(x){data.frame(index = x$index, 
+                                                                 value = x$value, 
+                                                                 conf.low = x$conf.low, 
+                                                                 conf.high = x$conf.high, 
+                                                                 age = x$age)}))
+perform = cbind(model, perform)
+write.table(perform, paste0(output, model, "_performance.tsv"), sep = "\t", row.names = FALSE)
+
+# KM Curves
+curves = data.frame(curve0_20 = c(0,   0.2),
+                    curve20_70 = c(0.2, 0.7),
+                    curve80_98 = c(0.8, 0.98),
+                    curve98_100 = c(0.98, 1.0))
+
+label_generator = function(x, y) {
+  x = x * 100
+  y = y * 100
+  out = paste0("PHS ", x, "-", y, "th centile")
+  return(out)
+}
+
+km_curves = data.frame()
+for (i in seq_len(length(curves))) {
+  curven <- km_curve(data = combined_data,  
+                     interval = curves[[i]],
+                     age_range = 40:100, 
+                     scale = FALSE, 
+                     inverse = FALSE)
+  curven$label = label_generator(curves[1, i], curves[2, i])
+  km_curves = rbind(km_curves, curven)
+}
+
+
+km_curve = ggplot(km_curves, aes(x = time, 
+                      y = estimate,
+                      ymin = conf.low,
+                      ymax = conf.high,
+                      col = label,
+                      fill = label)) +
+  geom_ribbon(alpha = 0.1,
+              color = 0) +
+  geom_step() +
+  theme_minimal() +
+  xlim(40, 100) + 
+  ylim(0, 1) +
+  labs(x = "Age", y = "Disease-free Survival", title = model) +
+  scale_color_brewer(palette = "Set1",
+                     name = "Centile") +
+  scale_fill_brewer(palette = "Set1",
+                    name = "Centile")  + theme(aspect.ratio=1)
+
+ggsave(paste0(output, model, "_km_curve.png"), km_curve,
+       units = "px", height = 1300, width = 1600, create.dir = TRUE)
+```
+
+
 ## Developer Instructions
 
 These are general instructions for how to create and document an R package.
