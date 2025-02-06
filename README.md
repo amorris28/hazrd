@@ -359,6 +359,61 @@ ggsave(paste0(output, model, "_km_curve.png"), km_curve,
        units = "px", height = 1300, width = 1600, create.dir = TRUE)
 ```
 
+# Individual Prediction
+
+It is possible to generate a lookup table to perform individual
+prediction on a new, un-observed individual for which we have calculated
+a PHS score. To do this, we fit the model using our data and generate
+predicted curves for each of 99 percentiles (1 to 99%). We then output
+these curves with their associated PHS score at each percentile. This
+removes any connection to the subject-level data so is safe to export
+from secure computing platforms. We can then plot the prediction for the
+closest percentile to the new individual’s PHS
+
+Future work will be to implement a way of interpolating the curve for a
+subject that is between two percentiles. In addition, work should be
+done to perform smoothing of the curve using the baseline hazard
+function rather than outputing a K-M curve for that individual. This
+will improve the interpretability of the individual prediction since
+risk isn’t likely to suddenly drop-off at a particular age, but should
+be an exponential function.
+
+Here is an example workflow:
+
+``` r
+# Create the lookup table (on a secure computing platform using
+# individual-level data)
+
+lookup_table = create_lookup_table(test_data)
+```
+
+Export that lookup table from the computing platform and then identify
+the percentile for a new subject. Based on this toy dataset, a subject
+with a PHS of 1.6 would be approximately in the 94th percentile. Here, I
+plot the predicted curve for the median percentiel (50%) with a gray
+shaded area for the confidence intervals, an individual line for every
+percentile from 1 to 99, and I have highlighted in red the predicted
+risk curve and confidence intervals for the “new” hypothetical subject
+with a PHS of 1.6 (94th percentile):
+
+``` r
+ggplot(lookup_table[lookup_table$percentile == 0.50, ], 
+       aes(x = time, y = surv, ymin = lower, ymax = upper)) +
+    geom_line() +
+    geom_ribbon(alpha = 0.5) +
+    theme_classic() +
+    geom_line(aes(x = time, y = surv, group = percentile), data = lookup_table, alpha = 0.1) +
+    geom_line(aes(x = time, y = surv, group = percentile), 
+                data = lookup_table[lookup_table$percentile == 0.94, ], 
+                color = "red") +
+    geom_ribbon(aes(x = time, y = surv, ymin = lower, ymax = upper), 
+                data = lookup_table[lookup_table$percentile == 0.94, ], 
+                alpha = 0.5, fill = "red") +
+    labs(x = "Age", y = "Disease-free Sruvival")
+```
+
+![](README_files/figure-gfm/plot_ind_pred-1.png)<!-- -->
+
 ## Developer Instructions
 
 These are general instructions for how to create and document an R
