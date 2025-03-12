@@ -8,6 +8,13 @@
 \description{
 Tools to compute polygenic hazard scores using Cox proportional hazards model and lasso regularization via glmnet.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://amorris28.github.io/hazrd/}
+}
+
+}
 \author{
 \strong{Maintainer}: Andrew Morris \email{andrewmorris@mailbox.org}
 

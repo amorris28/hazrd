@@ -26,3 +26,4 @@ Suggests:
 VignetteBuilder: knitr
 LazyData: true
 LazyDataCompression: bzip2
+URL: https://amorris28.github.io/hazrd/
