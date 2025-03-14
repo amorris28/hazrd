@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>hazrd • hazrd</title>
+<title>Get started • hazrd</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="hazrd">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get started">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -49,7 +49,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>hazrd</h1>
+      <h1>Get started</h1>
             
       
 
@@ -60,8 +60,7 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://amorris28.github.io/hazrd/">hazrd</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">46495809</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="getting-started-with-hazrd">Getting started with <code>{hazrd}</code><a class="anchor" aria-label="anchor" href="#getting-started-with-hazrd"></a>
 </h2>
@@ -86,40 +85,61 @@
 PHSes to the mean of the bottom 20% (i.e., <code>HR80_20</code>). We can
 also generate 95% confidence intervals using bootstrapping.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>, CI <span class="op">=</span> <span class="cn">TRUE</span>, boot <span class="op">=</span> <span class="fl">300</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">HR80_20</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>, CI <span class="op">=</span> <span class="cn">TRUE</span>, boot <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">HR80_20</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 5</span></span>
 <span><span class="co">#&gt;  $ index    : chr "HR80_20"</span></span>
 <span><span class="co">#&gt;  $ value    : num 8.17</span></span>
-<span><span class="co">#&gt;  $ conf.low : num 5.87</span></span>
-<span><span class="co">#&gt;  $ conf.high: num 11.7</span></span>
-<span><span class="co">#&gt;  $ iters    : num [1:300, 1] 7.23 6.63 7.09 6.55 5.64 ...</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ conf.low : num 6.17</span></span>
+<span><span class="co">#&gt;  $ conf.high: num 11.4</span></span>
+<span><span class="co">#&gt;  $ iters    : num [1:300, 1] 6.35 8.38 6.43 6.65 7.32 ...</span></span></code></pre></div>
+<p>Each <code>get_</code> function also returns the output from each
+bootstrap iteration in <code>$iters</code> so that the user can plot
+these or calculate their own confidence intervals:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">HR80_20</span><span class="op">$</span><span class="va">iters</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">2</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">HR80_20</span><span class="op">$</span><span class="va">HR</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">HR80_20</span><span class="op">$</span><span class="va">conf.low</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">HR80_20</span><span class="op">$</span><span class="va">conf.high</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"HR80_20"</span>, y <span class="op">=</span> <span class="st">"Count"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="hazrd_files/figure-html/HR_histogram-1.png" width="700"></p>
 <p>Similarly, calculate the odds ratio at age 70 between the top 20% and
 bottom 20% of PHSes.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_or.html">get_or</a></span><span class="op">(</span><span class="va">test_data</span>, or_age <span class="op">=</span> <span class="fl">70</span>, CI <span class="op">=</span> <span class="cn">TRUE</span>, boot <span class="op">=</span> <span class="fl">300</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">OR80_20</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_or.html">get_or</a></span><span class="op">(</span><span class="va">test_data</span>, or_age <span class="op">=</span> <span class="fl">70</span>, CI <span class="op">=</span> <span class="cn">TRUE</span>, boot <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">OR80_20</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 6</span></span>
 <span><span class="co">#&gt;  $ index    : chr "OR80_20"</span></span>
 <span><span class="co">#&gt;  $ value    : num 8.52</span></span>
-<span><span class="co">#&gt;  $ conf.low : num 4.86</span></span>
-<span><span class="co">#&gt;  $ conf.high: num 17.5</span></span>
+<span><span class="co">#&gt;  $ conf.low : num 4.53</span></span>
+<span><span class="co">#&gt;  $ conf.high: num 17.1</span></span>
 <span><span class="co">#&gt;  $ age      : num 70</span></span>
-<span><span class="co">#&gt;  $ iters    : num [1:300, 1] 12.41 9.37 6.83 8.39 7.24 ...</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ iters    : num [1:300, 1] 7.97 11.73 8.86 4.27 5.04 ...</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">OR80_20</span><span class="op">$</span><span class="va">iters</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">3</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">OR80_20</span><span class="op">$</span><span class="va">OR</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">OR80_20</span><span class="op">$</span><span class="va">conf.low</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">OR80_20</span><span class="op">$</span><span class="va">conf.high</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"OR80_20"</span>, y <span class="op">=</span> <span class="st">"Count"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="hazrd_files/figure-html/OR_histogram-1.png" width="700"></p>
 <p>Return the concordance index with 95% confidence intervals from a
 coxph fit:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_cindex.html">get_cindex</a></span><span class="op">(</span><span class="va">test_data</span>,  CI <span class="op">=</span> <span class="cn">TRUE</span>, boot <span class="op">=</span> <span class="fl">300</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">c_index</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_cindex.html">get_cindex</a></span><span class="op">(</span><span class="va">test_data</span>, CI <span class="op">=</span> <span class="cn">TRUE</span>, boot <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">c_index</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 5</span></span>
 <span><span class="co">#&gt;  $ index    : chr "C_Index"</span></span>
 <span><span class="co">#&gt;  $ value    : num 0.708</span></span>
-<span><span class="co">#&gt;  $ conf.low : num 0.683</span></span>
-<span><span class="co">#&gt;  $ conf.high: num 0.737</span></span>
-<span><span class="co">#&gt;  $ iters    : num [1:300, 1] 0.716 0.703 0.71 0.71 0.692 ...</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ conf.low : num 0.678</span></span>
+<span><span class="co">#&gt;  $ conf.high: num 0.734</span></span>
+<span><span class="co">#&gt;  $ iters    : num [1:300, 1] 0.713 0.718 0.71 0.714 0.695 ...</span></span></code></pre></div>
 <p>Finally, plot the Kaplan-Meier curves with confidence intervals for
 centiles of interest.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">curves</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>curve0_20 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,   <span class="fl">0.2</span><span class="op">)</span>,</span>
 <span>                    curve20_70 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
 <span>                    curve80_98 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">0.98</span><span class="op">)</span>,</span>
@@ -178,7 +198,7 @@ several formats. If your <code>data.frame</code> contains standard
 columns <code>phs</code>, <code>age</code>, and <code>status</code>,
 then you can simply pass the data.frame object to the
 <code>data =</code> argument:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">test_data</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 5</span></span>
@@ -190,7 +210,7 @@ then you can simply pass the data.frame object to the
 <p>If your data is stored in a data.frame with non-standard column
 names, e.g., <code>HazardScores</code>, <code>CaseControl</code>, and
 <code>AgeLastObs</code>,</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test_data2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">test_data</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>HazardScores <span class="op">=</span> <span class="va">phs</span>, </span>
 <span>                                        CaseControl <span class="op">=</span> <span class="va">status</span>, </span>
 <span>                                        AgeLastObs <span class="op">=</span> <span class="va">age</span><span class="op">)</span><span class="op">)</span></span>
@@ -203,7 +223,7 @@ names, e.g., <code>HazardScores</code>, <code>CaseControl</code>, and
 <span><span class="co">#&gt; 5   -0.4041602           1   74.33629</span></span>
 <span><span class="co">#&gt; 6   -0.4531890           1   77.15814</span></span></code></pre></div>
 <p>then you can specify these column names as separate arguments:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">test_data2</span>, </span>
 <span>       phs <span class="op">=</span> <span class="st">"HazardScores"</span>, </span>
 <span>       status <span class="op">=</span> <span class="st">"CaseControl"</span>, </span>
@@ -217,7 +237,7 @@ names, e.g., <code>HazardScores</code>, <code>CaseControl</code>, and
 <span><span class="co">#&gt;  $ iters    : NULL</span></span></code></pre></div>
 <p>If any of your data is not in a data.frame, but is instead in
 separate vectors, you can provide these individually by name:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hazScore</span> <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">phs</span></span>
 <span><span class="va">caseCon</span> <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">status</span></span>
 <span><span class="va">ageLastObs</span> <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">age</span></span>
@@ -233,7 +253,7 @@ separate vectors, you can provide these individually by name:</p>
 <span><span class="co">#&gt;  $ conf.high: NULL</span></span>
 <span><span class="co">#&gt;  $ iters    : NULL</span></span></code></pre></div>
 <p>Lastly, you can do any combination of the above:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">test_data3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>phs <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">phs</span>,</span>
 <span>                        CaseControl <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">status</span><span class="op">)</span></span>
 <span><span class="va">Ages</span> <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">age</span></span>
@@ -262,7 +282,7 @@ customizing your hazard ratios. By default, it calculates the
 20%. However, custom intervals can be specified using the
 <code>upper_interval</code> and <code>lower_interval</code>
 arguments.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
 <span>       lower_interval <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>       upper_interval <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -280,7 +300,7 @@ will use <code>-Inf:0.2</code>. However, two values can be specified as
 a vector to specify a particular range. For example, if you want the
 lower interval to be the middle 40% of PHSes, you can specify
 <code>lower_interval = c(0.3, 0.7)</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
 <span>       lower_interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
 <span>       upper_interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -295,7 +315,7 @@ lower interval to be the middle 40% of PHSes, you can specify
 <code>get_or</code> as for <code>get_hr</code>. The only difference is
 that the odds ratio must be calculated at a particular age, which is
 passed with the <code>or_age</code> argument:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_or.html">get_or</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
 <span>       or_age <span class="op">=</span> <span class="fl">70</span>,</span>
 <span>       lower_interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
@@ -321,7 +341,7 @@ iterations with <code>bootstrap_iterations =</code>. In this case,
 values for the upper and lower 95% confidence intervals as well as all
 of the HR estimates from each bootstrap iteration in
 <code>iters</code>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
 <span>       CI <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>       bootstrap_iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -329,9 +349,9 @@ of the HR estimates from each bootstrap iteration in
 <span><span class="co">#&gt; List of 5</span></span>
 <span><span class="co">#&gt;  $ index    : chr "HR80_20"</span></span>
 <span><span class="co">#&gt;  $ value    : num 8.17</span></span>
-<span><span class="co">#&gt;  $ conf.low : num 6.02</span></span>
+<span><span class="co">#&gt;  $ conf.low : num 6.1</span></span>
 <span><span class="co">#&gt;  $ conf.high: num 11.1</span></span>
-<span><span class="co">#&gt;  $ iters    : num [1:300, 1] 8.14 7.82 8.12 9.88 9.02 ...</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ iters    : num [1:300, 1] 7.77 8.21 7.5 9.34 9.75 ...</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="sample-weight-correction">Sample weight correction<a class="anchor" aria-label="anchor" href="#sample-weight-correction"></a>
@@ -343,7 +363,7 @@ population number of cases and the population number of controls to
 perform sample weight correction. These are provided with the
 <code>swc_popnumcases</code> and <code>swc_popnumcontrols</code>
 arguments.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
 <span>       swc <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>       swc_popnumcases <span class="op">=</span> <span class="fl">28421</span>,</span>
@@ -364,7 +384,7 @@ arguments.</p>
 function to return a single Kaplan-Meier curve for a given interval.
 Plotting must be performed manually once you have returned these
 curves.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">curven</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/km_curve.html">km_curve</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">test_data</span>,  </span>
 <span>                       interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="fl">1.00</span><span class="op">)</span>, </span>
 <span>                       age_range <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">100</span>, </span>
@@ -379,7 +399,7 @@ age-at-diagnosis or similar. Alternatively, can be <code>0:10</code>
 for, for exmaple, age of conversion to AD after MCI diagnosis.</p>
 <p>We can generate multiple curves at various intervals and get them
 into a data.frame:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">curves</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>curve0_20 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,   <span class="fl">0.2</span><span class="op">)</span>,</span>
 <span>                    curve20_70 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
 <span>                    curve80_98 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">0.98</span><span class="op">)</span>,</span>
@@ -403,7 +423,7 @@ into a data.frame:</p>
 <span>    <span class="va">km_curves</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">km_curves</span>, <span class="va">curven</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>And plot them:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">km_curves</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, </span>
 <span>                      y <span class="op">=</span> <span class="va">estimate</span>,</span>
 <span>                      ymin <span class="op">=</span> <span class="va">conf.low</span>,</span>
@@ -425,6 +445,192 @@ into a data.frame:</p>
 <span><span class="co">#&gt; (`geom_step()`).</span></span></code></pre></div>
 <p><img src="hazrd_files/figure-html/plot_km_curves2-1.png" width="432"></p>
 </div>
+<div class="section level3">
+<h3 id="individual-prediction">Individual Prediction<a class="anchor" aria-label="anchor" href="#individual-prediction"></a>
+</h3>
+<p>It is possible to generate a lookup table to perform individual
+prediction on a new, un-observed individual for which we have calculated
+a PHS score. To do this, we fit the model using our data and generate
+predicted curves for each of 99 percentiles (1 to 99%). We then output
+these curves with their associated PHS score at each percentile. This
+removes any connection to the subject-level data so is safe to export
+from secure computing platforms. We can then plot the prediction for the
+closest percentile to the new individual’s PHS</p>
+<p>Future work will be to implement a way of interpolating the curve for
+a subject that is between two percentiles. In addition, work should be
+done to perform smoothing of the curve using the baseline hazard
+function rather than outputing a K-M curve for that individual. This
+will improve the interpretability of the individual prediction since
+risk isn’t likely to suddenly drop-off at a particular age, but should
+be an exponential function.</p>
+<p>Here is an example workflow:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create the lookup table (on a secure computing platform using</span></span>
+<span><span class="co"># individual-level data)</span></span>
+<span></span>
+<span><span class="va">lookup_table</span> <span class="op">=</span> <span class="fu"><a href="../reference/create_lookup_table.html">create_lookup_table</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span></code></pre></div>
+<p>Export that lookup table from the computing platform and then
+identify the percentile for a new subject. Based on this toy dataset, a
+subject with a PHS of 1.6 would be approximately in the 94th percentile.
+Here, I plot the predicted curve for the median percentiel (50%) with a
+gray shaded area for the confidence intervals, an individual line for
+every percentile from 1 to 99, and I have highlighted in red the
+predicted risk curve and confidence intervals for the “new” hypothetical
+subject with a PHS of 1.6 (94th percentile):</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">lookup_table</span><span class="op">[</span><span class="va">lookup_table</span><span class="op">$</span><span class="va">percentile</span> <span class="op">==</span> <span class="fl">0.50</span>, <span class="op">]</span>, </span>
+<span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">surv</span>, ymin <span class="op">=</span> <span class="va">lower</span>, ymax <span class="op">=</span> <span class="va">upper</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">surv</span>, group <span class="op">=</span> <span class="va">percentile</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">lookup_table</span>, alpha <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">surv</span>, group <span class="op">=</span> <span class="va">percentile</span><span class="op">)</span>, </span>
+<span>                data <span class="op">=</span> <span class="va">lookup_table</span><span class="op">[</span><span class="va">lookup_table</span><span class="op">$</span><span class="va">percentile</span> <span class="op">==</span> <span class="fl">0.94</span>, <span class="op">]</span>, </span>
+<span>                color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">surv</span>, ymin <span class="op">=</span> <span class="va">lower</span>, ymax <span class="op">=</span> <span class="va">upper</span><span class="op">)</span>, </span>
+<span>                data <span class="op">=</span> <span class="va">lookup_table</span><span class="op">[</span><span class="va">lookup_table</span><span class="op">$</span><span class="va">percentile</span> <span class="op">==</span> <span class="fl">0.94</span>, <span class="op">]</span>, </span>
+<span>                alpha <span class="op">=</span> <span class="fl">0.5</span>, fill <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Age"</span>, y <span class="op">=</span> <span class="st">"Disease-free Survival"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="hazrd_files/figure-html/plot_ind_pred-1.png" width="700"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="example-script">Example Script<a class="anchor" aria-label="anchor" href="#example-script"></a>
+</h2>
+<p>Here is an example script to run the entire hazrd analysis from the
+command line:</p>
+<pre><code>Rscript hazrd_script.R phs.tsv metadata.tsv FALSE reports/</code></pre>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#########################################</span></span>
+<span><span class="co"># First argument: PHS file</span></span>
+<span><span class="co"># tab delimited file, with or without header, first column ID, second column PHS score</span></span>
+<span><span class="co"># file basename used as prefix for output</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># Second argument: metadata file</span></span>
+<span><span class="co"># tab delimited file with or without header, first column id,  second column age, </span></span>
+<span><span class="co"># third column status (0 or 1). Additional columns will be ignored.</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># Third argument: </span></span>
+<span><span class="co"># boolean (i.e., TRUE or FALSE) indicating whether to inverse (x * -1) the PHS scores</span></span>
+<span><span class="co"># to reverse the direction of effect.</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># Fourth argument:</span></span>
+<span><span class="co"># path to output directory, e.g., "reports/"</span></span>
+<span><span class="co"># if the directory does not exist it will be created</span></span>
+<span></span>
+<span><span class="co">########################################</span></span>
+<span><span class="co"># Load packages</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://amorris28.github.io/hazrd/">hazrd</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co">#######################################</span></span>
+<span><span class="co"># parse arguments</span></span>
+<span></span>
+<span><span class="va">args</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/commandArgs.html" class="external-link">commandArgs</a></span><span class="op">(</span>trailingOnly<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model_file</span> <span class="op">=</span> <span class="va">args</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="co"># PHS file</span></span>
+<span></span>
+<span><span class="co"># model = gsub("\\_.*","", basename(args[1])) # filename for output</span></span>
+<span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"\\..*"</span>,<span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">args</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="co"># filename for output</span></span>
+<span></span>
+<span><span class="va">metadata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="va">args</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"age"</span>, <span class="st">"status"</span><span class="op">)</span><span class="op">)</span> <span class="co"># Phenotype data</span></span>
+<span></span>
+<span><span class="va">inverse</span> <span class="op">=</span> <span class="va">args</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">output</span> <span class="op">=</span> <span class="va">args</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span></span>
+<span></span>
+<span><span class="co">#########################################</span></span>
+<span><span class="co"># Import PHS data</span></span>
+<span></span>
+<span><span class="va">phs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="va">model_file</span>, col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"phs"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">phs</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">phs</span><span class="op">$</span><span class="va">phs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">phs</span><span class="op">$</span><span class="va">phs</span>, center <span class="op">=</span> <span class="cn">TRUE</span>, scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="va">inverse</span><span class="op">)</span> <span class="op">{</span><span class="va">phs</span><span class="op">$</span><span class="va">phs</span> <span class="op">=</span> <span class="va">phs</span><span class="op">$</span><span class="va">phs</span> <span class="op">*</span> <span class="op">-</span><span class="fl">1</span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">combined_data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">metadata</span>, <span class="va">phs</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">combined_data</span> <span class="op">=</span> <span class="va">combined_data</span><span class="op">[</span><span class="op">!</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">combined_data</span><span class="op">$</span><span class="va">phs</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="co">#########################################</span></span>
+<span><span class="co"># Analyze PHS data</span></span>
+<span></span>
+<span><span class="co"># PHS Histogram</span></span>
+<span><span class="va">phs_hist</span> <span class="op">=</span> </span>
+<span>    <span class="fu"><a href="../reference/phs_hist.html">phs_hist</a></span><span class="op">(</span><span class="va">combined_data</span>, normalize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="va">model</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output</span>, <span class="va">model</span>, <span class="st">"_hist.png"</span><span class="op">)</span>, <span class="va">phs_hist</span>, </span>
+<span>       units <span class="op">=</span> <span class="st">"px"</span>, height <span class="op">=</span> <span class="fl">1300</span>, width <span class="op">=</span> <span class="fl">1300</span>, create.dir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Performance metrics</span></span>
+<span></span>
+<span></span>
+<span><span class="va">HR80_20</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">combined_data</span>, CI <span class="op">=</span> <span class="cn">TRUE</span>, boot <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<span><span class="va">ages</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">70</span>, <span class="fl">80</span><span class="op">)</span></span>
+<span><span class="va">OR80_20</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">ages</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="../reference/get_or.html">get_or</a></span><span class="op">(</span><span class="va">combined_data</span>, or_age <span class="op">=</span> <span class="va">x</span>, CI <span class="op">=</span> <span class="cn">TRUE</span>, boot <span class="op">=</span> <span class="fl">300</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="va">c_index</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_cindex.html">get_cindex</a></span><span class="op">(</span><span class="va">combined_data</span>, CI <span class="op">=</span> <span class="cn">TRUE</span>, boot <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">HR80_20</span><span class="op">$</span><span class="va">age</span> <span class="op">=</span> <span class="cn">NA</span></span>
+<span><span class="va">c_index</span><span class="op">$</span><span class="va">age</span> <span class="op">=</span> <span class="cn">NA</span></span>
+<span><span class="va">indices</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">HR80_20</span>, <span class="va">OR80_20</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">OR80_20</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="va">OR80_20</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, <span class="va">c_index</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">perform</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind.data.frame</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">indices</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>index <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">index</span>, </span>
+<span>                                                                 value <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">value</span>, </span>
+<span>                                                                 conf.low <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">conf.low</span>, </span>
+<span>                                                                 conf.high <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">conf.high</span>, </span>
+<span>                                                                 age <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">age</span><span class="op">)</span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">perform</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">perform</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.table</a></span><span class="op">(</span><span class="va">perform</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output</span>, <span class="va">model</span>, <span class="st">"_performance.tsv"</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\t"</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># KM Curves</span></span>
+<span><span class="va">curves</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>curve0_20 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,   <span class="fl">0.2</span><span class="op">)</span>,</span>
+<span>                    curve20_70 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
+<span>                    curve80_98 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">0.98</span><span class="op">)</span>,</span>
+<span>                    curve98_100 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.98</span>, <span class="fl">1.0</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">label_generator</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">=</span> <span class="va">x</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span>  <span class="va">y</span> <span class="op">=</span> <span class="va">y</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span>  <span class="va">out</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"PHS "</span>, <span class="va">x</span>, <span class="st">"-"</span>, <span class="va">y</span>, <span class="st">"th centile"</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">km_curves</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">curves</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">curven</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/km_curve.html">km_curve</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">combined_data</span>,  </span>
+<span>                     interval <span class="op">=</span> <span class="va">curves</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                     age_range <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">100</span>, </span>
+<span>                     scale <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>                     inverse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="va">curven</span><span class="op">$</span><span class="va">label</span> <span class="op">=</span> <span class="fu">label_generator</span><span class="op">(</span><span class="va">curves</span><span class="op">[</span><span class="fl">1</span>, <span class="va">i</span><span class="op">]</span>, <span class="va">curves</span><span class="op">[</span><span class="fl">2</span>, <span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">km_curves</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">km_curves</span>, <span class="va">curven</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span><span class="va">km_curve</span> <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">km_curves</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, </span>
+<span>                      y <span class="op">=</span> <span class="va">estimate</span>,</span>
+<span>                      ymin <span class="op">=</span> <span class="va">conf.low</span>,</span>
+<span>                      ymax <span class="op">=</span> <span class="va">conf.high</span>,</span>
+<span>                      col <span class="op">=</span> <span class="va">label</span>,</span>
+<span>                      fill <span class="op">=</span> <span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>              color <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">100</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Age"</span>, y <span class="op">=</span> <span class="st">"Disease-free Survival"</span>, title <span class="op">=</span> <span class="va">model</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span>,</span>
+<span>                     name <span class="op">=</span> <span class="st">"Centile"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span>,</span>
+<span>                    name <span class="op">=</span> <span class="st">"Centile"</span><span class="op">)</span>  <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">output</span>, <span class="va">model</span>, <span class="st">"_km_curve.png"</span><span class="op">)</span>, <span class="va">km_curve</span>,</span>
+<span>       units <span class="op">=</span> <span class="st">"px"</span>, height <span class="op">=</span> <span class="fl">1300</span>, width <span class="op">=</span> <span class="fl">1600</span>, create.dir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

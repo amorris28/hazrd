@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   hazrd: hazrd.html
-last_built: 2025-03-12T09:44Z
+last_built: 2025-03-14T15:21Z
 urls:
   reference: https://amorris28.github.io/hazrd/reference
   article: https://amorris28.github.io/hazrd/articles
