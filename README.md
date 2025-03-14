@@ -63,3 +63,8 @@ You can then install the `.tar.gz` with `install.packages` in `R`:
 ``` r
 install.packages("hazrd_0.1.0.tar.gz", repos = NULL, type="source")
 ```
+
+## Getting started
+
+For an introduction on how to use the package, please see the vignettes
+on the [hazrd pkgdown website](https://amorris28.github.io/hazrd/).
