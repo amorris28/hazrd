@@ -1,5 +1,5 @@
 ---
-title: "Get started"
+title: "Getting started with `{hazrd}`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{hazrd}
@@ -18,8 +18,6 @@ knitr::opts_chunk$set(
 library(hazrd)
 library(ggplot2)
 ```
-
-## Getting started with `{hazrd}`
 
 Here is our test data included in the package.
 
