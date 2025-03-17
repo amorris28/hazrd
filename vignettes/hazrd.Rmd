@@ -303,8 +303,6 @@ ggplot(km_curves, aes(x = time,
 
 It is possible to generate a lookup table to perform individual prediction on a new, un-observed individual for which we have calculated a PHS score. To do this, we fit the model using our data and generate predicted curves for each of 99 percentiles (1 to 99%). We then output these curves with their associated PHS score at each percentile. This removes any connection to the subject-level data so is safe to export from secure computing platforms. We can then plot the prediction for the closest percentile to the new individual's PHS
 
-Future work will be to implement a way of interpolating the curve for a subject that is between two percentiles. In addition, work should be done to perform smoothing of the curve using the baseline hazard function rather than outputing a K-M curve for that individual. This will improve the interpretability of the individual prediction since risk isn't likely to suddenly drop-off at a particular age, but should be an exponential function.
-
 Here is an example workflow:
 
 ```{r create_lookup_table}
