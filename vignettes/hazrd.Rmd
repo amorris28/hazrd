@@ -456,9 +456,6 @@ Here again the blue curves are the group-based curves (0-20, 20-80, and 80-100%)
 Now, comparing the 90th percentile individual to the "empirical" curve for the subjects in the top quintile:
 
 ```{r}
-# This is the curve for the 90% percentile
-cp_predict_0.9
-
 # This is the curve for the group in the 80-100 quintile
 test_data80_100 = test_data[test_data$phs_group == "80-100", ]
 
