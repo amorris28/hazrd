@@ -418,7 +418,8 @@ ggplot() +
     geom_step(aes(x = age, y = cp_predict_0.2), data = new_data0.2, color = 2) +
     geom_step(aes(x = age, y = cp_predict_0.8), data = new_data0.8, color = 2) +
     geom_step(aes(x = age, y = cp_predict_0.5), data = new_data0.5, color = 2) +
-    labs(x = "Age", y = "Disease-free Survival")
+    labs(x = "Age", y = "Disease-free Survival") +
+    theme_minimal()
 ```
 
 Here, the blue curves are the quintile curves or group-based curves and the red curves are the percentile-based curves.
