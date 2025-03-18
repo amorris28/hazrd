@@ -27,7 +27,7 @@ head(test_data)
 
 Next, plot the histogram of PHSes by case/control status.
 
-```{r phs_hist, fig.width=4}
+```{r phs_hist}
 phs_hist(test_data, normalize = TRUE)
 ```
 
@@ -466,7 +466,9 @@ surv_80_100_data = data.frame(age = surv_80_100$time,
 ggplot() + 
     geom_step(aes(x = ages, y = cp_predict_0.9), data = new_data0.9, color = 4) + # blue
     geom_step(aes(x = age, y = cp_predict_80100), data = new_data80100, color = 2) + #red
-    geom_step(aes(x = age, y = surv), data = surv_80_100_data, color = 3) # green
+    geom_step(aes(x = age, y = surv), data = surv_80_100_data, color = 3) + # green
+    labs(x = "Age", y = "Disease-free Survival") +
+    theme_minimal()
 
 ```
 
