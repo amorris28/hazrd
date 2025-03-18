@@ -78,7 +78,7 @@ str(c_index)
 
 Finally, plot the Kaplan-Meier curves with confidence intervals for centiles of interest.
 
-```{r plot_km_curves, fig.width=4.5}
+```{r plot_km_curves}
 curves = data.frame(curve0_20 = c(0,   0.2),
                     curve20_70 = c(0.2, 0.7),
                     curve80_98 = c(0.8, 0.98),
@@ -278,7 +278,7 @@ for (i in seq_len(length(curves))) {
 
 And plot them:
 
-```{r plot_km_curves2, fig.width=4.5}
+```{r plot_km_curves2}
 ggplot(km_curves, aes(x = time, 
                       y = estimate,
                       ymin = conf.low,
@@ -331,15 +331,15 @@ ggplot(lookup_table[lookup_table$percentile == 0.50, ],
 ```
 
 
-# Percentiles versus Quintiles for comparison and prediction
+## Percentiles versus Quintiles for comparison and prediction
 
-In the literature on PHS, there are at least two ways that folks visualize the survival estimates for different PHS models. One is to compare the 20th percentile to the 80th percentile. The other is to compare quintiles, that is, the top 20% of PHSes to the bottom 20% (approximately equal to the 10th versus 20th percentile). Here is an explanation of how to do both and how those estimates compare:
+In the literature on PHS, there are at least two ways that folks visualize the survival estimates for different PHS models. One is to compare the 20th percentile to the 80th percentile. The other is to compare quintiles, that is, the top 20% of PHSes to the bottom 20%. Here is an explanation of how to do both and how those estimates compare:
 
-## Percentiles
+### Percentiles
 
 ```{r}
 library(survival)
-# Fit the coxph model and generate a survival curve
+# Fit the coxph model
 cp_fit = coxph(Surv(age, status) ~ phs, data = test_data)
 
 # Calculate the PHS at each percentile of interest
@@ -357,7 +357,7 @@ new_data0.8$phs = phs0.8
 new_data0.5 = new_data0.2
 new_data0.5$phs = phs0.5
 
-# Using out original model, generate a predicted survival curve
+# Using our original model, generate a predicted survival curve
 cp_predict_0.2 <- predict(cp_fit, new_data0.2, type = "survival")
 cp_predict_0.8 <- predict(cp_fit, new_data0.8, type = "survival")
 cp_predict_0.5 <- predict(cp_fit, new_data0.5, type = "survival")
@@ -372,7 +372,7 @@ ggplot() +
 
 Here, the blue line is the 20th percentile, the green line is the 50th percentile, and the red line is the 80th percentile.
 
-## Quintiles
+### Quintiles
 
 ```{r}
 # Cut the PHSes into groups based on percentile.
@@ -380,7 +380,7 @@ Here, the blue line is the 20th percentile, the green line is the 50th percentil
 test_data$phs_group <- cut(test_data$phs, c(-Inf, phs0.2, phs0.8, Inf),
                     labels = c("0-20", "20-80", "80-100"))
 
-# Fit the modell, this time with group as the predictor rather than the PHS
+# Fit the model, this time with group as the predictor rather than the PHS
 cp_fit_group <- coxph(Surv(age, status) ~ phs_group, test_data)
 
 # Generate some new data for prediction
@@ -421,7 +421,7 @@ ggplot() +
     labs(x = "Age", y = "Disease-free Survival")
 ```
 
-Here, the blue curves are the quintile curves or group-based curves and the red curvies are the percentile-based curves.
+Here, the blue curves are the quintile curves or group-based curves and the red curves are the percentile-based curves.
 
 The 0-20 and 80-100 curves are close to but not exactly the same as the 10% percentile and the 90% percentile:
 
