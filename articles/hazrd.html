@@ -606,6 +606,55 @@ the 10% percentile and the 90% percentile:</p>
 <p>Here again the blue curves are the group-based curves (0-20, 20-80,
 and 80-100%) and the pink curves are the prediction for the 10th
 percentile and the 90th percentile.</p>
+<hr>
+<p>Now, comparing the 90th percentile individual to the “empirical”
+curve for the subjects in the top quintile:</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># This is the curve for the 90% percentile</span></span>
+<span><span class="va">cp_predict_0.9</span></span>
+<span><span class="co">#&gt;  [1] 1.00000000 1.00000000 1.00000000 0.99406458 0.99406458 0.99007461</span></span>
+<span><span class="co">#&gt;  [7] 0.98807638 0.98407665 0.98004866 0.97191484 0.95755262 0.94726378</span></span>
+<span><span class="co">#&gt; [13] 0.93486835 0.91197668 0.89736215 0.88686306 0.87214759 0.85070078</span></span>
+<span><span class="co">#&gt; [19] 0.83764146 0.82450900 0.81131138 0.79129142 0.77330567 0.74848560</span></span>
+<span><span class="co">#&gt; [25] 0.72575459 0.70736561 0.68147608 0.66945294 0.63786161 0.60393184</span></span>
+<span><span class="co">#&gt; [31] 0.58669339 0.57153769 0.53582220 0.50980445 0.47776959 0.44439152</span></span>
+<span><span class="co">#&gt; [37] 0.41560075 0.36902082 0.35152702 0.30704978 0.25655577 0.22082585</span></span>
+<span><span class="co">#&gt; [43] 0.19668393 0.16156295 0.13304721 0.11382946 0.11382946 0.10304508</span></span>
+<span><span class="co">#&gt; [49] 0.08498174 0.06775668 0.06054787 0.04666897 0.04350895 0.04350895</span></span>
+<span><span class="co">#&gt; [55] 0.03625287 0.03625287 0.03157617 0.03157617 0.02571776 0.02571776</span></span>
+<span><span class="co">#&gt; [61] 0.02571776</span></span>
+<span></span>
+<span><span class="co"># This is the curve for the group in the 80-100 quintile</span></span>
+<span><span class="va">test_data80_100</span> <span class="op">=</span> <span class="va">test_data</span><span class="op">[</span><span class="va">test_data</span><span class="op">$</span><span class="va">phs_group</span> <span class="op">==</span> <span class="st">"80-100"</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="va">surv_80_100</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>, <span class="va">test_data80_100</span><span class="op">)</span></span>
+<span><span class="va">surv_80_100_data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>age <span class="op">=</span> <span class="va">surv_80_100</span><span class="op">$</span><span class="va">time</span>,</span>
+<span>                              surv <span class="op">=</span> <span class="va">surv_80_100</span><span class="op">$</span><span class="va">surv</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">100</span>, y <span class="op">=</span> <span class="va">cp_predict_0.9</span><span class="op">)</span>, color <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> <span class="co"># blue</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">cp_predict_80100</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">new_data80100</span>, color <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="co">#red</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">surv</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">surv_80_100_data</span>, color <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="co"># green</span></span></code></pre></div>
+<p><img src="hazrd_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p>Here, blue is the prediction for the 90th percentile in the full PHS
+model. Red is the prediction for the 80-100% group from the “PHS Group”
+model. And green is the “empirical” survival curve for just the
+individuals in the 80-100% group.</p>
+<p>One thing I want to add is that the way to test the proportional
+hazard assumptions for a model is with the <code>cox.zph</code>
+function.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ph_fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/cox.zph.html" class="external-link">cox.zph</a></span><span class="op">(</span><span class="va">cp_fit</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Not sig. so proportional hazards assumption is met</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ph_fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        chisq df    p</span></span>
+<span><span class="co">#&gt; phs    0.358  1 0.55</span></span>
+<span><span class="co">#&gt; GLOBAL 0.358  1 0.55</span></span>
+<span></span>
+<span><span class="co"># Residual plot visualizing this:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ph_fit</span><span class="op">)</span></span></code></pre></div>
+<p><img src="hazrd_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 </div>
 </div>
 <div class="section level2">
@@ -614,7 +663,7 @@ percentile and the 90th percentile.</p>
 <p>Here is an example script to run the entire hazrd analysis from the
 command line:</p>
 <pre><code>Rscript hazrd_script.R phs.tsv metadata.tsv FALSE reports/</code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#########################################</span></span>
 <span><span class="co"># First argument: PHS file</span></span>
 <span><span class="co"># tab delimited file, with or without header, first column ID, second column PHS score</span></span>
