@@ -10,10 +10,11 @@ get_or(
   age = "age",
   status = "status",
   or_age,
-  lower_interval = 0.2,
-  upper_interval = 0.8,
-  CI = FALSE,
-  bootstrap_iterations = 1000
+  numerator = 0.8,
+  denominator = 0.2,
+  conf.int = FALSE,
+  conf.level = 0.95,
+  bootstrap.iterations
 )
 }
 \arguments{
@@ -27,13 +28,15 @@ get_or(
 
 \item{or_age}{an integer specifying the age at which the odds ratio should be calculated}
 
-\item{lower_interval}{a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be \code{-Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.30, 0.70)}). The default is \code{0.2}.}
+\item{numerator}{a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be \code{Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.80, 0.98)}). The default is \code{0.8}.}
 
-\item{upper_interval}{a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be \code{Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.80, 0.98)}). The default is \code{0.80}.}
+\item{denominator}{a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be \code{-Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.30, 0.70)}). The default is \code{0.2}.}
 
-\item{CI}{logical. If \code{TRUE} performs bootstrap and returns 95\% confidence intervals. Default = \code{FALSE}.}
+\item{conf.int}{logical. If \code{TRUE} performs bootstrap and returns 95\% confidence intervals. Default = \code{FALSE}.}
 
-\item{bootstrap_iterations}{Number of bootstrap iterations to run. Required if boot = \code{TRUE}. Default = 1000.}
+\item{conf.level}{The confidence level to use for the confidence interval if conf.int = TRUE. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
+
+\item{bootstrap.iterations}{Number of bootstrap iterations to run. Required if boot = \code{TRUE}.}
 }
 \value{
 A numeric odds ratio

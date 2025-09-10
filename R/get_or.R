@@ -11,10 +11,11 @@
 #' @param age an optional string specifying the column name in `data` containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"
 #' @param status an optional string specifying the column name in `data` containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"
 #' @param or_age an integer specifying the age at which the odds ratio should be calculated
-#' @param lower_interval a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be `-Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.30, 0.70)`). The default is `0.2`. 
-#' @param upper_interval a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be `Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.80, 0.98)`). The default is `0.80`. 
-#' @param CI logical. If \code{TRUE} performs bootstrap and returns 95% confidence intervals. Default = \code{FALSE}.
-#' @param bootstrap_iterations Number of bootstrap iterations to run. Required if boot = `TRUE`. Default = 1000.
+#' @param numerator a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be `Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.80, 0.98)`). The default is `0.8`. 
+#' @param denominator a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be `-Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.30, 0.70)`). The default is `0.2`. 
+#' @param conf.int logical. If \code{TRUE} performs bootstrap and returns 95% confidence intervals. Default = \code{FALSE}.
+#' @param conf.level The confidence level to use for the confidence interval if conf.int = TRUE. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.
+#' @param bootstrap.iterations Number of bootstrap iterations to run. Required if boot = `TRUE`.
 #' 
 #' @return A numeric odds ratio
 #' 
@@ -30,10 +31,11 @@ get_or <- function(data = NULL,
                    age = "age", 
                    status = "status", 
                    or_age,
-                   lower_interval = 0.20,
-                   upper_interval = 0.80, 
-                   CI = FALSE,
-                   bootstrap_iterations = 1000) {  
+                   numerator = 0.80, 
+                   denominator = 0.20,
+                   conf.int = FALSE,
+                   conf.level = 0.95,
+                   bootstrap.iterations) {  
     if (missing(or_age)) {
         stop("An age must be provided via 'or_age'")
     }
@@ -51,24 +53,24 @@ get_or <- function(data = NULL,
     
     OR = calc_or(df = df, 
                  or_age = or_age,
-                 lower_interval = lower_interval, 
-                 upper_interval = upper_interval)
+                 denominator = denominator, 
+                 numerator = numerator)
     boot_out = NULL
-    if (CI == TRUE) {
+    if (conf.int) {
         boot_out = boot_conf(df,
-                              bootstrap_iterations,
-                              calc_or,
-                              or_age,
-                              lower_interval,
-                              upper_interval)
+                             bootstrap.iterations,
+                             conf.level,
+                             calc_or,
+                             or_age,
+                             denominator,
+                             numerator)
     }
-    return(list("index" = paste0("OR", 
-                                 scales::label_percent(suffix = "")(upper_interval), "_",
-                                 scales::label_percent(suffix = "")(lower_interval)),
-                "value" = OR, 
+    return(list("value" = OR, 
                 "conf.low" = boot_out$quantiles[[1]], 
                 "conf.high" = boot_out$quantiles[[2]],
-                "age" = or_age,
-                "iters" = boot_out$iters))
+                "age" = or_age#,
+                #"iters" = boot_out$iters
+                )
+           )
     
 }

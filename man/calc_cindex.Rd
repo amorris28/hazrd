@@ -4,16 +4,10 @@
 \alias{calc_cindex}
 \title{Returns the concordance index for a dataset using a coxph fit}
 \usage{
-calc_cindex(df, swc = FALSE, swc_popnumcases = NULL, swc_popnumcontrols = NULL)
+calc_cindex(df)
 }
 \arguments{
 \item{df}{a data.frame containing the columns phs, age, and status}
-
-\item{swc}{logical. if \code{TRUE} performs sample weight correction}
-
-\item{swc_popnumcases}{an optional integer specifying the number of cases in a reference population for sample weight correction. Required if swc = \code{TRUE}.}
-
-\item{swc_popnumcontrols}{an optional integer specifying the number of controls in a reference population for sample weight correction. Required if swc = \code{TRUE}.}
 }
 \value{
 A numeric hazard ratio

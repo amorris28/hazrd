@@ -1,11 +1,12 @@
-#' Calculates the 95% confidence interval using bootstrapping
+#' Calculates confidence intervals using bootstrapping
 #' 
 #' Internal function. Not intended for users. This function can return the 95%
 #' confidence intervals for any statistic so long as the function passed to `f`
 #' returns a single value of that statistic.
 #'
 #' @param df a data.frame containing the columns phs, age, and status
-#' @param bootstrap_iterations number of bootstrap iterations to run.
+#' @param bootstrap.iterations number of bootstrap iterations to run.
+#' @param conf.level The confidence level to use for the confidence interval. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval. 
 #' @param f the name of a function to perform bootstrapping on. 
 #' @param ... arguments to be passed on to `f()`.
 #' 
@@ -15,16 +16,17 @@
 #' 
 #' @export
 boot_conf = function(df, 
-                     bootstrap_iterations,
+                     bootstrap.iterations,
+                     conf.level = 0.95,
                      f,
                      ...) {
-    # f = match.fun(function_to_bootstrap)
-    iters = matrix(NA, nrow = bootstrap_iterations)
-    for (b in (1:bootstrap_iterations)){
-        indices = sample(nrow(df), replace = TRUE)
-        tmp_df = df[indices, ]
+
+    iters = numeric(bootstrap.iterations)
+    for (b in seq_len(bootstrap.iterations)){
+        tmp_df = df[sample(nrow(df), replace = TRUE), ]
         iters[b] = f(tmp_df, ...)
     }
-    boot_out = list(quantiles = quantile(iters, c(0.025, 0.975)), iters = iters)
-    return(boot_out)
+    
+    alpha = (1 - conf.level) / 2
+    list(quantiles = quantile(iters, probs = c(alpha, 1 - alpha)), iters = iters)
 }
