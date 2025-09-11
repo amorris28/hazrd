@@ -1,6 +1,8 @@
-#' Returns the concordance index for a dataset using a coxph fit
-#' 
-#' Internal function. Not intended for users.
+#' Calculate a C-index for a PHS model (low-level)
+#'
+#' This function performs the actual C-index calculation used internally by
+#' \code{\link{get_cindex}}. Most users should call \code{get_cindex()} directly.
+#' This function is exported to provide transparency and reproducibility.
 #'
 #' @param df a data.frame containing the columns phs, age, and status
 #' 

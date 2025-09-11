@@ -1,7 +1,8 @@
-#' Returns a concordance index from a coxph fit
+#' Returns a hazard ratio and 95% CI for Polygenic Hazard Scores
 #' 
-#' This function returns the concordance index from a coxph fit and optionally
-#' performs bootstrap resampling to return 95% confidence intervals.
+#' This function calculates the hazard ratio for a 1 standard deviation increase
+#' in PHS and optionally performs
+#' bootstrap resampling to return 95% confidence intervals.
 #' The data can either be provided as a data.frame with columns containing
 #' the phs, age, and status of each individual or separate vectors containing
 #' each of these values. The columns in `data` default to 'phs', 'age', and
@@ -11,6 +12,8 @@
 #' @param phs an optional string specifying the column name in `data` containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"
 #' @param age an optional string specifying the column name in `data` containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"
 #' @param status an optional string specifying the column name in `data` containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"
+#' @param numerator a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be `Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.80, 0.98)`). The default is `0.8`. 
+#' @param denominator a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be `-Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.30, 0.70)`). The default is `0.2`. 
 #' @param conf.int logical. if \code{TRUE} performs bootstrap and returns 95% confidence intervals. Default = \code{FALSE}.
 #' @param conf.level The confidence level to use for the confidence interval if conf.int = TRUE. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param bootstrap.iterations Number of bootstrap iterations to run. Required if boot = `TRUE`. Default = 1000.
@@ -19,16 +22,16 @@
 #' 
 #' @examples
 #' 
-#' c_index <- get_cindex(test_data, conf.int = TRUE, bootstrap.iterations = 300)
+#' HR80_20 <- get_hr(test_data, conf.int = TRUE, bootstrap.iterations = 300)
 #' 
 #' @export
-get_cindex <- function(data = NULL,
-                       phs = "phs",
-                       age = "age",
-                       status = "status",
-                       conf.int = FALSE,
-                       conf.level = 0.95,
-                       bootstrap.iterations) {
+get_hrsd <- function(data = NULL,
+                   phs = "phs",
+                   age = "age",
+                   status = "status",
+                   conf.int = FALSE,
+                   conf.level = 0.95,
+                   bootstrap.iterations) {
     
     for (col in c(phs, age, status)) {
         if (!(col %in% names(data))) stop("Column `", col, "` not found in `data`.")
@@ -40,16 +43,15 @@ get_cindex <- function(data = NULL,
     
     df <- data.frame(phs = phs_vec, age = age_vec, status = status_vec)
     
-    c_index = calc_cindex(df)
+    HR = calc_hrsd(df)
     boot_out = NULL
     if (conf.int) {
         boot_out = boot_conf(df,
                              bootstrap.iterations,
                              conf.level,
-                             calc_cindex)
+                             calc_hrsd)
     }
-
-    res <- list(value = c_index)
+    res <- list(value = HR)
     if (conf.int) {
         res$conf.low <- boot_out$quantiles[[1]]
         res$conf.high <- boot_out$quantiles[[2]]

@@ -28,29 +28,23 @@ get_hr <- function(data = NULL,
                    phs = "phs",
                    age = "age",
                    status = "status",
-                   numerator = 0.80,
-                   denominator = 0.20,
+                   numerator = c(0.80, 1.0),
+                   denominator = c(0.0, 0.20),
                    conf.int = FALSE,
                    conf.level = 0.95,
                    bootstrap.iterations) {
     
-    if (is.character(phs)) {
-        phs = data[[phs]]
-    }
-    if (is.character(age)) {
-        age = data[[age]]
-    }
-    if (is.character(status)) {
-        status = data[[status]]
+    for (col in c(phs, age, status)) {
+        if (!(col %in% names(data))) stop("Column `", col, "` not found in `data`.")
     }
     
-    df <- data.frame(age = age, 
-                     status = status, 
-                     phs = phs)
+    phs_vec <- if (is.character(phs)) data[[phs]] else phs
+    age_vec <- if (is.character(age)) data[[age]] else age
+    status_vec <- if (is.character(status)) data[[status]] else status
     
-    HR = calc_hr(df, 
-                 numerator, 
-                 denominator)
+    df <- data.frame(phs = phs_vec, age = age_vec, status = status_vec)
+    
+    HR = calc_hr(df, numerator, denominator)
     boot_out = NULL
     if (conf.int) {
         boot_out = boot_conf(df,
@@ -60,11 +54,10 @@ get_hr <- function(data = NULL,
                              numerator,
                              denominator)
     }
-    return(list("value" = HR, 
-                "conf.low" = boot_out$quantiles[[1]], 
-                "conf.high" = boot_out$quantiles[[2]]#,
-                # "iters" = boot_out$iters
-                )
-           )
-    
+    res <- list(value = HR)
+    if (conf.int) {
+        res$conf.low <- boot_out$quantiles[[1]]
+        res$conf.high <- boot_out$quantiles[[2]]
+    }
+    return(res)
 }

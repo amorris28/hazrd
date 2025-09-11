@@ -1,8 +1,9 @@
-#' Calculates confidence intervals using bootstrapping
-#' 
-#' Internal function. Not intended for users. This function can return the 95%
-#' confidence intervals for any statistic so long as the function passed to `f`
-#' returns a single value of that statistic.
+#' Bootstrap confidence intervals for a custom statistic
+#'
+#' This function allows advanced users to compute bootstrap confidence
+#' intervals for any statistic so long as the function passed to `f`
+#' returns a single value of that statistic. For most users, the built-in
+#' functions such as \code{\link{get_hr}} are recommended.
 #'
 #' @param df a data.frame containing the columns phs, age, and status
 #' @param bootstrap.iterations number of bootstrap iterations to run.

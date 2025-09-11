@@ -2,7 +2,7 @@
 % Please edit documentation in R/boot_conf.R
 \name{boot_conf}
 \alias{boot_conf}
-\title{Calculates confidence intervals using bootstrapping}
+\title{Bootstrap confidence intervals for a custom statistic}
 \usage{
 boot_conf(df, bootstrap.iterations, conf.level = 0.95, f, ...)
 }
@@ -21,7 +21,8 @@ boot_conf(df, bootstrap.iterations, conf.level = 0.95, f, ...)
 A list of confidence intervals
 }
 \description{
-Internal function. Not intended for users. This function can return the 95\%
-confidence intervals for any statistic so long as the function passed to \code{f}
-returns a single value of that statistic.
+This function allows advanced users to compute bootstrap confidence
+intervals for any statistic so long as the function passed to \code{f}
+returns a single value of that statistic. For most users, the built-in
+functions such as \code{\link{get_hr}} are recommended.
 }

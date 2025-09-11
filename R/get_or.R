@@ -36,20 +36,16 @@ get_or <- function(data = NULL,
                    conf.int = FALSE,
                    conf.level = 0.95,
                    bootstrap.iterations) {  
-    if (missing(or_age)) {
-        stop("An age must be provided via 'or_age'")
-    }
-    if (is.character(phs)) {
-        phs = data[[phs]]
-    }
-    if (is.character(age)) {
-        age = data[[age]]
-    }
-    if (is.character(status)) {
-        status = data[[status]]
+
+    for (col in c(phs, age, status)) {
+        if (!(col %in% names(data))) stop("Column `", col, "` not found in `data`.")
     }
     
-    df <- data.frame(age, status, phs)
+    phs_vec <- if (is.character(phs)) data[[phs]] else phs
+    age_vec <- if (is.character(age)) data[[age]] else age
+    status_vec <- if (is.character(status)) data[[status]] else status
+    
+    df <- data.frame(phs = phs_vec, age = age_vec, status = status_vec)
     
     OR = calc_or(df = df, 
                  or_age = or_age,
@@ -65,12 +61,11 @@ get_or <- function(data = NULL,
                              denominator,
                              numerator)
     }
-    return(list("value" = OR, 
-                "conf.low" = boot_out$quantiles[[1]], 
-                "conf.high" = boot_out$quantiles[[2]],
-                "age" = or_age#,
-                #"iters" = boot_out$iters
-                )
-           )
-    
+
+    res <- list(value = OR)
+    if (conf.int) {
+        res$conf.low <- boot_out$quantiles[[1]]
+        res$conf.high <- boot_out$quantiles[[2]]
+    }
+    return(res)
 }

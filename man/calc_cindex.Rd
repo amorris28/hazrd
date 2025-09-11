@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_cindex.R
 \name{calc_cindex}
 \alias{calc_cindex}
-\title{Returns the concordance index for a dataset using a coxph fit}
+\title{Calculate a C-index for a PHS model (low-level)}
 \usage{
 calc_cindex(df)
 }
@@ -13,5 +13,7 @@ calc_cindex(df)
 A numeric hazard ratio
 }
 \description{
-Internal function. Not intended for users.
+This function performs the actual C-index calculation used internally by
+\code{\link{get_cindex}}. Most users should call \code{get_cindex()} directly.
+This function is exported to provide transparency and reproducibility.
 }

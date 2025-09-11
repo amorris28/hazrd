@@ -2,20 +2,22 @@
 % Please edit documentation in R/calc_hr.R
 \name{calc_hr}
 \alias{calc_hr}
-\title{Calculates the hazard ratio for a dataset using a coxph fit}
+\title{Calculate a hazard ratio between two percentile groups (low-level)}
 \usage{
 calc_hr(df, numerator, denominator)
 }
 \arguments{
-\item{df}{a data.frame containing the clumnes phs, age, and status}
+\item{df}{a data.frame containing the columns phs, age, and status}
 
-\item{numerator}{a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be \code{Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.80, 0.98)}). The default is \code{0.80}.}
+\item{numerator}{a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be \code{Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.80, 0.98)}).}
 
-\item{denominator}{a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be \code{-Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.30, 0.70)}). The default is \code{0.2}.}
+\item{denominator}{a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be \code{-Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.30, 0.70)}).}
 }
 \value{
 A numeric hazard ratio
 }
 \description{
-Internal function. Not intended for users.
+This function performs the actual HR calculation used internally by
+\code{\link{get_hr}}. Most users should call \code{get_hr()} directly.
+This function is exported to provide transparency and reproducibility.
 }

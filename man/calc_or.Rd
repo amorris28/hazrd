@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_or.R
 \name{calc_or}
 \alias{calc_or}
-\title{Calculates the odds ratio for a dataset}
+\title{Calculate a odds ratio between two percentile groups (low-level)}
 \usage{
 calc_or(df, or_age, numerator, denominator)
 }
@@ -11,13 +11,15 @@ calc_or(df, or_age, numerator, denominator)
 
 \item{or_age}{an integer specifying the age at which the odds ratio should be calculated}
 
-\item{numerator}{a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be \code{Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.80, 0.98)}). The default is \code{0.80}.}
+\item{numerator}{a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be \code{Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.80, 0.98)}).}
 
-\item{denominator}{a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be \code{-Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.30, 0.70)}). The default is \code{0.2}.}
+\item{denominator}{a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be \code{-Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.30, 0.70)}).}
 }
 \value{
 A numeric odds ratio
 }
 \description{
-Internal function. Not intended for users.
+This function performs the actual OR calculation used internally by
+\code{\link{get_or}}. Most users should call \code{get_or()} directly.
+This function is exported to provide transparency and reproducibility.
 }

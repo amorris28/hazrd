@@ -1,10 +1,12 @@
-#' Calculates the hazard ratio for a dataset using a coxph fit
-#' 
-#' Internal function. Not intended for users.
+#' Calculate a hazard ratio between two percentile groups (low-level)
 #'
-#' @param df a data.frame containing the clumnes phs, age, and status
-#' @param numerator a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be `Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.80, 0.98)`). The default is `0.80`. 
-#' @param denominator a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be `-Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.30, 0.70)`). The default is `0.2`. 
+#' This function performs the actual HR calculation used internally by
+#' \code{\link{get_hr}}. Most users should call \code{get_hr()} directly.
+#' This function is exported to provide transparency and reproducibility.
+#'
+#' @param df a data.frame containing the columns phs, age, and status
+#' @param numerator a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be `Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.80, 0.98)`).
+#' @param denominator a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be `-Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.30, 0.70)`). 
 #' 
 #' @return A numeric hazard ratio
 #' 
@@ -12,9 +14,7 @@
 #' @importFrom stats quantile
 #' 
 #' @export
-calc_hr = function(df, 
-                   numerator, 
-                   denominator) {
+calc_hr = function(df, numerator, denominator) {
 
     
     if (length(denominator) == 1) {
