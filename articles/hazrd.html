@@ -105,11 +105,10 @@ bottom 20% of PHSes.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">OR80_20</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_or.html">get_or</a></span><span class="op">(</span><span class="va">test_data</span>, or_age <span class="op">=</span> <span class="fl">70</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">OR80_20</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 4</span></span>
+<span><span class="co">#&gt; List of 3</span></span>
 <span><span class="co">#&gt;  $ value    : num 1.78</span></span>
 <span><span class="co">#&gt;  $ conf.low : num 4.53</span></span>
-<span><span class="co">#&gt;  $ conf.high: num 17.1</span></span>
-<span><span class="co">#&gt;  $ age      : num 70</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ conf.high: num 17.1</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">OR80_20</span><span class="op">$</span><span class="va">iters</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">3</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
@@ -191,10 +190,8 @@ then you can simply pass the data.frame object to the
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">test_data</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 3</span></span>
-<span><span class="co">#&gt;  $ value    : num 8.17</span></span>
-<span><span class="co">#&gt;  $ conf.low : NULL</span></span>
-<span><span class="co">#&gt;  $ conf.high: NULL</span></span></code></pre></div>
+<span><span class="co">#&gt; List of 1</span></span>
+<span><span class="co">#&gt;  $ value: num 8.17</span></span></code></pre></div>
 <p>If your data is stored in a data.frame with non-standard column
 names, e.g., <code>HazardScores</code>, <code>CaseControl</code>, and
 <code>AgeLastObs</code>,</p>
@@ -217,40 +214,8 @@ names, e.g., <code>HazardScores</code>, <code>CaseControl</code>, and
 <span>       status <span class="op">=</span> <span class="st">"CaseControl"</span>, </span>
 <span>       age <span class="op">=</span> <span class="st">"AgeLastObs"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 3</span></span>
-<span><span class="co">#&gt;  $ value    : num 8.17</span></span>
-<span><span class="co">#&gt;  $ conf.low : NULL</span></span>
-<span><span class="co">#&gt;  $ conf.high: NULL</span></span></code></pre></div>
-<p>If any of your data is not in a data.frame, but is instead in
-separate vectors, you can provide these individually by name:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hazScore</span> <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">phs</span></span>
-<span><span class="va">caseCon</span> <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">status</span></span>
-<span><span class="va">ageLastObs</span> <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">age</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span>phs <span class="op">=</span> <span class="va">hazScore</span>, </span>
-<span>       status <span class="op">=</span> <span class="va">caseCon</span>, </span>
-<span>       age <span class="op">=</span> <span class="va">ageLastObs</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 3</span></span>
-<span><span class="co">#&gt;  $ value    : num 8.17</span></span>
-<span><span class="co">#&gt;  $ conf.low : NULL</span></span>
-<span><span class="co">#&gt;  $ conf.high: NULL</span></span></code></pre></div>
-<p>Lastly, you can do any combination of the above:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">test_data3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>phs <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">phs</span>,</span>
-<span>                        CaseControl <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">status</span><span class="op">)</span></span>
-<span><span class="va">Ages</span> <span class="op">=</span> <span class="va">test_data</span><span class="op">$</span><span class="va">age</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">test_data3</span>,</span>
-<span>       <span class="co">#phs = "phs", # omitted because test_data3 already contains column "phs"</span></span>
-<span>       status <span class="op">=</span> <span class="st">"CaseControl"</span>, </span>
-<span>       age <span class="op">=</span> <span class="va">Ages</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 3</span></span>
-<span><span class="co">#&gt;  $ value    : num 8.17</span></span>
-<span><span class="co">#&gt;  $ conf.low : NULL</span></span>
-<span><span class="co">#&gt;  $ conf.high: NULL</span></span></code></pre></div>
+<span><span class="co">#&gt; List of 1</span></span>
+<span><span class="co">#&gt;  $ value: num 8.17</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="hazard-ratios-and-odds-ratios">Hazard ratios and odds ratios<a class="anchor" aria-label="anchor" href="#hazard-ratios-and-odds-ratios"></a>
@@ -263,15 +228,13 @@ customizing your hazard ratios. By default, it calculates the
 <code>HR80_20</code>, which compares the top 20% of PHSes to the bottom
 20%. However, custom intervals can be specified using the
 <code>numerator</code> and <code>denominator</code> arguments.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
 <span>       denominator <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>       numerator <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 3</span></span>
-<span><span class="co">#&gt;  $ value    : num 8.17</span></span>
-<span><span class="co">#&gt;  $ conf.low : NULL</span></span>
-<span><span class="co">#&gt;  $ conf.high: NULL</span></span></code></pre></div>
+<span><span class="co">#&gt; List of 1</span></span>
+<span><span class="co">#&gt;  $ value: num 8.17</span></span></code></pre></div>
 <p>These are the default arguments. If one value is passed to
 <code>numerator</code> then it calculates the hazard ratio for the
 interval <code>0.8:Inf</code>. Similarly, <code>denominator</code> will
@@ -279,30 +242,25 @@ use <code>-Inf:0.2</code>. However, two values can be specified as a
 vector to specify a particular range. For example, if you want the lower
 interval to be the middle 40% of PHSes, you can specify
 <code>denominator = c(0.3, 0.7)</code>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
 <span>       denominator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
 <span>       numerator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 3</span></span>
-<span><span class="co">#&gt;  $ value    : num 3.04</span></span>
-<span><span class="co">#&gt;  $ conf.low : NULL</span></span>
-<span><span class="co">#&gt;  $ conf.high: NULL</span></span></code></pre></div>
+<span><span class="co">#&gt; List of 1</span></span>
+<span><span class="co">#&gt;  $ value: num 3.04</span></span></code></pre></div>
 <p>interval specifications are the same for odds ratios from
 <code>get_or</code> as for <code>get_hr</code>. The only difference is
 that the odds ratio must be calculated at a particular age, which is
 passed with the <code>or_age</code> argument:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_or.html">get_or</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
 <span>       or_age <span class="op">=</span> <span class="fl">70</span>,</span>
 <span>       denominator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
 <span>       numerator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 4</span></span>
-<span><span class="co">#&gt;  $ value    : num 0.261</span></span>
-<span><span class="co">#&gt;  $ conf.low : NULL</span></span>
-<span><span class="co">#&gt;  $ conf.high: NULL</span></span>
-<span><span class="co">#&gt;  $ age      : num 70</span></span></code></pre></div>
+<span><span class="co">#&gt; List of 1</span></span>
+<span><span class="co">#&gt;  $ value: num 0.261</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="confidence-intervals-from-bootstrapping">Confidence intervals from bootstrapping<a class="anchor" aria-label="anchor" href="#confidence-intervals-from-bootstrapping"></a>
@@ -316,7 +274,7 @@ case, <code>get_hr</code> returns a list containing the hazard ratio and
 the values for the upper and lower 95% confidence intervals as well as
 all of the HR estimates from each bootstrap iteration in
 <code>iters</code>.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
 <span>       conf.int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>       bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -334,7 +292,7 @@ all of the HR estimates from each bootstrap iteration in
 function to return a single Kaplan-Meier curve for a given interval.
 Plotting must be performed manually once you have returned these
 curves.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">curven</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/km_curve.html">km_curve</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">test_data</span>,  </span>
 <span>                       interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="fl">1.00</span><span class="op">)</span>, </span>
 <span>                       age_range <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">100</span>, </span>
@@ -349,7 +307,7 @@ age-at-diagnosis or similar. Alternatively, can be <code>0:10</code>
 for, for exmaple, age of conversion to AD after MCI diagnosis.</p>
 <p>We can generate multiple curves at various intervals and get them
 into a data.frame:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">curves</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>curve0_20 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,   <span class="fl">0.2</span><span class="op">)</span>,</span>
 <span>                    curve20_70 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
 <span>                    curve80_98 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">0.98</span><span class="op">)</span>,</span>
@@ -373,7 +331,7 @@ into a data.frame:</p>
 <span>    <span class="va">km_curves</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">km_curves</span>, <span class="va">curven</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>And plot them:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">km_curves</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, </span>
 <span>                      y <span class="op">=</span> <span class="va">estimate</span>,</span>
 <span>                      ymin <span class="op">=</span> <span class="va">conf.low</span>,</span>
@@ -407,7 +365,7 @@ removes any connection to the subject-level data so is safe to export
 from secure computing platforms. We can then plot the prediction for the
 closest percentile to the new individual’s PHS</p>
 <p>Here is an example workflow:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create the lookup table (on a secure computing platform using</span></span>
 <span><span class="co"># individual-level data)</span></span>
 <span></span>
@@ -420,7 +378,7 @@ gray shaded area for the confidence intervals, an individual line for
 every percentile from 1 to 99, and I have highlighted in red the
 predicted risk curve and confidence intervals for the “new” hypothetical
 subject with a PHS of 1.6 (94th percentile):</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">lookup_table</span><span class="op">[</span><span class="va">lookup_table</span><span class="op">$</span><span class="va">percentile</span> <span class="op">==</span> <span class="fl">0.50</span>, <span class="op">]</span>, </span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">surv</span>, ymin <span class="op">=</span> <span class="va">lower</span>, ymax <span class="op">=</span> <span class="va">upper</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -448,7 +406,7 @@ is an explanation of how to do both and how those estimates compare:</p>
 <div class="section level3">
 <h3 id="percentiles">Percentiles<a class="anchor" aria-label="anchor" href="#percentiles"></a>
 </h3>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span>
 <span><span class="va">ages</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">100</span>, length.out <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span></span>
@@ -481,14 +439,14 @@ is an explanation of how to do both and how those estimates compare:</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">cp_predict_0.5</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">new_data0.5</span>, color <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Age"</span>, y <span class="op">=</span> <span class="st">"Disease-free Survival"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="hazrd_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="hazrd_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 <p>Here, the blue line is the 20th percentile, the green line is the
 50th percentile, and the red line is the 80th percentile.</p>
 </div>
 <div class="section level3">
 <h3 id="quintiles">Quintiles<a class="anchor" aria-label="anchor" href="#quintiles"></a>
 </h3>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cut the PHSes into groups based on percentile.</span></span>
 <span><span class="co"># Here, we are splitting them into 0-20%, 20-80%, and 80-100%</span></span>
 <span><span class="va">test_data</span><span class="op">$</span><span class="va">phs_group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">$</span><span class="va">phs</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="va">phs0.2</span>, <span class="va">phs0.8</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
@@ -518,14 +476,14 @@ is an explanation of how to do both and how those estimates compare:</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">cp_predict_2080</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">new_data2080</span>, color <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Age"</span>, y <span class="op">=</span> <span class="st">"Disease-free Survival"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="hazrd_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="hazrd_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <p>Here, the blue line is the survival curve for the bottom 20% of
 PHSes, the green line is the survival curve for the middle 60% of PHSes
 (20-80%), and the red line is the survival curve for the top 20% of
 PHSes.</p>
 <p>Lastly, we can compare these two approaches and see how they generate
 different survival curves:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">cp_predict_0020</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">new_data0020</span>, color <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">cp_predict_2080</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">new_data2080</span>, color <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
@@ -535,12 +493,12 @@ different survival curves:</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">cp_predict_0.5</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">new_data0.5</span>, color <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Age"</span>, y <span class="op">=</span> <span class="st">"Disease-free Survival"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="hazrd_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+<p><img src="hazrd_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <p>Here, the blue curves are the quintile curves or group-based curves
 and the red curves are the percentile-based curves.</p>
 <p>The 0-20 and 80-100 curves are close to but not exactly the same as
 the 10% percentile and the 90% percentile:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phs0.1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">$</span><span class="va">phs</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">phs0.9</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html" class="external-link">quantile</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">$</span><span class="va">phs</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">new_data0.1</span> <span class="op">=</span> <span class="va">new_data0.2</span></span>
@@ -558,14 +516,14 @@ the 10% percentile and the 90% percentile:</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">cp_predict_0.1</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">new_data0.1</span>, color <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>  <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">cp_predict_0.9</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">new_data0.9</span>, color <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="hazrd_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
+<p><img src="hazrd_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <p>Here again the blue curves are the group-based curves (0-20, 20-80,
 and 80-100%) and the pink curves are the prediction for the 10th
 percentile and the 90th percentile.</p>
 <hr>
 <p>Now, comparing the 90th percentile individual to the “empirical”
 curve for the subjects in the top quintile:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This is the curve for the group in the 80-100 quintile</span></span>
 <span><span class="va">test_data80_100</span> <span class="op">=</span> <span class="va">test_data</span><span class="op">[</span><span class="va">test_data</span><span class="op">$</span><span class="va">phs_group</span> <span class="op">==</span> <span class="st">"80-100"</span>, <span class="op">]</span></span>
 <span></span>
@@ -579,7 +537,7 @@ curve for the subjects in the top quintile:</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_step</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">surv</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">surv_80_100_data</span>, color <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span> <span class="co"># green</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Age"</span>, y <span class="op">=</span> <span class="st">"Disease-free Survival"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="hazrd_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<p><img src="hazrd_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 <p>Here, blue is the prediction for the 90th percentile in the full PHS
 model. Red is the prediction for the 80-100% group from the “PHS Group”
 model. And green is the “empirical” survival curve for just the
@@ -587,7 +545,7 @@ individuals in the 80-100% group.</p>
 <p>One thing I want to add is that the way to test the proportional
 hazard assumptions for a model is with the <code>cox.zph</code>
 function.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ph_fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/cox.zph.html" class="external-link">cox.zph</a></span><span class="op">(</span><span class="va">cp_fit</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Not sig. so proportional hazards assumption is met</span></span>
@@ -598,7 +556,7 @@ function.</p>
 <span></span>
 <span><span class="co"># Residual plot visualizing this:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ph_fit</span><span class="op">)</span></span></code></pre></div>
-<p><img src="hazrd_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p><img src="hazrd_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 </div>
 </div>
 <div class="section level2">
@@ -607,7 +565,7 @@ function.</p>
 <p>Here is an example script to run the entire hazrd analysis from the
 command line:</p>
 <pre><code>Rscript hazrd_script.R phs.tsv metadata.tsv FALSE reports/</code></pre>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#########################################</span></span>
 <span><span class="co"># First argument: PHS file</span></span>
 <span><span class="co"># tab delimited file, with or without header, first column ID, second column PHS score</span></span>
