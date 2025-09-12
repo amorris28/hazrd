@@ -17,21 +17,17 @@ get_hrsd(
 \arguments{
 \item{data}{an optional data.frame containing the variables for phs, age, and status}
 
-\item{phs}{an optional string specifying the column name in \code{data} containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"}
+\item{phs}{an optional string specifying the column name in \code{data} containing the polygenic hazard score for each subject . The default is "phs"}
 
-\item{age}{an optional string specifying the column name in \code{data} containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"}
+\item{age}{an optional string specifying the column name in \code{data} containing the age of each subject. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"}
 
-\item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"}
+\item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event). The default is "status"}
 
 \item{conf.int}{logical. if \code{TRUE} performs bootstrap and returns 95\% confidence intervals. Default = \code{FALSE}.}
 
 \item{conf.level}{The confidence level to use for the confidence interval if conf.int = TRUE. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
 \item{bootstrap.iterations}{Number of bootstrap iterations to run. Required if boot = \code{TRUE}. Default = 1000.}
-
-\item{numerator}{a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be \code{Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.80, 0.98)}). The default is \code{0.8}.}
-
-\item{denominator}{a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be \code{-Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.30, 0.70)}). The default is \code{0.2}.}
 }
 \value{
 A numeric hazard ratio or a list containing HR and the 95\% confidence intervals from bootstrap

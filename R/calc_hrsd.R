@@ -15,5 +15,5 @@
 
 calc_hrsd = function(df) {
     cxph <- coxph(Surv(age, status) ~ phs, data = df)
-    as.numeric(exp(coef(cxph)))
+    as.numeric(exp(cxph$coefficients['phs']))
 }

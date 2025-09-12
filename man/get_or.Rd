@@ -20,11 +20,11 @@ get_or(
 \arguments{
 \item{data}{an optional data.frame containing the variables for phs, age, and status}
 
-\item{phs}{an optional string specifying the column name in \code{data} containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"}
+\item{phs}{an optional string specifying the column name in \code{data} containing the polygenic hazard score for each subject. The default is "phs"}
 
-\item{age}{an optional string specifying the column name in \code{data} containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"}
+\item{age}{an optional string specifying the column name in \code{data} containing the age of each subject. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"}
 
-\item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"}
+\item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event). The default is "status"}
 
 \item{or_age}{an integer specifying the age at which the odds ratio should be calculated}
 

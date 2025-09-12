@@ -152,32 +152,6 @@ get_hr(data = test_data2,
     str()
 ```
 
-If any of your data is not in a data.frame, but is instead in separate vectors, you can provide these individually by name:
-
-```{r}
-hazScore = test_data$phs
-caseCon = test_data$status
-ageLastObs = test_data$age
-
-get_hr(phs = hazScore, 
-       status = caseCon, 
-       age = ageLastObs) |> 
-    str()
-```
-
-Lastly, you can do any combination of the above:
-
-```{r}
-test_data3 = data.frame(phs = test_data$phs,
-                        CaseControl = test_data$status)
-Ages = test_data$age
-
-get_hr(data = test_data3,
-       #phs = "phs", # omitted because test_data3 already contains column "phs"
-       status = "CaseControl", 
-       age = Ages) |> 
-    str()
-```
 
 ### Hazard ratios and odds ratios
 
