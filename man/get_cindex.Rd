@@ -9,9 +9,8 @@ get_cindex(
   phs = "phs",
   age = "age",
   status = "status",
-  conf.int = FALSE,
-  conf.level = 0.95,
-  bootstrap.iterations
+  bootstrap.iterations = NULL,
+  conf.level = 0.95
 )
 }
 \arguments{
@@ -23,11 +22,9 @@ get_cindex(
 
 \item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event). The default is "status"}
 
-\item{conf.int}{logical. if \code{TRUE} performs bootstrap and returns 95\% confidence intervals. Default = \code{FALSE}.}
+\item{bootstrap.iterations}{Number of bootstrap iterations to run.}
 
 \item{conf.level}{The confidence level to use for the confidence interval if conf.int = TRUE. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
-
-\item{bootstrap.iterations}{Number of bootstrap iterations to run. Required if boot = \code{TRUE}. Default = 1000.}
 }
 \value{
 A numeric hazard ratio or a list containing HR and the 95\% confidence intervals from bootstrap
@@ -42,6 +39,6 @@ each of these values. The columns in \code{data} default to 'phs', 'age', and
 }
 \examples{
 
-c_index <- get_cindex(test_data, conf.int = TRUE, bootstrap.iterations = 300)
+c_index <- get_cindex(test_data, bootstrap.iterations = 300)
 
 }

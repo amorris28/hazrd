@@ -9,9 +9,9 @@ calc_hr(df, numerator, denominator)
 \arguments{
 \item{df}{a data.frame containing the columns phs, age, and status}
 
-\item{numerator}{a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be \code{Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.80, 0.98)}).}
+\item{numerator}{a vector specifying the quantiles of the numerator (e.g., \code{c(0.80, 0.98)}).}
 
-\item{denominator}{a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be \code{-Inf}. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., \code{c(0.30, 0.70)}).}
+\item{denominator}{a vector specifying the quantiles of the denominator (e.g., \code{c(0.30, 0.70)}).}
 }
 \value{
 A numeric hazard ratio

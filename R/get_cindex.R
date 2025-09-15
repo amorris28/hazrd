@@ -11,24 +11,22 @@
 #' @param phs an optional string specifying the column name in `data` containing the polygenic hazard score for each subject. The default is "phs"
 #' @param age an optional string specifying the column name in `data` containing the age of each subject. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"
 #' @param status an optional string specifying the column name in `data` containing case-control status (0 = censored, 1 = event). The default is "status"
-#' @param conf.int logical. if \code{TRUE} performs bootstrap and returns 95% confidence intervals. Default = \code{FALSE}.
+#' @param bootstrap.iterations Number of bootstrap iterations to run.
 #' @param conf.level The confidence level to use for the confidence interval if conf.int = TRUE. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.
-#' @param bootstrap.iterations Number of bootstrap iterations to run. Required if boot = `TRUE`. Default = 1000.
 #' 
 #' @return A numeric hazard ratio or a list containing HR and the 95% confidence intervals from bootstrap
 #' 
 #' @examples
 #' 
-#' c_index <- get_cindex(test_data, conf.int = TRUE, bootstrap.iterations = 300)
+#' c_index <- get_cindex(test_data, bootstrap.iterations = 300)
 #' 
 #' @export
 get_cindex <- function(data = NULL,
                        phs = "phs",
                        age = "age",
                        status = "status",
-                       conf.int = FALSE,
-                       conf.level = 0.95,
-                       bootstrap.iterations) {
+                       bootstrap.iterations = NULL,
+                       conf.level = 0.95) {
     
     for (col in c(phs, age, status)) {
         if (!(col %in% names(data))) stop("Column `", col, "` not found in `data`.")
@@ -41,16 +39,13 @@ get_cindex <- function(data = NULL,
     df <- data.frame(phs = phs_vec, age = age_vec, status = status_vec)
     
     c_index = calc_cindex(df)
+    res <- list(value = c_index)
     boot_out = NULL
-    if (conf.int) {
+    if (!is.null(bootstrap.iterations)) {
         boot_out = boot_conf(df,
                              bootstrap.iterations,
                              conf.level,
                              calc_cindex)
-    }
-
-    res <- list(value = c_index)
-    if (conf.int) {
         res$conf.low <- boot_out$quantiles[[1]]
         res$conf.high <- boot_out$quantiles[[2]]
     }

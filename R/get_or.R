@@ -11,11 +11,10 @@
 #' @param age an optional string specifying the column name in `data` containing the age of each subject. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"
 #' @param status an optional string specifying the column name in `data` containing case-control status (0 = censored, 1 = event). The default is "status"
 #' @param or_age an integer specifying the age at which the odds ratio should be calculated
-#' @param numerator a vector specifying the quantiles of the upper interval. If a single value is given, that will be used as the lower quantile and the upper quantile will be `Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.80, 0.98)`). The default is `0.8`. 
-#' @param denominator a vector specifying the quantiles of the lower interval. If a single value is given, that will be used as the upper quantile and the lower quantile will be `-Inf`. If a vector of length 2 is provided then these will be used as the lower and upper quantiles of the interval (e.g., `c(0.30, 0.70)`). The default is `0.2`. 
-#' @param conf.int logical. If \code{TRUE} performs bootstrap and returns 95% confidence intervals. Default = \code{FALSE}.
+#' @param numerator a vector specifying the quantiles of the numerator (e.g., `c(0.80, 0.98)`). The default is `c(0.8, 1.0)`. 
+#' @param denominator a vector specifying the quantiles of the denominator (e.g., `c(0.30, 0.70)`). The default is `c(0.0, 0.2)`. 
+#' @param bootstrap.iterations Number of bootstrap iterations to run.
 #' @param conf.level The confidence level to use for the confidence interval if conf.int = TRUE. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.
-#' @param bootstrap.iterations Number of bootstrap iterations to run. Required if boot = `TRUE`.
 #' 
 #' @return A numeric odds ratio
 #' 
@@ -31,12 +30,13 @@ get_or <- function(data = NULL,
                    age = "age", 
                    status = "status", 
                    or_age,
-                   numerator = 0.80, 
-                   denominator = 0.20,
-                   conf.int = FALSE,
-                   conf.level = 0.95,
-                   bootstrap.iterations) {  
-
+                   numerator = c(0.8, 1.0), 
+                   denominator = c(0.0, 0.2),
+                   bootstrap.iterations = NULL,
+                   conf.level = 0.95) {  
+    if (missing(or_age) || is.null(or_age)) {
+        stop("Argument 'or_age' is required. Please specify the age at which to compute the OR.")
+    }
     for (col in c(phs, age, status)) {
         if (!(col %in% names(data))) stop("Column `", col, "` not found in `data`.")
     }
@@ -48,22 +48,19 @@ get_or <- function(data = NULL,
     df <- data.frame(phs = phs_vec, age = age_vec, status = status_vec)
     
     OR = calc_or(df = df, 
-                 or_age = or_age,
-                 denominator = denominator, 
-                 numerator = numerator)
+                 or_age = or_age, 
+                 numerator = numerator,
+                 denominator = denominator)
+    res <- list(value = OR)
     boot_out = NULL
-    if (conf.int) {
+    if (!is.null(bootstrap.iterations)) {
         boot_out = boot_conf(df,
                              bootstrap.iterations,
                              conf.level,
                              calc_or,
                              or_age,
-                             denominator,
-                             numerator)
-    }
-
-    res <- list(value = OR)
-    if (conf.int) {
+                             numerator,
+                             denominator)
         res$conf.low <- boot_out$quantiles[[1]]
         res$conf.high <- boot_out$quantiles[[2]]
     }
