@@ -82,7 +82,7 @@
 PHSes to the mean of the bottom 20% (i.e., <code>HR80_20</code>). We can
 also generate 95% confidence intervals using bootstrapping.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">HR80_20</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">HR80_20</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">HR80_20</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 3</span></span>
 <span><span class="co">#&gt;  $ value    : num 8.17</span></span>
@@ -103,10 +103,10 @@ these or calculate their own confidence intervals:</p>
 <p>Similarly, calculate the odds ratio at age 70 between the top 20% and
 bottom 20% of PHSes.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">OR80_20</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_or.html">get_or</a></span><span class="op">(</span><span class="va">test_data</span>, or_age <span class="op">=</span> <span class="fl">70</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">OR80_20</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_or.html">get_or</a></span><span class="op">(</span><span class="va">test_data</span>, or_age <span class="op">=</span> <span class="fl">70</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">OR80_20</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 3</span></span>
-<span><span class="co">#&gt;  $ value    : num 1.78</span></span>
+<span><span class="co">#&gt;  $ value    : num 8.52</span></span>
 <span><span class="co">#&gt;  $ conf.low : num 4.53</span></span>
 <span><span class="co">#&gt;  $ conf.high: num 17.1</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -121,7 +121,7 @@ bottom 20% of PHSes.</p>
 <p>Return the concordance index with 95% confidence intervals from a
 coxph fit:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">c_index</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_cindex.html">get_cindex</a></span><span class="op">(</span><span class="va">test_data</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">c_index</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_cindex.html">get_cindex</a></span><span class="op">(</span><span class="va">test_data</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">c_index</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 3</span></span>
 <span><span class="co">#&gt;  $ value    : num 0.708</span></span>
@@ -171,6 +171,8 @@ centiles of interest.</p>
 <span>                       name <span class="op">=</span> <span class="st">"Centile"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span>,</span>
 <span>                       name <span class="op">=</span> <span class="st">"Centile"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 16 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_ribbon()`).</span></span>
 <span><span class="co">#&gt; Warning: Removed 15 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">#&gt; (`geom_step()`).</span></span></code></pre></div>
 <p><img src="hazrd_files/figure-html/plot_km_curves-1.png" width="700"></p>
@@ -185,10 +187,10 @@ centiles of interest.</p>
 <code>get_or</code>, <code>phs_hist</code>, etc.) can accept data in
 several formats. If your <code>data.frame</code> contains standard
 columns <code>phs</code>, <code>age</code>, and <code>status</code>,
-then you can simply pass the data.frame object to the
-<code>data =</code> argument:</p>
+then you can simply pass the data.frame object to the first
+argument:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">test_data</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 1</span></span>
 <span><span class="co">#&gt;  $ value: num 8.17</span></span></code></pre></div>
@@ -209,7 +211,7 @@ names, e.g., <code>HazardScores</code>, <code>CaseControl</code>, and
 <span><span class="co">#&gt; 6   -0.4531890           1   77.15814</span></span></code></pre></div>
 <p>then you can specify these column names as separate arguments:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">test_data2</span>, </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data2</span>, </span>
 <span>       phs <span class="op">=</span> <span class="st">"HazardScores"</span>, </span>
 <span>       status <span class="op">=</span> <span class="st">"CaseControl"</span>, </span>
 <span>       age <span class="op">=</span> <span class="st">"AgeLastObs"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -230,8 +232,8 @@ customizing your hazard ratios. By default, it calculates the
 <code>numerator</code> and <code>denominator</code> arguments.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
-<span>       denominator <span class="op">=</span> <span class="fl">0.2</span>,</span>
-<span>       numerator <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>       numerator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">1.0</span><span class="op">)</span>,</span>
+<span>       denominator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0</span>, <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 1</span></span>
 <span><span class="co">#&gt;  $ value: num 8.17</span></span></code></pre></div>
@@ -244,8 +246,8 @@ interval to be the middle 40% of PHSes, you can specify
 <code>denominator = c(0.3, 0.7)</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
-<span>       denominator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
-<span>       numerator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>       numerator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">1.0</span><span class="op">)</span>,</span>
+<span>       denominator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.7</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 1</span></span>
 <span><span class="co">#&gt;  $ value: num 3.04</span></span></code></pre></div>
@@ -256,27 +258,25 @@ passed with the <code>or_age</code> argument:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_or.html">get_or</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
 <span>       or_age <span class="op">=</span> <span class="fl">70</span>,</span>
-<span>       denominator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
-<span>       numerator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>       numerator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">1.0</span><span class="op">)</span>,</span>
+<span>       denominator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.7</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 1</span></span>
-<span><span class="co">#&gt;  $ value: num 0.261</span></span></code></pre></div>
+<span><span class="co">#&gt;  $ value: num 3.83</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="confidence-intervals-from-bootstrapping">Confidence intervals from bootstrapping<a class="anchor" aria-label="anchor" href="#confidence-intervals-from-bootstrapping"></a>
 </h4>
 <p>95% confidence intervals for the estimates from the
 <code>get_hr</code>, <code>get_or</code>, and <code>get_cindex</code>
-functions can be generated by bootstrapping. This is done by by
-specifying <code>conf.int = TRUE</code> and providing a number of
-bootstrap iterations with <code>bootstrap.iterations =</code>. In this
-case, <code>get_hr</code> returns a list containing the hazard ratio and
-the values for the upper and lower 95% confidence intervals as well as
-all of the HR estimates from each bootstrap iteration in
-<code>iters</code>.</p>
+functions can be generated by bootstrapping. This is done by specifying
+a number of bootstrap iterations with
+<code>bootstrap.iterations =</code>. In this case, <code>get_hr</code>
+returns a list containing the hazard ratio and the values for the upper
+and lower 95% confidence intervals as well as all of the HR estimates
+from each bootstrap iteration in <code>iters</code>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">test_data</span>,</span>
-<span>       conf.int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>       bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 3</span></span>
@@ -293,7 +293,7 @@ function to return a single Kaplan-Meier curve for a given interval.
 Plotting must be performed manually once you have returned these
 curves.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">curven</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/km_curve.html">km_curve</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">test_data</span>,  </span>
+<code class="sourceCode R"><span><span class="va">curven</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/km_curve.html">km_curve</a></span><span class="op">(</span><span class="va">test_data</span>,  </span>
 <span>                       interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="fl">1.00</span><span class="op">)</span>, </span>
 <span>                       age_range <span class="op">=</span> <span class="fl">40</span><span class="op">:</span><span class="fl">100</span>, </span>
 <span>                       scale <span class="op">=</span> <span class="cn">FALSE</span>, </span>
@@ -349,6 +349,8 @@ into a data.frame:</p>
 <span>                       name <span class="op">=</span> <span class="st">"Centile"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span>,</span>
 <span>                       name <span class="op">=</span> <span class="st">"Centile"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 16 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_ribbon()`).</span></span>
 <span><span class="co">#&gt; Warning: Removed 15 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">#&gt; (`geom_step()`).</span></span></code></pre></div>
 <p><img src="hazrd_files/figure-html/plot_km_curves2-1.png" width="700"></p>
@@ -634,10 +636,10 @@ command line:</p>
 <span><span class="co"># Performance metrics</span></span>
 <span></span>
 <span></span>
-<span><span class="va">HR80_20</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">combined_data</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<span><span class="va">HR80_20</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_hr.html">get_hr</a></span><span class="op">(</span><span class="va">combined_data</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
 <span><span class="va">ages</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">70</span>, <span class="fl">80</span><span class="op">)</span></span>
-<span><span class="va">OR80_20</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">ages</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="../reference/get_or.html">get_or</a></span><span class="op">(</span><span class="va">combined_data</span>, or_age <span class="op">=</span> <span class="va">x</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="va">c_index</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_cindex.html">get_cindex</a></span><span class="op">(</span><span class="va">combined_data</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<span><span class="va">OR80_20</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">ages</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="../reference/get_or.html">get_or</a></span><span class="op">(</span><span class="va">combined_data</span>, or_age <span class="op">=</span> <span class="va">x</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="va">c_index</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_cindex.html">get_cindex</a></span><span class="op">(</span><span class="va">combined_data</span>, bootstrap.iterations <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">HR80_20</span><span class="op">$</span><span class="va">age</span> <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="va">c_index</span><span class="op">$</span><span class="va">age</span> <span class="op">=</span> <span class="cn">NA</span></span>
