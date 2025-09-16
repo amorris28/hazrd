@@ -21,37 +21,41 @@ fit_phs(object, ...)
 )
 }
 \arguments{
-\item{object}{a data.frame containing the variables for phs, age, and status}
+\item{object}{Either
+\itemize{
+\item a survival formula, e.g. \code{Surv(age, status) ~ phs} (formula interface), or
+\item a \code{data.frame} containing the variables for \code{phs}, \code{age}, and \code{status} (data-frame interface).
+}}
 
-\item{...}{Additional arguments (currently ignored)}
+\item{...}{Additional arguments (currently ignored).}
 
-\item{data}{A data.frame containing variables in the formula}
+\item{data}{A \code{data.frame} containing variables in the formula (formula interface only).}
 
 \item{bootstrap.iterations}{Number of bootstrap iterations to run to generate confidence intervals.}
 
 \item{conf.level}{The confidence level to use for the confidence interval if conf.int = TRUE. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 
-\item{age}{an optional string specifying the column name in \code{data} containing the age of each subject. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"}
+\item{age}{A string specifying the column name in \code{data} containing the age of each subject. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). Default \code{"age"}.}
 
-\item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event). The default is "status"}
+\item{status}{A string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event). Default \code{"status"}.}
 
-\item{phs}{an optional string specifying the column name in \code{data} containing the polygenic hazard score for each subject. The default is "phs"}
+\item{phs}{A string specifying the column name in \code{data} containing the polygenic hazard score for each subject (data-frame interface only). Default \code{"phs"}.}
 }
 \value{
-An object of class \code{"phsfit"}.
+An object of class \code{"phsfit"} containing the base Cox model, any bootstrap fits and indices, the formula, the original data, and bootstrap metadata.
 }
 \description{
-\code{fit_phs()} is a generic function that fits a PHS model from either a formula
+\code{fit_phs()} fits a PHS model from either a formula
 interface (similar to \code{coxph()}) or directly from a data frame with specified
 columns. It returns an object of class \code{"phsfit"}, which can then be passed
 to \code{get_hr()}, \code{get_or()}, \code{get_cindex()}, etc.
 }
 \examples{
 # Formula interface:
-fit_phs(Surv(age, status) ~ phs, data = test_data)
+fit <- fit_phs(Surv(age, status) ~ phs, data = test_data)
 
 # Data frame interface:
-fit_phs(test_data, age = "age", status = "status", phs = "phs")
+fit <- fit_phs(test_data, age = "age", status = "status", phs = "phs")
 }
 \seealso{
 \code{\link[=fit_phs.formula]{fit_phs.formula()}}, \code{\link[=fit_phs.data.frame]{fit_phs.data.frame()}}
