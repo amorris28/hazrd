@@ -4,14 +4,14 @@
 #' \code{\link{get_cindex}}. Most users should call \code{get_cindex()} directly.
 #' This function is exported to provide transparency and reproducibility.
 #'
-#' @param df a data.frame containing the columns phs, age, and status
+#' @param data a data.frame containing the columns phs, age, and status
 #' 
 #' @return A numeric hazard ratio
 #' 
 #' @import survival
 #' 
 #' @export
-calc_cindex = function(df) {
-    cxph <- coxph(Surv(age, status) ~ phs, data = df)
+calc_cindex = function(data) {
+    cxph <- coxph(Surv(age, status) ~ phs, data = data)
     as.numeric(cxph$concordance['concordance'])
 }

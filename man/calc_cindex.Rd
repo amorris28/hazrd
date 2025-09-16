@@ -4,10 +4,10 @@
 \alias{calc_cindex}
 \title{Calculate a C-index for a PHS model (low-level)}
 \usage{
-calc_cindex(df)
+calc_cindex(data)
 }
 \arguments{
-\item{df}{a data.frame containing the columns phs, age, and status}
+\item{data}{a data.frame containing the columns phs, age, and status}
 }
 \value{
 A numeric hazard ratio

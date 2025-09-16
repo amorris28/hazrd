@@ -4,10 +4,10 @@
 \alias{boot_conf}
 \title{Bootstrap confidence intervals for a custom statistic}
 \usage{
-boot_conf(df, bootstrap.iterations, conf.level = 0.95, f, ...)
+boot_conf(data, bootstrap.iterations, conf.level = 0.95, f, ...)
 }
 \arguments{
-\item{df}{a data.frame containing the columns phs, age, and status}
+\item{data}{a data.frame containing the columns phs, age, and status}
 
 \item{bootstrap.iterations}{number of bootstrap iterations to run.}
 

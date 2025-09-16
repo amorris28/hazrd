@@ -93,7 +93,7 @@ label_generator = function(x, y) {
 
 km_curves = data.frame()
 for (i in seq_len(length(curves))) {
-    curven <- km_curve(data = test_data,  
+    curven <- km_curve(test_data,  
                        interval = curves[[i]],
                        age_range = 40:100, 
                        scale = FALSE, 
@@ -226,7 +226,7 @@ label_generator = function(x, y) {
 
 km_curves = data.frame()
 for (i in seq_len(length(curves))) {
-    curven <- km_curve(data = test_data,  
+    curven <- km_curve(test_data,  
                        interval = curves[[i]],
                        age_range = 40:100, 
                        scale = FALSE, 
@@ -558,7 +558,7 @@ label_generator = function(x, y) {
 
 km_curves = data.frame()
 for (i in seq_len(length(curves))) {
-  curven <- km_curve(data = combined_data,  
+  curven <- km_curve(combined_data,  
                      interval = curves[[i]],
                      age_range = 40:100, 
                      scale = FALSE, 

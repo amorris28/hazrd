@@ -2,47 +2,58 @@
 % Please edit documentation in R/get_hrsd.R
 \name{get_hrsd}
 \alias{get_hrsd}
-\title{Returns a hazard ratio and 95\% CI for Polygenic Hazard Scores}
+\alias{get_hrsd.data.frame}
+\alias{get_hrsd.phsfit}
+\title{Return the hazard ratio for a 1 standard deviation increase in PHS}
 \usage{
-get_hrsd(
-  data = NULL,
+get_hrsd(object, ...)
+
+\method{get_hrsd}{data.frame}(
+  object,
   phs = "phs",
   age = "age",
   status = "status",
-  conf.int = FALSE,
+  bootstrap.iterations = NULL,
   conf.level = 0.95,
-  bootstrap.iterations
+  ...
 )
+
+\method{get_hrsd}{phsfit}(object, bootstrap.iterations = NULL, conf.level = 0.95, ...)
 }
 \arguments{
-\item{data}{an optional data.frame containing the variables for phs, age, and status}
+\item{object}{An object for which the HRSD is desired. Typically a data.frame or a \code{phsfit} object.}
 
-\item{phs}{an optional string specifying the column name in \code{data} containing the polygenic hazard score for each subject . The default is "phs"}
+\item{...}{Additional arguments (currently ignored).}
 
-\item{age}{an optional string specifying the column name in \code{data} containing the age of each subject. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"}
+\item{phs}{Optional string specifying the column in \code{data} containing polygenic hazard scores. Default: "phs".}
 
-\item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event). The default is "status"}
+\item{age}{Optional string specifying the column in \code{data} containing ages. Default: "age".}
 
-\item{conf.int}{logical. if \code{TRUE} performs bootstrap and returns 95\% confidence intervals. Default = \code{FALSE}.}
+\item{status}{Optional string specifying the column in \code{data} containing case-control status (0=censored, 1=event). Default: "status".}
 
-\item{conf.level}{The confidence level to use for the confidence interval if conf.int = TRUE. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
+\item{bootstrap.iterations}{Number of bootstrap iterations (used only in data.frame method or if not precomputed in phsfit).}
 
-\item{bootstrap.iterations}{Number of bootstrap iterations to run. Required if boot = \code{TRUE}. Default = 1000.}
+\item{conf.level}{Confidence level for intervals (default 0.95).}
 }
 \value{
-A numeric hazard ratio or a list containing HR and the 95\% confidence intervals from bootstrap
+A list containing:
+\describe{
+\item{value}{Point estimate of the hazard ratio for 1-SD increase in PHS}
+\item{conf.low}{Lower bound of confidence interval (if bootstrapped)}
+\item{conf.high}{Upper bound of confidence interval (if bootstrapped)}
+}
 }
 \description{
-This function calculates the hazard ratio for a 1 standard deviation increase
-in PHS and optionally performs
-bootstrap resampling to return 95\% confidence intervals.
-The data can either be provided as a data.frame with columns containing
-the phs, age, and status of each individual or separate vectors containing
-each of these values. The columns in \code{data} default to 'phs', 'age', and
-'status', but any arbitrary column names can be used if named explicitly.
+\code{get_hrsd()} calculates the hazard ratio for a 1-SD increase in polygenic hazard scores
+from either a fitted PHS object (\code{phsfit}) or directly from a data.frame.
+Optionally, bootstrap confidence intervals can be computed.
 }
 \examples{
+# Using a data.frame
+HRSD <- get_hrsd(test_data, bootstrap.iterations = 300)
 
-HR80_20 <- get_hr(test_data, conf.int = TRUE, bootstrap.iterations = 300)
+# Using a phsfit object
+phsfit <- fit_phs(test_data, bootstrap.iterations = 300)
+HRSD <- get_hrsd(phsfit)
 
 }

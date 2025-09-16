@@ -4,7 +4,7 @@
 #' \code{\link{get_hrsd}}. Most users should call \code{get_hrsd()} directly.
 #' This function is exported to provide transparency and reproducibility.
 #'
-#' @param df a data.frame containing the columns phs, age, and status
+#' @param data a data.frame containing the columns phs, age, and status
 #' 
 #' @return A numeric hazard ratio
 #' 
@@ -13,7 +13,7 @@
 #' 
 #' @export
 
-calc_hrsd = function(df) {
-    cxph <- coxph(Surv(age, status) ~ phs, data = df)
+calc_hrsd = function(data) {
+    cxph <- coxph(Surv(age, status) ~ phs, data = data)
     as.numeric(exp(cxph$coefficients['phs']))
 }

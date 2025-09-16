@@ -5,7 +5,7 @@
 #' returns a single value of that statistic. For most users, the built-in
 #' functions such as \code{\link{get_hr}} are recommended.
 #'
-#' @param df a data.frame containing the columns phs, age, and status
+#' @param data a data.frame containing the columns phs, age, and status
 #' @param bootstrap.iterations number of bootstrap iterations to run.
 #' @param conf.level The confidence level to use for the confidence interval. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval. 
 #' @param f the name of a function to perform bootstrapping on. 
@@ -16,7 +16,7 @@
 #' @return A list of confidence intervals
 #' 
 #' @export
-boot_conf = function(df, 
+boot_conf = function(data, 
                      bootstrap.iterations,
                      conf.level = 0.95,
                      f,
@@ -24,8 +24,8 @@ boot_conf = function(df,
 
     iters = numeric(bootstrap.iterations)
     for (b in seq_len(bootstrap.iterations)){
-        tmp_df = df[sample(nrow(df), replace = TRUE), ]
-        iters[b] = f(tmp_df, ...)
+        tmp_data = data[sample(nrow(data), replace = TRUE), ]
+        iters[b] = f(tmp_data, ...)
     }
     
     alpha = (1 - conf.level) / 2

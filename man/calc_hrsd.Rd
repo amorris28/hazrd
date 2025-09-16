@@ -4,10 +4,10 @@
 \alias{calc_hrsd}
 \title{Calculate a hazard ratio for a one standard deviation increase in PHS (low-level)}
 \usage{
-calc_hrsd(df)
+calc_hrsd(data)
 }
 \arguments{
-\item{df}{a data.frame containing the columns phs, age, and status}
+\item{data}{a data.frame containing the columns phs, age, and status}
 }
 \value{
 A numeric hazard ratio

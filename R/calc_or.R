@@ -4,7 +4,7 @@
 #' \code{\link{get_or}}. Most users should call \code{get_or()} directly.
 #' This function is exported to provide transparency and reproducibility.
 #'
-#' @param df a data.frame containing the columns phs, age, and status
+#' @param data a data.frame containing the columns phs, age, and status
 #' @param or_age an integer specifying the age at which the odds ratio should be calculated
 #' @param numerator a vector specifying the quantiles of the numerator (e.g., `c(0.80, 0.98)`). 
 #' @param denominator a vector specifying the quantiles of the denominator (e.g., `c(0.30, 0.70)`).
@@ -15,18 +15,18 @@
 #' @importFrom stats quantile
 #' 
 #' @export
-calc_or = function(df, or_age, numerator, denominator) {
+calc_or = function(data, or_age, numerator, denominator) {
     if (missing(or_age) || is.null(or_age)) {
         stop("Argument 'or_age' is required. Please specify the age at which to compute the OR.")
     }
-    num_critvals <- c(quantile(df$phs, numerator[1]), quantile(df$phs, numerator[2]))
-    den_critvals <- c(quantile(df$phs, denominator[1]), quantile(df$phs, denominator[2]))
+    num_critvals <- c(quantile(data$phs, numerator[1]), quantile(data$phs, numerator[2]))
+    den_critvals <- c(quantile(data$phs, denominator[1]), quantile(data$phs, denominator[2]))
     
-    ix_num <- which(df$phs >= num_critvals[1] & df$phs <= num_critvals[2])
-    ix_den <- which(df$phs >= den_critvals[1] & df$phs <= den_critvals[2])
+    ix_num <- which(data$phs >= num_critvals[1] & data$phs <= num_critvals[2])
+    ix_den <- which(data$phs >= den_critvals[1] & data$phs <= den_critvals[2])
     
-    num_model <- coxph(Surv(age, status) ~ 1, data = df[ix_num,])
-    den_model <- coxph(Surv(age, status) ~ 1, data = df[ix_den,])
+    num_model <- coxph(Surv(age, status) ~ 1, data = data[ix_num,])
+    den_model <- coxph(Surv(age, status) ~ 1, data = data[ix_den,])
     
     num_fit <- survfit(num_model)
     den_fit <- survfit(den_model)

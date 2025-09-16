@@ -4,10 +4,10 @@
 \alias{calc_or}
 \title{Calculate a odds ratio between two percentile groups (low-level)}
 \usage{
-calc_or(df, or_age, numerator, denominator)
+calc_or(data, or_age, numerator, denominator)
 }
 \arguments{
-\item{df}{a data.frame containing the columns phs, age, and status}
+\item{data}{a data.frame containing the columns phs, age, and status}
 
 \item{or_age}{an integer specifying the age at which the odds ratio should be calculated}
 

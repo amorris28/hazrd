@@ -1,42 +1,55 @@
-#' Return Kaplan-Meier curve
+#' Return Kaplan-Meier (K-M) curves from a PHS model
 #'
-#' This function returns a single Kaplan-Meier curve for plotting.
-#' Output includes age, the K-M estimate at each age, and the upper and lower confidence intervals
+#' `km_curve()` is a generic function that calculates Kaplan-Meier survival curves
+#' from a coxph fit or directly from a data.frame. It returns a data.frame with
+#' time, survival estimates, and upper/lower confidence intervals.
 #'
-#' @param data an optional data.frame containing the variables for phs, age, and status
-#' @param phs an optional string specifying the column name in `data` containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"
-#' @param age an optional string specifying the column name in `data` containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"
-#' @param status an optional string specifying the column name in `data` containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"
-#' @param interval a vector of length two specifying the lower  and upper quantiles of the interval. The default is `c(-Inf, Inf)`.
-#' @param age_range a vector of ages over which curves should be calculated. Default = 40:100
-#' @param scale logical. if `TRUE` centers and scales the PHS scores to unit variance. Default = `FALSE`.
-#' @param inverse logical. if `TRUE` calculates the inverse (x * -1) the PHS scores to reverse the direction of effect. Default = `FALSE`.
-#' 
-#' @importFrom survival coxph Surv survfit
-#' @importFrom stats quantile
-#' 
-#' @return A data.frame containing ages, the K-M curve, and the upper and lower confidence intervals
+#' @param object An object for which a KM curve is desired. For method details, 
+#'   see the specific method.
+#' @param phs String specifying the column name in `data` containing the polygenic
+#'   hazard score. Default `"phs"`.
+#' @param age String specifying the column name in `data` containing the age of
+#'   each subject. Default `"age"`.
+#' @param status String specifying the column name in `data` containing case/control
+#'   status (0 = censored, 1 = event). Default `"status"`.
+#' @param interval Vector of length 2 giving lower and upper quantiles of PHS to 
+#'   define the interval. By default includes all PHSes: `c(0, 1)`.
+#' @param age_range Vector of ages over which curves should be calculated. Default `40:100`.
+#' @param scale Logical; if TRUE, centers and scales PHS to unit variance. Default FALSE.
+#' @param inverse Logical; if TRUE, reverses PHS direction. Default FALSE.
+#' @param ... Additional arguments (currently ignored)
+#'
+#' @return A data.frame with columns `time`, `estimate`, `conf.low`, `conf.high`, and `cumhaz`.
+#'
 #' @examples
+#' phsfit <- fit_phs(test_data)
+#' km_df <- km_curve(phsfit)
 #' 
-#' km_curve <- km_curve(test_data)
+#' # data.frame interface
+#' km_df2 <- km_curve(test_data)
+#' 
 #' \dontrun{
-#' ggplot(km_curve, aes(x = time,
-#'                      y = estimate,
-#'                      ymin = conf.low,
-#'                      ymax = conf.high)) +
-#'                      geom_ribbon() +
-#'                      geom_step()
+#' library(ggplot2)
+#' ggplot(km_df, aes(x = time, y = estimate, ymin = conf.low, ymax = conf.high)) +
+#'   geom_ribbon() +
+#'   geom_step()
 #' }
+#'
 #' @export
-km_curve <- function(data = NULL,
-                     phs = "phs",
-                     age = "age",
-                     status = "status",
-                     interval = c(0, 1),
-                     age_range = 40:100,
-                     scale = FALSE,
-                     inverse = FALSE) {
+km_curve <- function(object, ...) UseMethod("km_curve")
 
+#' @rdname km_curve
+#' @export
+km_curve.data.frame <- function(object,
+                                phs = "phs",
+                                age = "age",
+                                status = "status",
+                                interval = c(0, 1),
+                                age_range = 40:100,
+                                scale = FALSE,
+                                inverse = FALSE,
+                                ...) {
+    data <- object
     scale <- as.logical(scale)
     inverse <- as.logical(inverse)
     
@@ -68,15 +81,40 @@ km_curve <- function(data = NULL,
     # Plot K-M curves for centiles
     mod <- survfit(Surv(age, status) ~ 1, data = quantile_data)
     
-    kmcurve <- data.frame(time = mod$time,
-                           # n.risk = mod$n.risk,
-                           # n.event = mod$n.event,
-                           # n.censor = mod$n.censor,
-                           estimate = mod$surv,
-                           # std.error = mod$std.err,
-                           conf.low = mod$lower,
-                           conf.high = mod$upper,
-                           cumhaz = mod$cumhaz)
-    return(kmcurve)
+    
+    data.frame(time = mod$time,
+               # n.risk = mod$n.risk,
+               # n.event = mod$n.event,
+               # n.censor = mod$n.censor,
+               estimate = mod$surv,
+               # std.error = mod$std.err,
+               conf.low = mod$lower,
+               conf.high = mod$upper,
+               cumhaz = mod$cumhaz)
+    
+}
+
+#' @rdname km_curve
+#' @export
+km_curve.phsfit <- function(object,
+                            phs = "phs",
+                            age = "age",
+                            status = "status",
+                            interval = c(0, 1),
+                            age_range = 40:100,
+                            scale = FALSE,
+                            inverse = FALSE,
+                            ...) {
+    phsfit <- object
+    data <- phsfit$data
+    km_curve.data.frame(data,
+                        phs,
+                        age,
+                        status,
+                        interval,
+                        age_range,
+                        scale,
+                        inverse)
+    
 }
 

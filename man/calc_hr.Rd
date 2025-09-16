@@ -4,10 +4,10 @@
 \alias{calc_hr}
 \title{Calculate a hazard ratio between two percentile groups (low-level)}
 \usage{
-calc_hr(df, numerator, denominator)
+calc_hr(data, numerator, denominator)
 }
 \arguments{
-\item{df}{a data.frame containing the columns phs, age, and status}
+\item{data}{a data.frame containing the columns phs, age, and status}
 
 \item{numerator}{a vector specifying the quantiles of the numerator (e.g., \code{c(0.80, 0.98)}).}
 

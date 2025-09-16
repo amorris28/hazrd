@@ -4,7 +4,7 @@
 \alias{get_hr}
 \alias{get_hr.data.frame}
 \alias{get_hr.phsfit}
-\title{Return the hazard ratio (HR) from a PHS model}
+\title{Return hazard ratios (HR) from a PHS model}
 \usage{
 get_hr(object, ...)
 
@@ -29,7 +29,8 @@ get_hr(object, ...)
 )
 }
 \arguments{
-\item{object}{a \code{phsfit} object}
+\item{object}{An object for which a hazard ratio is desired. Typically a
+data.frame or a \code{phsfit} object.}
 
 \item{...}{Additional arguments (currently ignored)}
 
@@ -39,53 +40,33 @@ get_hr(object, ...)
 
 \item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event). The default is "status"}
 
-\item{numerator}{a vector specifying the quantiles of the numerator (e.g., \code{c(0.80, 0.98)}). The default is \code{c(0.8, 1.0)}.}
+\item{numerator}{Numeric vector of quantiles for the numerator (e.g., \code{c(0.80, 1.0)}).}
 
-\item{denominator}{a vector specifying the quantiles of the denominator (e.g., \code{c(0.30, 0.70)}). The default is \code{c(0.0, 0.2)}.}
+\item{denominator}{Numeric vector of quantiles for the denominator (e.g., \code{c(0.0, 0.2)}).}
 
-\item{bootstrap.iterations}{Number of bootstrap iterations to run to generate confidence intervals.}
+\item{bootstrap.iterations}{Number of bootstrap iterations (used only in data.frame method).}
 
-\item{conf.level}{The confidence level to use for the confidence interval if conf.int = TRUE. Must be strictly greater than 0 and less than 1. Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
+\item{conf.level}{Confidence level for intervals (default 0.95).}
 }
 \value{
-A list.
-
-A numeric hazard ratio or a list containing HR and the 95\% confidence intervals from bootstrap
-
-A numeric hazard ratio or a list containing HR and the 95\% confidence intervals from bootstrap
+A list containing:
+\describe{
+\item{value}{Point estimate of the HR}
+\item{conf.low}{Lower bound of confidence interval (if bootstrapped)}
+\item{conf.high}{Upper bound of confidence interval (if bootstrapped)}
+}
 }
 \description{
-\code{get_hr()} is a generic function that calculate the HR from a coxph fit or
-directly from a data frame with specified columns. It returns a list with
-the HR point estimate and optional bootstrap confidence intervals
-
-This function calculates the hazard ratio and optionally performs
-bootstrap resampling to return 95\% confidence intervals.
-The data can either be provided as a data.frame with columns containing
-the phs, age, and status of each individual or separate vectors containing
-each of these values. The columns in \code{data} default to 'phs', 'age', and
-'status', but any arbitrary column names can be used if named explicitly.
-
-This function calculates the hazard ratio and optionally performs
-bootstrap resampling to return 95\% confidence intervals.
-The data can either be provided as a data.frame with columns containing
-the phs, age, and status of each individual or separate vectors containing
-each of these values.
+\code{get_hr()} calculates hazard ratios from either a fitted PHS object (\code{phsfit})
+or directly from a data.frame. It returns a list containing the point estimate
+and optionally bootstrap confidence intervals.
 }
 \examples{
-# phsfit interface:
-\dontrun{
-    get_hr(phsfit)
-}
-# Data frame interface:
-get_hr(test_data, age = "age", status = "status", phs = "phs")
+# Using a data.frame
+HR <- get_hr(test_data, bootstrap.iterations = 300)
 
-HR80_20 <- get_hr(test_data, bootstrap.iterations = 300)
+# Using a phsfit object
+phsfit <- fit_phs(test_data, bootstrap.iterations = 300)
+HR <- get_hr(phsfit)
 
-
-HR80_20 <- get_hr(test_data, bootstrap.iterations = 300)
-
-}
-\seealso{
-\code{\link[=get_hr.phsfit]{get_hr.phsfit()}}, \code{\link[=get_hr.data.frame]{get_hr.data.frame()}}
 }

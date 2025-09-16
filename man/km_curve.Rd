@@ -2,52 +2,80 @@
 % Please edit documentation in R/km_curve.R
 \name{km_curve}
 \alias{km_curve}
-\title{Return Kaplan-Meier curve}
+\alias{km_curve.data.frame}
+\alias{km_curve.phsfit}
+\title{Return Kaplan-Meier (K-M) curves from a PHS model}
 \usage{
-km_curve(
-  data = NULL,
+km_curve(object, ...)
+
+\method{km_curve}{data.frame}(
+  object,
   phs = "phs",
   age = "age",
   status = "status",
   interval = c(0, 1),
   age_range = 40:100,
   scale = FALSE,
-  inverse = FALSE
+  inverse = FALSE,
+  ...
+)
+
+\method{km_curve}{phsfit}(
+  object,
+  phs = "phs",
+  age = "age",
+  status = "status",
+  interval = c(0, 1),
+  age_range = 40:100,
+  scale = FALSE,
+  inverse = FALSE,
+  ...
 )
 }
 \arguments{
-\item{data}{an optional data.frame containing the variables for phs, age, and status}
+\item{object}{An object for which a KM curve is desired. For method details,
+see the specific method.}
 
-\item{phs}{an optional string specifying the column name in \code{data} containing the polygenic hazard score for each subject or the unquoted name of a vector containing these values. The default is "phs"}
+\item{...}{Additional arguments (currently ignored)}
 
-\item{age}{an optional string specifying the column name in \code{data} containing the age of each subject or the unquoted name of a vector containing these values. For cases, this should be the age at event (e.g., diagnosis) and for controls this should be age of censoring (e.g., last observation). The default is "age"}
+\item{phs}{String specifying the column name in \code{data} containing the polygenic
+hazard score. Default \code{"phs"}.}
 
-\item{status}{an optional string specifying the column name in \code{data} containing case-control status (0 = censored, 1 = event) or the unquoted name of a vector containing these values. The default is "status"}
+\item{age}{String specifying the column name in \code{data} containing the age of
+each subject. Default \code{"age"}.}
 
-\item{interval}{a vector of length two specifying the lower  and upper quantiles of the interval. The default is \code{c(-Inf, Inf)}.}
+\item{status}{String specifying the column name in \code{data} containing case/control
+status (0 = censored, 1 = event). Default \code{"status"}.}
 
-\item{age_range}{a vector of ages over which curves should be calculated. Default = 40:100}
+\item{interval}{Vector of length 2 giving lower and upper quantiles of PHS to
+define the interval. By default includes all PHSes: \code{c(0, 1)}.}
 
-\item{scale}{logical. if \code{TRUE} centers and scales the PHS scores to unit variance. Default = \code{FALSE}.}
+\item{age_range}{Vector of ages over which curves should be calculated. Default \code{40:100}.}
 
-\item{inverse}{logical. if \code{TRUE} calculates the inverse (x * -1) the PHS scores to reverse the direction of effect. Default = \code{FALSE}.}
+\item{scale}{Logical; if TRUE, centers and scales PHS to unit variance. Default FALSE.}
+
+\item{inverse}{Logical; if TRUE, reverses PHS direction. Default FALSE.}
 }
 \value{
-A data.frame containing ages, the K-M curve, and the upper and lower confidence intervals
+A data.frame with columns \code{time}, \code{estimate}, \code{conf.low}, \code{conf.high}, and \code{cumhaz}.
 }
 \description{
-This function returns a single Kaplan-Meier curve for plotting.
-Output includes age, the K-M estimate at each age, and the upper and lower confidence intervals
+\code{km_curve()} is a generic function that calculates Kaplan-Meier survival curves
+from a coxph fit or directly from a data.frame. It returns a data.frame with
+time, survival estimates, and upper/lower confidence intervals.
 }
 \examples{
+phsfit <- fit_phs(test_data)
+km_df <- km_curve(phsfit)
 
-km_curve <- km_curve(test_data)
+# data.frame interface
+km_df2 <- km_curve(test_data)
+
 \dontrun{
-ggplot(km_curve, aes(x = time,
-                     y = estimate,
-                     ymin = conf.low,
-                     ymax = conf.high)) +
-                     geom_ribbon() +
-                     geom_step()
+library(ggplot2)
+ggplot(km_df, aes(x = time, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_ribbon() +
+  geom_step()
 }
+
 }
