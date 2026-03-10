@@ -15,6 +15,7 @@ to Assets, and download the “Source code (tar.gz)” file. Then, in `R`,
 run:
 
 ``` r
+
 install.packages("hazrd-0.2.0.tar.gz", repos = NULL, type = "source")
 ```
 
@@ -27,6 +28,7 @@ git clone git@github.com:amorris28/hazrd.git
 ```
 
 ``` r
+
 devtools::install("hazrd")
 ```
 
@@ -38,6 +40,7 @@ website](https://amorris28.github.io/hazrd/).
 ## Quick example
 
 ``` r
+
 library(hazrd)
 
 # Compute HR, C-index, OR, and HR_SD in one call

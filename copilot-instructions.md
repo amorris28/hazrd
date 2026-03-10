@@ -62,12 +62,14 @@ column order; keep that contract when adding new metrics.
 
 Build / test / debug workflows (commands you can run locally) - Install
 dev version: in R: `devtools::install("/path/to/hazrd")` or
-`devtools::build()` then
-`install.packages(..., repos = NULL, type = "source")`. - Run package
-tests: in R: `devtools::test()` or from shell: R -e ‘devtools::test()’ -
-Run R CMD check: from repo root: R CMD check –as-cran . - The repo has a
-GitHub Action `R-CMD-check.yaml` (see badge in `README.md`) — mimic the
-action’s R versions if reproducing CI locally.
+[`devtools::build()`](https://devtools.r-lib.org/reference/build.html)
+then `install.packages(..., repos = NULL, type = "source")`. - Run
+package tests: in R:
+[`devtools::test()`](https://devtools.r-lib.org/reference/test.html) or
+from shell: R -e ‘devtools::test()’ - Run R CMD check: from repo root: R
+CMD check –as-cran . - The repo has a GitHub Action `R-CMD-check.yaml`
+(see badge in `README.md`) — mimic the action’s R versions if
+reproducing CI locally.
 
 Integration points & external deps - Declared imports in `DESCRIPTION`:
 `boot`, `dplyr`, `ggplot2`, `survival`, `tibble`, `tidyr`, `scales`. Use
@@ -82,8 +84,9 @@ Testing & safety notes for code changes - Add unit tests to
 The package uses `testthat` edition 3. - Keep the reported metric names
 stable: tests and `bootstrap` matching rely on exact metric name
 strings. - When modifying exported functions, update roxygen comments in
-`R/` source — run `devtools::document()` to regenerate `NAMESPACE` and
-`man/` files.
+`R/` source — run
+[`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
+to regenerate `NAMESPACE` and `man/` files.
 
 Good example edits to get started - Small bugfix: ensure `or_age` bounds
 are handled (see `.calc_or_metric`) — add test covering an `or_age`
