@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/amorris28/hazrd/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/amorris28/hazrd/blob/v0.2.0/DESCRIPTION)
 
 Morris A (2026). *hazrd: Polygenic Hazard Score with Cox Proportional
 Hazards Model*. R package version 0.2.0,
