@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hazrd</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,8 +17,10 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/hazrd.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/amorris28/hazrd/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -35,109 +37,82 @@
 
 
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
 
       <dl><dt>
 
-          <code><a href="boot_conf.html">boot_conf()</a></code>
-
-        </dt>
-        <dd>Bootstrap confidence intervals for a custom statistic</dd>
-      </dl><dl><dt>
-
-          <code><a href="calc_cindex.html">calc_cindex()</a></code>
-
-        </dt>
-        <dd>Calculate a C-index for a PHS model (low-level)</dd>
-      </dl><dl><dt>
-
-          <code><a href="calc_hr.html">calc_hr()</a></code>
-
-        </dt>
-        <dd>Calculate a hazard ratio between two percentile groups (low-level)</dd>
-      </dl><dl><dt>
-
-          <code><a href="calc_hrsd.html">calc_hrsd()</a></code>
-
-        </dt>
-        <dd>Calculate a hazard ratio for a one standard deviation increase in PHS (low-level)</dd>
-      </dl><dl><dt>
-
-          <code><a href="calc_or.html">calc_or()</a></code>
-
-        </dt>
-        <dd>Calculate a odds ratio between two percentile groups (low-level)</dd>
-      </dl><dl><dt>
-
-          <code><a href="create_lookup_table.html">create_lookup_table()</a></code>
-
-        </dt>
-        <dd>Creates a lookup table for individual prediction of risk based on PHS</dd>
-      </dl><dl><dt>
-
-          <code><a href="cum_inc.html">cum_inc()</a></code>
-
-        </dt>
-        <dd>Compute Cumulative Incidence</dd>
-      </dl><dl><dt>
-
           <code><a href="fit_phs.html">fit_phs()</a></code>
 
         </dt>
         <dd>Fit a polygenic hazard score (PHS) model</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="get_cindex.html">get_cindex()</a></code>
 
         </dt>
-        <dd>Return concordance index (C-index) from a PHS model</dd>
-      </dl><dl><dt>
+        <dd>Deprecated: use phs_metrics() instead</dd>
+
+        <dt>
 
           <code><a href="get_hr.html">get_hr()</a></code>
 
         </dt>
-        <dd>Return hazard ratios (HR) from a PHS model</dd>
-      </dl><dl><dt>
+        <dd>Deprecated: use phs_metrics() instead</dd>
+
+        <dt>
 
           <code><a href="get_hrsd.html">get_hrsd()</a></code>
 
         </dt>
-        <dd>Return the hazard ratio for a 1 standard deviation increase in PHS</dd>
-      </dl><dl><dt>
+        <dd>Deprecated: use phs_metrics() instead</dd>
+
+        <dt>
 
           <code><a href="get_or.html">get_or()</a></code>
 
         </dt>
-        <dd>Return odds ratios (OR) from a PHS model at a specified age</dd>
-      </dl><dl><dt>
+        <dd>Deprecated: use phs_metrics() instead</dd>
 
-          <code><a href="get_phs_age.html">get_phs_age()</a></code>
-
-        </dt>
-        <dd>Polygenic Hazard Score Age Calculation</dd>
-      </dl><dl><dt>
+        <dt>
 
           <code><a href="km_curve.html">km_curve()</a></code>
 
         </dt>
-        <dd>Return Kaplan-Meier (K-M) curves from a PHS model</dd>
-      </dl><dl><dt>
+        <dd>Deprecated: use phs_km() instead</dd>
 
-          <code><a href="phs_hist.html">phs_hist()</a></code>
+        <dt>
+
+          <code><a href="phs_cox_curve.html">phs_cox_curve()</a></code>
 
         </dt>
-        <dd>Plot Histogram of Cases and Controls by PHS</dd>
-      </dl><dl><dt>
+        <dd>Cox model survival curves at specified PHS percentiles</dd>
+
+        <dt>
 
           <code><a href="phs_input_example.html">phs_input_example</a></code>
 
         </dt>
         <dd>PHS Input Example</dd>
-      </dl><dl><dt>
+
+        <dt>
+
+          <code><a href="phs_km_curve.html">phs_km_curve()</a></code>
+
+        </dt>
+        <dd>Kaplan-Meier curves stratified by PHS percentile</dd>
+
+        <dt>
+
+          <code><a href="phs_metrics.html">phs_metrics()</a></code>
+
+        </dt>
+        <dd>Calculate evaluation metrics for Polygenic Hazard Scores</dd>
+
+        <dt>
 
           <code><a href="test_data.html">test_data</a></code>
 
@@ -152,7 +127,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

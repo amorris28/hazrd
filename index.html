@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Polygenic Hazard Score with Cox Proportional Hazards Model">
-<meta name="description" content="Tools to compute polygenic hazard scores using Cox proportional hazards model and lasso regularization via glmnet.">
-<meta property="og:description" content="Tools to compute polygenic hazard scores using Cox proportional hazards model and lasso regularization via glmnet.">
+<meta name="description" content="Tools to evaluate and visualize Polygenic Hazard Score (PHS) analyses. Provides a consistent API for computing survival-based discrimination metrics (hazard ratio, C-index, odds ratio, HR per SD), bootstrapped confidence intervals, and Kaplan-Meier curves stratified by PHS percentile group.">
+<meta property="og:description" content="Tools to evaluate and visualize Polygenic Hazard Score (PHS) analyses. Provides a consistent API for computing survival-based discrimination metrics (hazard ratio, C-index, odds ratio, HR per SD), bootstrapped confidence intervals, and Kaplan-Meier curves stratified by PHS percentile group.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">hazrd</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,11 +33,13 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="articles/hazrd.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/amorris28/hazrd/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -50,7 +52,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of hazrd is to simplify and standardize the development and testing of polygenic hazard score models in an opinionated way based mainly on past work in the <a href="https://github.com/cmig-research-group/phs" class="external-link">PHS repo</a>. Currently, most of the functionality focuses on external validation of PHS models. This includes calculation of standard statistics (80-20 hazard ratios, 80-20 odds ratios, and concordance index) and plotting of Kaplan-Meier curves and cumulative incidence curves. In the future, this will be expanded to model development, internal validation, imaging risk scores, multimodal hazard scores, and functions related to Digital Avatar.</p>
+<p><code>hazrd</code> is an R package for evaluating and visualizing Polygenic Hazard Score (PHS) analyses. It provides a consistent, tidy-first API for computing survival-based discrimination metrics, bootstrapped confidence intervals, and Kaplan-Meier curves.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -59,37 +61,88 @@
 </h3>
 <p>To install the most recent release from Github, go to the <a href="https://github.com/amorris28/hazrd/releases" class="external-link">release</a> page, scroll down to Assets, and download the “Source code (tar.gz)” file. Then, in <code>R</code>, run:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"hazrd-0.1.0.tar.gz"</span>, repos <span class="op">=</span> <span class="cn">NULL</span>, type<span class="op">=</span><span class="st">"source"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"hazrd-0.2.0.tar.gz"</span>, repos <span class="op">=</span> <span class="cn">NULL</span>, type <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="using-devtools">Using <code>devtools</code>
 <a class="anchor" aria-label="anchor" href="#using-devtools"></a>
 </h3>
-<p>For a more up-to-date installation with all of the changes since the last release, install the development version of hazrd from <a href="https://github.com/" class="external-link">GitHub</a> by cloning the repository:</p>
+<p>For the development version:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">git</span> clone git@github.com:amorris28/hazrd.git</span></code></pre></div>
-<p>and then opening <code>R</code> and installing the package:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"hazrd"</span><span class="op">)</span></span></code></pre></div>
-<p>Replace <code>"hazrd"</code> with the path to the repository on your local computer.</p>
-<div class="section level4">
-<h4 id="on-a-remote-cluster">On a remote cluster<a class="anchor" aria-label="anchor" href="#on-a-remote-cluster"></a>
-</h4>
-<p>To install the development version on a remote cluster, such as TSD, build a tarball from your local clone of the Github repo:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">build</span><span class="op">(</span><span class="st">"hazrd"</span><span class="op">)</span></span></code></pre></div>
-<p>You can then install the <code>.tar.gz</code> with <code>install.packages</code> in <code>R</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"hazrd_0.1.0.tar.gz"</span>, repos <span class="op">=</span> <span class="cn">NULL</span>, type<span class="op">=</span><span class="st">"source"</span><span class="op">)</span></span></code></pre></div>
-</div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>For an introduction on how to use the package, please see the vignettes on the <a href="https://amorris28.github.io/hazrd/">hazrd pkgdown website</a>.</p>
+<p>For a full introduction see the vignette on the <a href="https://amorris28.github.io/hazrd/">hazrd pkgdown website</a>.</p>
+</div>
+<div class="section level2">
+<h2 id="quick-example">Quick example<a class="anchor" aria-label="anchor" href="#quick-example"></a>
+</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://amorris28.github.io/hazrd/">hazrd</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compute HR, C-index, OR, and HR_SD in one call</span></span>
+<span><span class="fu"><a href="reference/phs_metrics.html">phs_metrics</a></span><span class="op">(</span></span>
+<span>  <span class="va">test_data</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HR"</span>, <span class="st">"C_index"</span>, <span class="st">"OR"</span>, <span class="st">"HR_SD"</span><span class="op">)</span>,</span>
+<span>  or_age  <span class="op">=</span> <span class="fl">70</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Bootstrapped confidence intervals</span></span>
+<span><span class="fu"><a href="reference/phs_metrics.html">phs_metrics</a></span><span class="op">(</span></span>
+<span>  <span class="va">test_data</span>,</span>
+<span>  metrics   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HR"</span>, <span class="st">"C_index"</span><span class="op">)</span>,</span>
+<span>  bootstrap <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  n_boot    <span class="op">=</span> <span class="fl">999</span>,</span>
+<span>  seed      <span class="op">=</span> <span class="fl">42</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Kaplan-Meier plot stratified by PHS percentile (returns a ggplot object)</span></span>
+<span><span class="fu"><a href="reference/phs_km_curve.html">phs_km_curve</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Return tidy data for a custom ggplot</span></span>
+<span><span class="va">km_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/phs_km_curve.html">phs_km_curve</a></span><span class="op">(</span><span class="va">test_data</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.20</span>, <span class="fl">0.40</span>, <span class="fl">0.60</span>, <span class="fl">0.80</span><span class="op">)</span>, output <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="planned-features">Planned features<a class="anchor" aria-label="anchor" href="#planned-features"></a>
+</h2>
+<p>The following are on the roadmap for future releases. Contributions welcome.</p>
+<ul>
+<li>
+<strong><code>phs_abs_risk()</code></strong> — absolute (cumulative incidence) risk curves with competing risk support (<code>km</code>, <code>aalen_johansen</code>, <code>fine_gray</code> methods)</li>
+<li>
+<strong><code>phs_percentile()</code></strong> — compute percentile ranks; optionally relative to a reference population via <code>ref_data</code>
+</li>
+<li>
+<strong><code>phs_cut()</code></strong> — assign individuals to percentile strata with human-readable factor labels</li>
+<li>
+<strong><code>phs_describe()</code></strong> — descriptive statistics (n, events, median follow-up, PHS mean/SD) by stratum</li>
+<li>
+<strong><code>phs_calibration()</code></strong> — calibration plot and Hosmer-Lemeshow statistic</li>
+<li>
+<strong><code>theme_phs()</code> / <code>scale_color_phs()</code></strong> — default ggplot2 theme and colour scale for hazrd plots</li>
+<li>
+<strong>Uno’s C-index</strong> — IPCW-weighted concordance for heavily censored data (<code>cindex_method = "uno"</code> in <code><a href="reference/phs_metrics.html">phs_metrics()</a></code>)</li>
+<li>
+<strong>Parallel bootstrap</strong> — <code>parallel = "multicore"</code> / <code>"snow"</code> via <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code> (argument exists; only <code>"no"</code> is currently active)</li>
+<li>
+<strong>Risk table</strong> — numbers-at-risk appended below KM curves (<code>risk_table = TRUE</code> in <code>phs_km()</code>)</li>
+<li>
+<strong>Alternative HR methods</strong> — <code>continuous_point</code> and <code>categorical</code> (<code>hr_method</code> argument in <code><a href="reference/phs_metrics.html">phs_metrics()</a></code>; stubs exist)</li>
+</ul>
 </div>
 </div>
-  </main><aside class="col-md-3"><div class="license">
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/amorris28/hazrd/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/amorris28/hazrd/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
@@ -128,7 +181,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

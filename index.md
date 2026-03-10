@@ -1,0 +1,94 @@
+# hazrd
+
+`hazrd` is an R package for evaluating and visualizing Polygenic Hazard
+Score (PHS) analyses. It provides a consistent, tidy-first API for
+computing survival-based discrimination metrics, bootstrapped confidence
+intervals, and Kaplan-Meier curves.
+
+## Installation
+
+### Github
+
+To install the most recent release from Github, go to the
+[release](https://github.com/amorris28/hazrd/releases) page, scroll down
+to Assets, and download the “Source code (tar.gz)” file. Then, in `R`,
+run:
+
+``` r
+install.packages("hazrd-0.2.0.tar.gz", repos = NULL, type = "source")
+```
+
+### Using `devtools`
+
+For the development version:
+
+``` bash
+git clone git@github.com:amorris28/hazrd.git
+```
+
+``` r
+devtools::install("hazrd")
+```
+
+## Getting started
+
+For a full introduction see the vignette on the [hazrd pkgdown
+website](https://amorris28.github.io/hazrd/).
+
+## Quick example
+
+``` r
+library(hazrd)
+
+# Compute HR, C-index, OR, and HR_SD in one call
+phs_metrics(
+  test_data,
+  metrics = c("HR", "C_index", "OR", "HR_SD"),
+  or_age  = 70)
+
+# Bootstrapped confidence intervals
+phs_metrics(
+  test_data,
+  metrics   = c("HR", "C_index"),
+  bootstrap = TRUE,
+  n_boot    = 999,
+  seed      = 42
+)
+
+# Kaplan-Meier plot stratified by PHS percentile (returns a ggplot object)
+phs_km_curve(test_data)
+
+# Return tidy data for a custom ggplot
+km_data <- phs_km_curve(test_data, breaks = c(0.20, 0.40, 0.60, 0.80), output = "data")
+```
+
+## Planned features
+
+The following are on the roadmap for future releases. Contributions
+welcome.
+
+- **`phs_abs_risk()`** — absolute (cumulative incidence) risk curves
+  with competing risk support (`km`, `aalen_johansen`, `fine_gray`
+  methods)
+- **`phs_percentile()`** — compute percentile ranks; optionally relative
+  to a reference population via `ref_data`
+- **`phs_cut()`** — assign individuals to percentile strata with
+  human-readable factor labels
+- **`phs_describe()`** — descriptive statistics (n, events, median
+  follow-up, PHS mean/SD) by stratum
+- **`phs_calibration()`** — calibration plot and Hosmer-Lemeshow
+  statistic
+- **`theme_phs()` / `scale_color_phs()`** — default ggplot2 theme and
+  colour scale for hazrd plots
+- **Uno’s C-index** — IPCW-weighted concordance for heavily censored
+  data (`cindex_method = "uno"` in
+  [`phs_metrics()`](https://amorris28.github.io/hazrd/reference/phs_metrics.md))
+- **Parallel bootstrap** — `parallel = "multicore"` / `"snow"` via
+  [`boot::boot()`](https://rdrr.io/pkg/boot/man/boot.html) (argument
+  exists; only `"no"` is currently active)
+- **Risk table** — numbers-at-risk appended below KM curves
+  (`risk_table = TRUE` in `phs_km()`)
+- **Alternative HR methods** — `continuous_point` and `categorical`
+  (`hr_method` argument in
+  [`phs_metrics()`](https://amorris28.github.io/hazrd/reference/phs_metrics.md);
+  stubs exist)
