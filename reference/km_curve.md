@@ -7,32 +7,15 @@ instead.
 ## Usage
 
 ``` r
-km_curve(object, ...)
-
-# S3 method for class 'data.frame'
 km_curve(
-  object,
+  data = NULL,
   phs = "phs",
   age = "age",
   status = "status",
   interval = c(0, 1),
   age_range = 40:100,
   scale = FALSE,
-  inverse = FALSE,
-  ...
-)
-
-# S3 method for class 'phsfit'
-km_curve(
-  object,
-  phs = "phs",
-  age = "age",
-  status = "status",
-  interval = c(0, 1),
-  age_range = 40:100,
-  scale = FALSE,
-  inverse = FALSE,
-  ...
+  inverse = FALSE
 )
 ```
 

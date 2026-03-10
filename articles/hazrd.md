@@ -1,4 +1,4 @@
-# Getting started with \`{hazrd}\`
+# Getting started with hazrd
 
 ``` r
 library(hazrd)
@@ -7,9 +7,13 @@ library(ggplot2)
 
 `hazrd` provides a consistent API for computing survival-based
 discrimination metrics and visualizing Kaplan-Meier curves stratified by
-polygenic hazard score (PHS). The two primary user-facing functions are
+polygenic hazard score (PHS). The primary user-facing functions are
 [`phs_metrics()`](https://amorris28.github.io/hazrd/reference/phs_metrics.md)
-for statistics and `phs_km()` for plots.
+for statistics,
+[`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md)
+for Kaplan-Meier plots, and
+[`phs_cox_curve()`](https://amorris28.github.io/hazrd/reference/phs_cox_curve.md)
+for Cox model-based survival curves at specified PHS percentiles.
 
 ## Data
 

@@ -7,21 +7,15 @@ with `metrics = "HR_SD"` instead.
 ## Usage
 
 ``` r
-get_hrsd(object, ...)
-
-# S3 method for class 'data.frame'
 get_hrsd(
-  object,
+  data = NULL,
   phs = "phs",
   age = "age",
   status = "status",
-  bootstrap.iterations = NULL,
+  conf.int = FALSE,
   conf.level = 0.95,
-  ...
+  bootstrap.iterations
 )
-
-# S3 method for class 'phsfit'
-get_hrsd(object, bootstrap.iterations = NULL, conf.level = 0.95, ...)
 ```
 
 ## Arguments

@@ -7,31 +7,16 @@ with `metrics = "OR"` instead.
 ## Usage
 
 ``` r
-get_or(object, or_age, ...)
-
-# S3 method for class 'data.frame'
 get_or(
-  object,
-  or_age,
+  data = NULL,
   phs = "phs",
   age = "age",
   status = "status",
-  numerator = c(0.8, 1),
-  denominator = c(0, 0.2),
-  bootstrap.iterations = NULL,
-  conf.level = 0.95,
-  ...
-)
-
-# S3 method for class 'phsfit'
-get_or(
-  object,
   or_age,
   numerator = c(0.8, 1),
   denominator = c(0, 0.2),
   bootstrap.iterations = NULL,
-  conf.level = 0.95,
-  ...
+  conf.level = 0.95
 )
 ```
 

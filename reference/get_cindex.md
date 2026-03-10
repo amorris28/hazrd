@@ -7,21 +7,14 @@ with `metrics = "C_index"` instead.
 ## Usage
 
 ``` r
-get_cindex(object, ...)
-
-# S3 method for class 'data.frame'
 get_cindex(
-  object,
+  data = NULL,
   phs = "phs",
   age = "age",
   status = "status",
   bootstrap.iterations = NULL,
-  conf.level = 0.95,
-  ...
+  conf.level = 0.95
 )
-
-# S3 method for class 'phsfit'
-get_cindex(object, bootstrap.iterations = NULL, conf.level = 0.95, ...)
 ```
 
 ## Arguments

@@ -3,4 +3,4 @@
 ### All vignettes
 
 - [Getting started with
-  \`{hazrd}\`](https://amorris28.github.io/hazrd/articles/hazrd.md):
+  hazrd](https://amorris28.github.io/hazrd/articles/hazrd.md):
