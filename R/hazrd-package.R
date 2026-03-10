@@ -2,8 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom dplyr full_join
-#' @importFrom tidyr pivot_longer
 #' @importFrom utils globalVariables
+#' @importFrom stats approx quantile sd
 ## usethis namespace: end
 NULL

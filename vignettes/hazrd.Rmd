@@ -19,574 +19,195 @@ library(hazrd)
 library(ggplot2)
 ```
 
+`hazrd` provides a consistent API for computing survival-based discrimination
+metrics and visualizing Kaplan-Meier curves stratified by polygenic hazard score
+(PHS). The two primary user-facing functions are `phs_metrics()` for statistics
+and `phs_km()` for plots.
+
+## Data
+
+The package ships with a simulated survival dataset, `test_data`. The three
+required columns are `phs` (continuous score), `age` (time to event or
+censoring), and `status` (event indicator: 1 = event, 0 = censored).
+
 Here is our test data included in the package.
 
 ```{r}
 head(test_data)
 ```
 
-Next, plot the histogram of PHSes by case/control status.
+## Computing metrics with `phs_metrics()`
 
-```{r phs_hist}
-phs_hist(test_data, normalize = TRUE)
+`phs_metrics()` is the single entry point for all discrimination statistics. It
+fits a Cox proportional hazards model and derives metrics from the fit. The
+`metrics` argument controls which statistics are computed; column names are
+passed as strings and default to `"phs"`, `"age"`, and `"status"`.
+
+### All core metrics in one call
+
+```{r all_metrics}
+metrics <- phs_metrics(
+  test_data,
+  metrics  = c("HR", "C_index", "OR", "HR_SD"),
+  or_age   = 70
+)
+metrics
 ```
 
-### Generating test statistics and confidence intervals
+The returned tibble has one row per metric. `conf_low`, `conf_high`, and `se`
+are `NA` until bootstrapping is enabled.
 
-Then, calculate the hazard ratio comparing the mean of the top 20% of PHSes to the mean of the bottom 20% (i.e., `HR80_20`). We can also generate 95% confidence intervals using bootstrapping.
+### Hazard ratio
 
-```{r}
-HR80_20 = get_hr(test_data, bootstrap.iterations = 300)
-str(HR80_20)
+By default `phs_metrics()` computes `HR[80-100]_[0-20]` — the ratio of the top
+20% to the bottom 20% of the PHS distribution. Use `hr_numerator` /
+`hr_denominator` to change the bands:
+
+```{r hr_custom}
+phs_metrics(test_data, metrics = "HR", hr_numerator = 0.90, hr_denominator = 0.10)
 ```
 
-Each `get_` function also returns the output from each bootstrap iteration in `$iters` so that the user can plot these or calculate their own confidence intervals:
+For multiple HRs in one call, supply `hr_pairs`:
 
-```{r HR_histogram}
-ggplot(mapping = aes(x = HR80_20$iters)) +
-    geom_histogram(binwidth = 2/3) +
-    geom_vline(xintercept = HR80_20$HR, color = "red") +
-    geom_vline(xintercept = HR80_20$conf.low) +
-    geom_vline(xintercept = HR80_20$conf.high) +
-        theme_minimal() +
-        labs(x = "HR80_20", y = "Count")
+```{r hr_pairs}
+phs_metrics(
+  test_data,
+  metrics  = "HR",
+  hr_pairs = list(
+    list(numerator = c(0.80, 1.00), denominator = c(0.00, 0.20)),
+    list(numerator = c(0.80, 1.00), denominator = c(0.40, 0.60))
+  )
+)
 ```
 
-Similarly, calculate the odds ratio at age 70 between the top 20% and bottom 20% of PHSes.
+### Odds ratio
 
-```{r}
-OR80_20 = get_or(test_data, or_age = 70, bootstrap.iterations = 300)
-str(OR80_20)
+The OR is computed from Kaplan-Meier survival estimates at a specific age.
+`or_age` accepts a vector; one row is returned per age:
+
+```{r or}
+phs_metrics(test_data, metrics = "OR", or_age = c(65, 70, 75))
 ```
 
-```{r OR_histogram}
-ggplot(mapping = aes(x = OR80_20$iters)) +
-    geom_histogram(binwidth = 3/2) +
-    geom_vline(xintercept = OR80_20$OR, color = "red") +
-    geom_vline(xintercept = OR80_20$conf.low) +
-    geom_vline(xintercept = OR80_20$conf.high) +
-        theme_minimal() +
-        labs(x = "OR80_20", y = "Count")
+### Bootstrapped confidence intervals
+
+Set `bootstrap = TRUE` to populate `conf_low`, `conf_high`, and `se`. Use a
+small `n_boot` for speed during development:
+
+```{r bootstrap}
+phs_metrics(
+  test_data,
+  metrics   = c("HR", "C_index", "HR_SD"),
+  bootstrap = TRUE,
+  n_boot    = 300,
+  seed      = 42
+)
 ```
 
-Return the concordance index with 95% confidence intervals from a coxph fit:
+### Non-default column names
 
-```{r}
-c_index = get_cindex(test_data, bootstrap.iterations = 300)
-str(c_index)
+Column names are passed as strings, making `phs_metrics()` straightforward to
+use with non-standard data frames:
+
+```{r nonstandard}
+test_data2 <- with(test_data, data.frame(
+  score     = phs,
+  diagnosis_age = age,
+  case      = status
+))
+
+phs_metrics(
+  test_data2,
+  phs   = "score",
+  time  = "diagnosis_age",
+  event = "case",
+  metrics = c("HR", "C_index")
+)
 ```
 
-Finally, plot the Kaplan-Meier curves with confidence intervals for centiles of interest.
+## Kaplan-Meier curves with `phs_km_curve()`
 
-```{r plot_km_curves}
-curves = data.frame(curve0_20 = c(0,   0.2),
-                    curve20_70 = c(0.2, 0.7),
-                    curve80_98 = c(0.8, 0.98),
-                    curve98_100 = c(0.98, 1.0))
+`phs_km_curve()` stratifies the cohort into percentile bands and plots
+empirical Kaplan-Meier survival curves for each band. It returns either a
+`ggplot` object (`output = "plot"`, the default) or a tidy data frame
+(`output = "data"`).
 
-label_generator = function(x, y) {
-    x = x * 100
-    y = y * 100
-    out = paste0("PHS ", x, "-", y, "th centile")
-    return(out)
-}
+### Default plot
 
-km_curves = data.frame()
-for (i in seq_len(length(curves))) {
-    curven <- km_curve(test_data,  
-                       interval = curves[[i]],
-                       age_range = 40:100, 
-                       scale = FALSE, 
-                       inverse = FALSE)
-    curven$label = label_generator(curves[1, i], curves[2, i])
-    km_curves = rbind(km_curves, curven)
-}
+The default `breaks = c(0.20, 0.80)` splits the cohort into bottom 20%,
+middle 60%, and top 20%:
 
-
-ggplot(km_curves, aes(x = time, 
-                      y = estimate,
-                      ymin = conf.low,
-                      ymax = conf.high,
-                      col = label,
-                      fill = label)) +
-    geom_ribbon(alpha = 0.1,
-                color = 0) +
-    geom_step() +
-    theme_minimal() +
-    xlim(40, 100) + 
-    ylim(0, 1) +
-    labs(x = "Age", y = "Disease-free Survival") +
-    scale_color_brewer(palette = "Set1",
-                       name = "Centile") +
-    scale_fill_brewer(palette = "Set1",
-                       name = "Centile")
+```{r km_default}
+phs_km_curve(test_data)
 ```
 
-## More advanced topics
+### Custom cutpoints
 
-### Data format
+Pass any numeric vector of percentile cutpoints (strictly in (0, 1)) to
+`breaks`:
 
-Each of the functions in this package (e.g., `get_hr`, `get_or`, `phs_hist`, etc.)  can accept data in several formats. If your `data.frame` contains standard columns `phs`, `age`, and `status`, then you can simply pass the data.frame object to the first argument:
-
-```{r}
-get_hr(test_data) |> 
-    str()
+```{r km_custom}
+# Quintiles
+phs_km_curve(test_data, breaks = c(0.20, 0.40, 0.60, 0.80))
 ```
 
-If your data is stored in a data.frame with non-standard column names, e.g., `HazardScores`, `CaseControl`, and `AgeLastObs`,
+### Modifying the ggplot output
 
-```{r}
-test_data2 = with(test_data, data.frame(HazardScores = phs, 
-                                        CaseControl = status, 
-                                        AgeLastObs = age))
-head(test_data2)
+`phs_km_curve()` returns a standard `ggplot` object that can be extended with
+any ggplot2 layers, themes, or scales:
+
+```{r km_styled}
+phs_km_curve(test_data) +
+  theme_classic(base_size = 13) +
+  labs(
+    title = "Disease-free Survival by PHS Percentile",
+    x     = "Age (years)",
+    y     = "Disease-free Probability",
+    color = "PHS Group",
+    fill  = "PHS Group"
+  ) +
+  coord_cartesian(xlim = c(40, 100))
 ```
 
-then you can specify these column names as separate arguments:
+### Getting the underlying data
 
-```{r}
-get_hr(test_data2, 
-       phs = "HazardScores", 
-       status = "CaseControl", 
-       age = "AgeLastObs") |> 
-    str()
+Use `output = "data"` when you want to build a fully custom plot or pass the
+survival estimates on to further analysis:
+
+```{r km_data}
+km_data <- phs_km_curve(test_data, output = "data")
+head(km_data)
 ```
 
+The returned data frame has columns `time`, `estimate`, `conf.low`, `conf.high`,
+`n.risk`, `n.event`, and `stratum`, which can be used directly with ggplot2:
 
-### Hazard ratios and odds ratios
-
-#### Specifying intervals
-
-The `get_hr` function allows several options for customizing your hazard ratios. By default, it calculates the `HR80_20`, which compares the top 20% of PHSes to the bottom 20%. However, custom intervals can be specified using the `numerator` and `denominator` arguments.
-
-```{r}
-get_hr(test_data,
-       numerator = c(0.8, 1.0),
-       denominator = c(0.0, 0.2)) |> 
-    str()
+```{r km_manual_plot}
+ggplot(km_data, aes(x = time, y = estimate,
+                    ymin = conf.low, ymax = conf.high,
+                    color = stratum, fill = stratum)) +
+  geom_ribbon(alpha = 0.15, color = NA) +
+  geom_step(linewidth = 0.8) +
+  scale_color_brewer(palette = "Set1", name = "PHS Group") +
+  scale_fill_brewer(palette = "Set1", name = "PHS Group") +
+  coord_cartesian(xlim = c(40, 100), ylim = c(0, 1)) +
+  labs(x = "Age (years)", y = "Disease-free Probability") +
+  theme_minimal()
 ```
 
-These are the default arguments. If one value is passed to `numerator` then it calculates the hazard ratio for the interval `0.8:Inf`. Similarly, `denominator` will use `-Inf:0.2`. However, two values can be specified as a vector to specify a particular range. For example, if you want the lower interval to be the middle 40% of PHSes, you can specify `denominator = c(0.3, 0.7)`. 
+## Cox model curves with `phs_cox_curve()`
 
-```{r}
-get_hr(test_data,
-       numerator = c(0.8, 1.0),
-       denominator = c(0.3, 0.7)) |> 
-    str()
+`phs_cox_curve()` fits a Cox proportional-hazards model (`phs` as the sole
+predictor) and returns predicted survival curves for individuals at specified
+PHS percentiles. Unlike `phs_km_curve()`, these are smooth model-based
+predictions, not empirical group estimates.
+
+```{r cox_default}
+phs_cox_curve(test_data)
 ```
 
-interval specifications are the same for odds ratios from `get_or` as for `get_hr`. The only difference is that the odds ratio must be calculated at a particular age, which is passed with the `or_age` argument:
+Supply specific percentiles via the `percentiles` argument:
 
-```{r}
-get_or(test_data,
-       or_age = 70,
-       numerator = c(0.8, 1.0),
-       denominator = c(0.3, 0.7)) |> 
-    str()
+```{r cox_custom}
+phs_cox_curve(test_data, percentiles = c(0.01, 0.10, 0.50, 0.90, 0.99))
 ```
-
-#### Confidence intervals from bootstrapping
-
-95% confidence intervals for the estimates from the `get_hr`, `get_or`,  and `get_cindex` functions can be generated by bootstrapping. This is done by specifying a number of bootstrap iterations with `bootstrap.iterations = `. In this case, `get_hr` returns a list containing the hazard ratio and the values for the upper and lower 95% confidence intervals as well as all of the HR estimates from each bootstrap iteration in `iters`.
-
-```{r}
-get_hr(test_data,
-       bootstrap.iterations = 300) |> 
-    str()
-```
-
-### Plotting curves
-
-To plot Kaplan-Meier curves, you can use the `km_curve` function to return a single Kaplan-Meier curve for a given interval. Plotting must be performed manually once you have returned these curves.
-
-```{r}
-curven <- km_curve(test_data,  
-                       interval = c(0.80, 1.00), 
-                       age_range = 40:100, 
-                       scale = FALSE, 
-                       inverse = FALSE)
-```
-
-`interval` specifies the lower and upper quantile of the interval. In this case, the K-M curve for the top 20% of samples (`0.8:1.0`) will be returned. In addition, `age_range` specifies the ages over which the curve should be generated. Can be on the order of `40:100` for age-at-diagnosis or similar. Alternatively, can be `0:10` for, for exmaple, age of conversion to AD after MCI diagnosis.
-
-We can generate multiple curves at various intervals and get them into a data.frame:
-
-```{r}
-curves = data.frame(curve0_20 = c(0,   0.2),
-                    curve20_70 = c(0.2, 0.7),
-                    curve80_98 = c(0.8, 0.98),
-                    curve98_100 = c(0.98, 1.0))
-
-label_generator = function(x, y) {
-    x = x * 100
-    y = y * 100
-    out = paste0("PHS ", x, "-", y, "th centile")
-    return(out)
-}
-
-km_curves = data.frame()
-for (i in seq_len(length(curves))) {
-    curven <- km_curve(test_data,  
-                       interval = curves[[i]],
-                       age_range = 40:100, 
-                       scale = FALSE, 
-                       inverse = FALSE)
-    curven$label = label_generator(curves[1, i], curves[2, i])
-    km_curves = rbind(km_curves, curven)
-}
-```
-
-And plot them:
-
-```{r plot_km_curves2}
-ggplot(km_curves, aes(x = time, 
-                      y = estimate,
-                      ymin = conf.low,
-                      ymax = conf.high,
-                      col = label,
-                      fill = label)) +
-    geom_ribbon(alpha = 0.1,
-                color = 0) +
-    geom_step() +
-    theme_minimal() +
-    xlim(40, 100) + 
-    ylim(0, 1) +
-    labs(x = "Age", y = "Disease-free Survival") +
-    scale_color_brewer(palette = "Set1",
-                       name = "Centile") +
-    scale_fill_brewer(palette = "Set1",
-                       name = "Centile")
-```
-
-
-### Individual Prediction
-
-It is possible to generate a lookup table to perform individual prediction on a new, un-observed individual for which we have calculated a PHS score. To do this, we fit the model using our data and generate predicted curves for each of 99 percentiles (1 to 99%). We then output these curves with their associated PHS score at each percentile. This removes any connection to the subject-level data so is safe to export from secure computing platforms. We can then plot the prediction for the closest percentile to the new individual's PHS
-
-Here is an example workflow:
-
-```{r create_lookup_table}
-# Create the lookup table (on a secure computing platform using
-# individual-level data)
-
-lookup_table = create_lookup_table(test_data)
-```
-
-Export that lookup table from the computing platform and then identify the percentile for a new subject. Based on this toy dataset, a subject with a PHS of 1.6 would be approximately in the 94th percentile. Here, I plot the predicted curve for the median percentiel (50%) with a gray shaded area for the confidence intervals, an individual line for every percentile from 1 to 99, and I have highlighted in red the predicted risk curve and confidence intervals for the "new" hypothetical subject with a PHS of 1.6 (94th percentile):
-
-```{r plot_ind_pred}
-ggplot(lookup_table[lookup_table$percentile == 0.50, ], 
-       aes(x = time, y = surv, ymin = lower, ymax = upper)) +
-    geom_line() +
-    geom_ribbon(alpha = 0.5) +
-    theme_classic() +
-    geom_line(aes(x = time, y = surv, group = percentile), data = lookup_table, alpha = 0.1) +
-    geom_line(aes(x = time, y = surv, group = percentile), 
-                data = lookup_table[lookup_table$percentile == 0.94, ], 
-                color = "red") +
-    geom_ribbon(aes(x = time, y = surv, ymin = lower, ymax = upper), 
-                data = lookup_table[lookup_table$percentile == 0.94, ], 
-                alpha = 0.5, fill = "red") +
-    labs(x = "Age", y = "Disease-free Survival")
-```
-
-
-## Percentiles versus Quintiles for comparison and prediction
-
-In the literature on PHS, there are at least two ways that folks visualize the survival estimates for different PHS models. One is to compare the 20th percentile to the 80th percentile. The other is to compare quintiles, that is, the top 20% of PHSes to the bottom 20%. Here is an explanation of how to do both and how those estimates compare:
-
-### Percentiles
-
-```{r}
-library(survival)
-ages = seq(40, 100, length.out = 10000)
-
-# Fit the coxph model
-cp_fit = coxph(Surv(age, status) ~ phs, data = test_data)
-
-# Calculate the PHS at each percentile of interest
-phs0.2 = as.numeric(quantile(test_data$phs, 0.2))
-phs0.8 = as.numeric(quantile(test_data$phs, 0.8))
-phs0.5 = as.numeric(quantile(test_data$phs, 0.5))
-
-
-# Generate some new data for prediction using these PHS scores
-new_data0.2 <- data.frame(status = 1,
-                         age = ages,
-                         phs = phs0.2)
-new_data0.8 = new_data0.2
-new_data0.8$phs = phs0.8
-new_data0.5 = new_data0.2
-new_data0.5$phs = phs0.5
-
-# Using our original model, generate a predicted survival curve
-cp_predict_0.2 <- predict(cp_fit, new_data0.2, type = "survival")
-cp_predict_0.8 <- predict(cp_fit, new_data0.8, type = "survival")
-cp_predict_0.5 <- predict(cp_fit, new_data0.5, type = "survival")
-
-ggplot() +
-    geom_step(aes(x = age, y = cp_predict_0.2), data = new_data0.2, color = 4) +
-    geom_step(aes(x = age, y = cp_predict_0.8), data = new_data0.8, color = 2) +
-    geom_step(aes(x = age, y = cp_predict_0.5), data = new_data0.5, color = 3) +
-    labs(x = "Age", y = "Disease-free Survival") +
-    theme_minimal()
-```
-
-Here, the blue line is the 20th percentile, the green line is the 50th percentile, and the red line is the 80th percentile.
-
-### Quintiles
-
-```{r}
-# Cut the PHSes into groups based on percentile.
-# Here, we are splitting them into 0-20%, 20-80%, and 80-100%
-test_data$phs_group <- cut(test_data$phs, c(-Inf, phs0.2, phs0.8, Inf),
-                    labels = c("0-20", "20-80", "80-100"))
-
-# Fit the model, this time with group as the predictor rather than the PHS
-cp_fit_group <- coxph(Surv(age, status) ~ phs_group, test_data)
-
-# Generate some new data for prediction
-new_data0020 <- data.frame(status = 1,
-                           age = ages,
-                           phs_group = "0-20")
-new_data2080 <- new_data0020
-new_data2080$phs_group = "20-80"
-new_data80100 <- new_data0020
-new_data80100$phs_group = "80-100"
-
-# Generate a predicted survival curve
-cp_predict_0020 <- predict(cp_fit_group, new_data0020, type = "survival")
-cp_predict_2080 <- predict(cp_fit_group, new_data2080, type = "survival")
-cp_predict_80100 <- predict(cp_fit_group, new_data80100, type = "survival")
-
-# Plot the curves for each group
-ggplot() +
-    geom_step(aes(x = age, y = cp_predict_0020), data = new_data0020, color = 4) +
-    geom_step(aes(x = age, y = cp_predict_80100), data = new_data80100, color = 2) +
-    geom_step(aes(x = age, y = cp_predict_2080), data = new_data2080, color = 3) +
-    labs(x = "Age", y = "Disease-free Survival") +
-    theme_minimal()
-```
-
-Here, the blue line is the survival curve for the bottom 20% of PHSes, the green line is the survival curve for the middle 60% of PHSes (20-80%), and the red line is the survival curve for the top 20% of PHSes.
-
-Lastly, we can compare these two approaches and see how they generate different survival curves:
-
-```{r}
-ggplot() +
-    geom_step(aes(x = age, y = cp_predict_0020), data = new_data0020, color = 4) +
-    geom_step(aes(x = age, y = cp_predict_2080), data = new_data2080, color = 4) +
-    geom_step(aes(x = age, y = cp_predict_80100), data = new_data80100, color = 4) +
-    geom_step(aes(x = age, y = cp_predict_0.2), data = new_data0.2, color = 2) +
-    geom_step(aes(x = age, y = cp_predict_0.8), data = new_data0.8, color = 2) +
-    geom_step(aes(x = age, y = cp_predict_0.5), data = new_data0.5, color = 2) +
-    labs(x = "Age", y = "Disease-free Survival") +
-    theme_minimal()
-```
-
-Here, the blue curves are the quintile curves or group-based curves and the red curves are the percentile-based curves.
-
-The 0-20 and 80-100 curves are close to but not exactly the same as the 10% percentile and the 90% percentile:
-
-```{r}
-phs0.1 = as.numeric(quantile(test_data$phs, 0.1))
-phs0.9 = as.numeric(quantile(test_data$phs, 0.9))
-new_data0.1 = new_data0.2
-new_data0.1$phs = phs0.1
-new_data0.9 = new_data0.2
-new_data0.9$phs = phs0.9
-cp_predict_0.1 <- predict(cp_fit, new_data0.1, type = "survival")
-cp_predict_0.9 <- predict(cp_fit, new_data0.9, type = "survival")
-
-ggplot() +
-    geom_step(aes(x = age, y = cp_predict_0020), data = new_data0020, color = 4) +
-    geom_step(aes(x = age, y = cp_predict_2080), data = new_data2080, color = 4) +
-    geom_step(aes(x = age, y = cp_predict_80100), data = new_data80100, color = 4) +
-    labs(x = "Age", y = "Disease-free Survival") +
-    theme_minimal() +
-    geom_step(aes(x = age, y = cp_predict_0.1), data = new_data0.1, color = 6)  +
-    geom_step(aes(x = age, y = cp_predict_0.9), data = new_data0.9, color = 6) 
-
-```
-
-Here again the blue curves are the group-based curves (0-20, 20-80, and 80-100%) and the pink curves are the prediction for the 10th percentile and the 90th percentile.
-
----
-
-Now, comparing the 90th percentile individual to the "empirical" curve for the subjects in the top quintile:
-
-```{r}
-# This is the curve for the group in the 80-100 quintile
-test_data80_100 = test_data[test_data$phs_group == "80-100", ]
-
-surv_80_100 = survfit(Surv(age, status) ~ 1, test_data80_100)
-surv_80_100_data = data.frame(age = surv_80_100$time,
-                              surv = surv_80_100$surv)
-
-ggplot() + 
-    geom_step(aes(x = ages, y = cp_predict_0.9), data = new_data0.9, color = 4) + # blue
-    geom_step(aes(x = age, y = cp_predict_80100), data = new_data80100, color = 2) + #red
-    geom_step(aes(x = age, y = surv), data = surv_80_100_data, color = 3) + # green
-    labs(x = "Age", y = "Disease-free Survival") +
-    theme_minimal()
-
-```
-
-Here, blue is the prediction for the 90th percentile in the full PHS model. Red is the prediction for the 80-100% group from the "PHS Group" model. And green is the "empirical" survival curve for just the individuals in the 80-100% group.
-
-One thing I want to add is that the way to test the proportional hazard assumptions for a model is with the `cox.zph` function.
-
-```{r}
-ph_fit = cox.zph(cp_fit)
-
-# Not sig. so proportional hazards assumption is met
-print(ph_fit)
-
-# Residual plot visualizing this:
-plot(ph_fit)
-
-```
-
-
-
-## Example Script
-
-Here is an example script to run the entire hazrd analysis from the command line:
-
-```
-Rscript hazrd_script.R phs.tsv metadata.tsv FALSE reports/
-```
-
-```{r, eval=FALSE}
-#########################################
-# First argument: PHS file
-# tab delimited file, with or without header, first column ID, second column PHS score
-# file basename used as prefix for output
-#
-# Second argument: metadata file
-# tab delimited file with or without header, first column id,  second column age, 
-# third column status (0 or 1). Additional columns will be ignored.
-#
-# Third argument: 
-# boolean (i.e., TRUE or FALSE) indicating whether to inverse (x * -1) the PHS scores
-# to reverse the direction of effect.
-#
-# Fourth argument:
-# path to output directory, e.g., "reports/"
-# if the directory does not exist it will be created
-
-########################################
-# Load packages
-library(hazrd)
-library(ggplot2)
-
-
-#######################################
-# parse arguments
-
-args = commandArgs(trailingOnly=TRUE)
-
-model_file = args[1] # PHS file
-
-# model = gsub("\\_.*","", basename(args[1])) # filename for output
-model = gsub("\\..*","", basename(args[1])) # filename for output
-
-metadata = read.table(args[2], col.names = c("id", "age", "status")) # Phenotype data
-
-inverse = args[3]
-
-output = args[4]
-
-#########################################
-# Import PHS data
-
-phs = read.table(model_file, col.names = c("id", "phs"))
-
-print(head(phs))
-
-phs$phs = scale(phs$phs, center = TRUE, scale = TRUE)
-
-if (inverse) {phs$phs = phs$phs * -1}
-
-combined_data = merge(metadata, phs, by = "id")
-
-combined_data = combined_data[!(is.na(combined_data$phs)), ]
-
-#########################################
-# Analyze PHS data
-
-# PHS Histogram
-phs_hist = 
-	phs_hist(combined_data, normalize = TRUE) +
-	labs(title = model) + theme(aspect.ratio=1)
-
-ggsave(paste0(output, model, "_hist.png"), phs_hist, 
-       units = "px", height = 1300, width = 1300, create.dir = TRUE)
-
-# Performance metrics
-
-
-HR80_20 = get_hr(combined_data, bootstrap.iterations = 300)
-ages = c(60, 70, 80)
-OR80_20 = lapply(ages, function(x) {get_or(combined_data, or_age = x, bootstrap.iterations = 300)})
-c_index = get_cindex(combined_data, bootstrap.iterations = 300)
-
-HR80_20$age = NA
-c_index$age = NA
-indices = list(HR80_20, OR80_20[[1]], OR80_20[[2]], OR80_20[[3]], c_index)
-
-perform = do.call(rbind.data.frame, lapply(indices, function(x){data.frame(index = x$index, 
-                                                                 value = x$value, 
-                                                                 conf.low = x$conf.low, 
-                                                                 conf.high = x$conf.high, 
-                                                                 age = x$age)}))
-perform = cbind(model, perform)
-write.table(perform, paste0(output, model, "_performance.tsv"), sep = "\t", row.names = FALSE)
-
-# KM Curves
-curves = data.frame(curve0_20 = c(0,   0.2),
-                    curve20_70 = c(0.2, 0.7),
-                    curve80_98 = c(0.8, 0.98),
-                    curve98_100 = c(0.98, 1.0))
-
-label_generator = function(x, y) {
-  x = x * 100
-  y = y * 100
-  out = paste0("PHS ", x, "-", y, "th centile")
-  return(out)
-}
-
-km_curves = data.frame()
-for (i in seq_len(length(curves))) {
-  curven <- km_curve(combined_data,  
-                     interval = curves[[i]],
-                     age_range = 40:100, 
-                     scale = FALSE, 
-                     inverse = FALSE)
-  curven$label = label_generator(curves[1, i], curves[2, i])
-  km_curves = rbind(km_curves, curven)
-}
-
-
-km_curve = ggplot(km_curves, aes(x = time, 
-                      y = estimate,
-                      ymin = conf.low,
-                      ymax = conf.high,
-                      col = label,
-                      fill = label)) +
-  geom_ribbon(alpha = 0.1,
-              color = 0) +
-  geom_step() +
-  theme_minimal() +
-  xlim(40, 100) + 
-  ylim(0, 1) +
-  labs(x = "Age", y = "Disease-free Survival", title = model) +
-  scale_color_brewer(palette = "Set1",
-                     name = "Centile") +
-  scale_fill_brewer(palette = "Set1",
-                    name = "Centile")  + theme(aspect.ratio=1)
-
-ggsave(paste0(output, model, "_km_curve.png"), km_curve,
-       units = "px", height = 1300, width = 1600, create.dir = TRUE)
-```
-

@@ -6,3 +6,7 @@
 /.quarto/
 inst/doc
 docs
+
+# R CMD check artifacts
+*.Rcheck/
+..Rcheck/

@@ -6,12 +6,13 @@
 \alias{hazrd-package}
 \title{hazrd: Polygenic Hazard Score with Cox Proportional Hazards Model}
 \description{
-Tools to compute polygenic hazard scores using Cox proportional hazards model and lasso regularization via glmnet.
+Tools to evaluate and visualize Polygenic Hazard Score (PHS) analyses. Provides a consistent API for computing survival-based discrimination metrics (hazard ratio, C-index, odds ratio, HR per SD), bootstrapped confidence intervals, and Kaplan-Meier curves stratified by PHS percentile group.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://amorris28.github.io/hazrd/}
+  \item Report bugs at \url{https://github.com/amorris28/hazrd/issues}
 }
 
 }

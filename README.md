@@ -6,16 +6,10 @@ hazrd
 [![R-CMD-check](https://github.com/amorris28/hazRd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/amorris28/hazRd/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of hazrd is to simplify and standardize the development and
-testing of polygenic hazard score models in an opinionated way based
-mainly on past work in the [PHS
-repo](https://github.com/cmig-research-group/phs). Currently, most of
-the functionality focuses on external validation of PHS models. This
-includes calculation of standard statistics (80-20 hazard ratios, 80-20
-odds ratios, and concordance index) and plotting of Kaplan-Meier curves
-and cumulative incidence curves. In the future, this will be expanded to
-model development, internal validation, imaging risk scores, multimodal
-hazard scores, and functions related to Digital Avatar.
+`hazrd` is an R package for evaluating and visualizing Polygenic Hazard
+Score (PHS) analyses. It provides a consistent, tidy-first API for
+computing survival-based discrimination metrics, bootstrapped confidence
+intervals, and Kaplan-Meier curves.
 
 ## Installation
 
@@ -27,44 +21,76 @@ to Assets, and download the “Source code (tar.gz)” file. Then, in `R`,
 run:
 
 ``` r
-install.packages("hazrd-0.1.0.tar.gz", repos = NULL, type="source")
+install.packages("hazrd-0.2.0.tar.gz", repos = NULL, type = "source")
 ```
 
 ### Using `devtools`
 
-For a more up-to-date installation with all of the changes since the
-last release, install the development version of hazrd from
-[GitHub](https://github.com/) by cloning the repository:
+For the development version:
 
 ``` bash
 git clone git@github.com:amorris28/hazrd.git
 ```
 
-and then opening `R` and installing the package:
-
 ``` r
 devtools::install("hazrd")
 ```
 
-Replace `"hazrd"` with the path to the repository on your local
-computer.
-
-#### On a remote cluster
-
-To install the development version on a remote cluster, such as TSD,
-build a tarball from your local clone of the Github repo:
-
-``` r
-devtools::build("hazrd")
-```
-
-You can then install the `.tar.gz` with `install.packages` in `R`:
-
-``` r
-install.packages("hazrd_0.1.0.tar.gz", repos = NULL, type="source")
-```
-
 ## Getting started
 
-For an introduction on how to use the package, please see the vignettes
-on the [hazrd pkgdown website](https://amorris28.github.io/hazrd/).
+For a full introduction see the vignette on the [hazrd pkgdown
+website](https://amorris28.github.io/hazrd/).
+
+## Quick example
+
+``` r
+library(hazrd)
+
+# Compute HR, C-index, OR, and HR_SD in one call
+phs_metrics(
+  test_data,
+  metrics = c("HR", "C_index", "OR", "HR_SD"),
+  or_age  = 70)
+
+# Bootstrapped confidence intervals
+phs_metrics(
+  test_data,
+  metrics   = c("HR", "C_index"),
+  bootstrap = TRUE,
+  n_boot    = 999,
+  seed      = 42
+)
+
+# Kaplan-Meier plot stratified by PHS percentile (returns a ggplot object)
+phs_km_curve(test_data)
+
+# Return tidy data for a custom ggplot
+km_data <- phs_km_curve(test_data, breaks = c(0.20, 0.40, 0.60, 0.80), output = "data")
+```
+
+## Planned features
+
+The following are on the roadmap for future releases. Contributions
+welcome.
+
+- **`phs_abs_risk()`** — absolute (cumulative incidence) risk curves
+  with competing risk support (`km`, `aalen_johansen`, `fine_gray`
+  methods)
+- **`phs_percentile()`** — compute percentile ranks; optionally relative
+  to a reference population via `ref_data`
+- **`phs_cut()`** — assign individuals to percentile strata with
+  human-readable factor labels
+- **`phs_describe()`** — descriptive statistics (n, events, median
+  follow-up, PHS mean/SD) by stratum
+- **`phs_calibration()`** — calibration plot and Hosmer-Lemeshow
+  statistic
+- **`theme_phs()` / `scale_color_phs()`** — default ggplot2 theme and
+  colour scale for hazrd plots
+- **Uno’s C-index** — IPCW-weighted concordance for heavily censored
+  data (`cindex_method = "uno"` in `phs_metrics()`)
+- **Parallel bootstrap** — `parallel = "multicore"` / `"snow"` via
+  `boot::boot()` (argument exists; only `"no"` is currently active)
+- **Risk table** — numbers-at-risk appended below KM curves
+  (`risk_table = TRUE` in `phs_km()`)
+- **Alternative HR methods** — `continuous_point` and `categorical`
+  (`hr_method` argument in `phs_metrics()`; stubs exist)
