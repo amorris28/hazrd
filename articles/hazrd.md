@@ -1,7 +1,6 @@
 # Getting started with \`{hazrd}\`
 
 ``` r
-
 library(hazrd)
 library(ggplot2)
 ```
@@ -22,7 +21,6 @@ censored).
 Here is our test data included in the package.
 
 ``` r
-
 head(test_data)
 #>          phs      age status
 #> 1  0.8425735 67.95011      1
@@ -44,7 +42,6 @@ are passed as strings and default to `"phs"`, `"age"`, and `"status"`.
 ### All core metrics in one call
 
 ``` r
-
 metrics <- phs_metrics(
   test_data,
   metrics  = c("HR", "C_index", "OR", "HR_SD"),
@@ -73,7 +70,6 @@ computes `HR[80-100]_[0-20]` — the ratio of the top 20% to the bottom
 change the bands:
 
 ``` r
-
 phs_metrics(test_data, metrics = "HR", hr_numerator = 0.90, hr_denominator = 0.10)
 #> # A tibble: 1 × 9
 #>   metric      estimate conf_low conf_high    se n_numerator n_denominator method
@@ -85,7 +81,6 @@ phs_metrics(test_data, metrics = "HR", hr_numerator = 0.90, hr_denominator = 0.1
 For multiple HRs in one call, supply `hr_pairs`:
 
 ``` r
-
 phs_metrics(
   test_data,
   metrics  = "HR",
@@ -108,7 +103,6 @@ The OR is computed from Kaplan-Meier survival estimates at a specific
 age. `or_age` accepts a vector; one row is returned per age:
 
 ``` r
-
 phs_metrics(test_data, metrics = "OR", or_age = c(65, 70, 75))
 #> # A tibble: 3 × 9
 #>   metric      estimate conf_low conf_high    se n_numerator n_denominator method
@@ -125,7 +119,6 @@ Set `bootstrap = TRUE` to populate `conf_low`, `conf_high`, and `se`.
 Use a small `n_boot` for speed during development:
 
 ``` r
-
 phs_metrics(
   test_data,
   metrics   = c("HR", "C_index", "HR_SD"),
@@ -149,7 +142,6 @@ Column names are passed as strings, making
 straightforward to use with non-standard data frames:
 
 ``` r
-
 test_data2 <- with(test_data, data.frame(
   score     = phs,
   diagnosis_age = age,
@@ -185,7 +177,6 @@ The default `breaks = c(0.20, 0.80)` splits the cohort into bottom 20%,
 middle 60%, and top 20%:
 
 ``` r
-
 phs_km_curve(test_data)
 #> Warning: Removed 2 rows containing missing values or values outside the scale range
 #> (`geom_ribbon()`).
@@ -199,7 +190,6 @@ Pass any numeric vector of percentile cutpoints (strictly in (0, 1)) to
 `breaks`:
 
 ``` r
-
 # Quintiles
 phs_km_curve(test_data, breaks = c(0.20, 0.40, 0.60, 0.80))
 #> Warning: Removed 2 rows containing missing values or values outside the scale range
@@ -215,7 +205,6 @@ returns a standard `ggplot` object that can be extended with any ggplot2
 layers, themes, or scales:
 
 ``` r
-
 phs_km_curve(test_data) +
   theme_classic(base_size = 13) +
   labs(
@@ -238,7 +227,6 @@ Use `output = "data"` when you want to build a fully custom plot or pass
 the survival estimates on to further analysis:
 
 ``` r
-
 km_data <- phs_km_curve(test_data, output = "data")
 head(km_data)
 #>       time estimate conf.low conf.high n.risk n.event stratum
@@ -255,7 +243,6 @@ The returned data frame has columns `time`, `estimate`, `conf.low`,
 directly with ggplot2:
 
 ``` r
-
 ggplot(km_data, aes(x = time, y = estimate,
                     ymin = conf.low, ymax = conf.high,
                     color = stratum, fill = stratum)) +
@@ -282,7 +269,6 @@ percentiles. Unlike
 these are smooth model-based predictions, not empirical group estimates.
 
 ``` r
-
 phs_cox_curve(test_data)
 ```
 
@@ -291,7 +277,6 @@ phs_cox_curve(test_data)
 Supply specific percentiles via the `percentiles` argument:
 
 ``` r
-
 phs_cox_curve(test_data, percentiles = c(0.01, 0.10, 0.50, 0.90, 0.99))
 ```
 

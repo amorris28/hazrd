@@ -2,8 +2,6 @@
 
 ## All functions
 
-- [`fit_phs()`](https://amorris28.github.io/hazrd/reference/fit_phs.md)
-  : Fit a polygenic hazard score (PHS) model
 - [`get_cindex()`](https://amorris28.github.io/hazrd/reference/get_cindex.md)
   : Deprecated: use phs_metrics() instead
 - [`get_hr()`](https://amorris28.github.io/hazrd/reference/get_hr.md) :

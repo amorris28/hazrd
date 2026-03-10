@@ -15,7 +15,6 @@ to Assets, and download the “Source code (tar.gz)” file. Then, in `R`,
 run:
 
 ``` r
-
 install.packages("hazrd-0.2.0.tar.gz", repos = NULL, type = "source")
 ```
 
@@ -28,7 +27,6 @@ git clone git@github.com:amorris28/hazrd.git
 ```
 
 ``` r
-
 devtools::install("hazrd")
 ```
 
@@ -40,7 +38,6 @@ website](https://amorris28.github.io/hazrd/).
 ## Quick example
 
 ``` r
-
 library(hazrd)
 
 # Compute HR, C-index, OR, and HR_SD in one call
@@ -100,8 +97,6 @@ welcome.
 
 ## All functions
 
-- [`fit_phs()`](https://amorris28.github.io/hazrd/reference/fit_phs.md)
-  : Fit a polygenic hazard score (PHS) model
 - [`get_cindex()`](https://amorris28.github.io/hazrd/reference/get_cindex.md)
   : Deprecated: use phs_metrics() instead
 - [`get_hr()`](https://amorris28.github.io/hazrd/reference/get_hr.md) :
