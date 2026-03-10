@@ -4,29 +4,16 @@
 \alias{get_or}
 \title{Deprecated: use phs_metrics() instead}
 \usage{
-get_or(object, or_age, ...)
-
-\method{get_or}{data.frame}(
-  object,
-  or_age,
+get_or(
+  data = NULL,
   phs = "phs",
   age = "age",
   status = "status",
-  numerator = c(0.8, 1),
-  denominator = c(0, 0.2),
-  bootstrap.iterations = NULL,
-  conf.level = 0.95,
-  ...
-)
-
-\method{get_or}{phsfit}(
-  object,
   or_age,
   numerator = c(0.8, 1),
   denominator = c(0, 0.2),
   bootstrap.iterations = NULL,
-  conf.level = 0.95,
-  ...
+  conf.level = 0.95
 )
 }
 \arguments{

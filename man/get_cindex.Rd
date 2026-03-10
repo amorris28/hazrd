@@ -4,19 +4,14 @@
 \alias{get_cindex}
 \title{Deprecated: use phs_metrics() instead}
 \usage{
-get_cindex(object, ...)
-
-\method{get_cindex}{data.frame}(
-  object,
+get_cindex(
+  data = NULL,
   phs = "phs",
   age = "age",
   status = "status",
   bootstrap.iterations = NULL,
-  conf.level = 0.95,
-  ...
+  conf.level = 0.95
 )
-
-\method{get_cindex}{phsfit}(object, bootstrap.iterations = NULL, conf.level = 0.95, ...)
 }
 \arguments{
 \item{data}{a data.frame containing PHS data}

@@ -4,30 +4,15 @@
 \alias{km_curve}
 \title{Deprecated: use phs_km() instead}
 \usage{
-km_curve(object, ...)
-
-\method{km_curve}{data.frame}(
-  object,
+km_curve(
+  data = NULL,
   phs = "phs",
   age = "age",
   status = "status",
   interval = c(0, 1),
   age_range = 40:100,
   scale = FALSE,
-  inverse = FALSE,
-  ...
-)
-
-\method{km_curve}{phsfit}(
-  object,
-  phs = "phs",
-  age = "age",
-  status = "status",
-  interval = c(0, 1),
-  age_range = 40:100,
-  scale = FALSE,
-  inverse = FALSE,
-  ...
+  inverse = FALSE
 )
 }
 \arguments{

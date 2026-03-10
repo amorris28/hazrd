@@ -1,8 +1,8 @@
 ---
-title: "Getting started with `{hazrd}`"
+title: "Getting started with hazrd"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{hazrd}
+  %\VignetteIndexEntry{Getting started with hazrd}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,8 +21,9 @@ library(ggplot2)
 
 `hazrd` provides a consistent API for computing survival-based discrimination
 metrics and visualizing Kaplan-Meier curves stratified by polygenic hazard score
-(PHS). The two primary user-facing functions are `phs_metrics()` for statistics
-and `phs_km()` for plots.
+(PHS). The primary user-facing functions are `phs_metrics()` for statistics,
+`phs_km_curve()` for Kaplan-Meier plots, and `phs_cox_curve()` for Cox
+model-based survival curves at specified PHS percentiles.
 
 ## Data
 

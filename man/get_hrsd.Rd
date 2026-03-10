@@ -4,19 +4,15 @@
 \alias{get_hrsd}
 \title{Deprecated: use phs_metrics() instead}
 \usage{
-get_hrsd(object, ...)
-
-\method{get_hrsd}{data.frame}(
-  object,
+get_hrsd(
+  data = NULL,
   phs = "phs",
   age = "age",
   status = "status",
-  bootstrap.iterations = NULL,
+  conf.int = FALSE,
   conf.level = 0.95,
-  ...
+  bootstrap.iterations
 )
-
-\method{get_hrsd}{phsfit}(object, bootstrap.iterations = NULL, conf.level = 0.95, ...)
 }
 \arguments{
 \item{data}{a data.frame containing PHS data}
