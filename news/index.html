@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hazrd</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,6 +33,26 @@
       <small>Source: <a href="https://github.com/amorris28/hazrd/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.1" id="hazrd-021">hazrd 0.2.1<a class="anchor" aria-label="anchor" href="#hazrd-021"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-2-1">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-1"></a></h3>
+<ul><li>
+<code><a href="../reference/phs_km_curve.html">phs_km_curve()</a></code>: new <code>intervals</code> parameter accepts a list of <code>c(lo, hi)</code> percentile pairs, enabling overlapping KM strata (e.g. top 5%, top 20%, bottom 20%). Default produces four bands: 0.95-1, 0.80-1, 0.30-0.70, and 0-0.20. The legacy <code>breaks</code> parameter is retained for backward compatibility.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-2-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-2-1"></a></h3>
+<ul><li>
+<code><a href="../reference/phs_km_curve.html">phs_km_curve()</a></code>: fixed malformed <code>man/phs_km_curve.Rd</code> caused by percent signs in roxygen <code>@param</code> text corrupting the <code>\arguments{}</code> block and producing R CMD check warnings.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-2-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-2-1"></a></h3>
+<ul><li>Vignette updated with overlapping intervals examples and <code>breaks</code> legacy usage.</li>
+<li>README installation section updated to use <code>devtools::install_github()</code>; dev-branch instructions added (<code>@dev</code>).</li>
+<li>
+<code>NEWS.md</code> corrected: function name <code>phs_km</code> -&gt; <code>phs_km_curve</code>, stale preset list removed, <code>phs_cox_curve</code> entry added.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="hazrd-020">hazrd 0.2.0<a class="anchor" aria-label="anchor" href="#hazrd-020"></a></h2>
 <div class="section level3">

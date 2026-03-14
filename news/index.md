@@ -1,5 +1,32 @@
 # Changelog
 
+## hazrd 0.2.1
+
+### New features
+
+- [`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md):
+  new `intervals` parameter accepts a list of `c(lo, hi)` percentile
+  pairs, enabling overlapping KM strata (e.g. top 5%, top 20%, bottom
+  20%). Default produces four bands: 0.95-1, 0.80-1, 0.30-0.70, and
+  0-0.20. The legacy `breaks` parameter is retained for backward
+  compatibility.
+
+### Bug fixes
+
+- [`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md):
+  fixed malformed `man/phs_km_curve.Rd` caused by percent signs in
+  roxygen `@param` text corrupting the `\arguments{}` block and
+  producing R CMD check warnings.
+
+### Documentation
+
+- Vignette updated with overlapping intervals examples and `breaks`
+  legacy usage.
+- README installation section updated to use
+  `devtools::install_github()`; dev-branch instructions added (`@dev`).
+- `NEWS.md` corrected: function name `phs_km` -\> `phs_km_curve`, stale
+  preset list removed, `phs_cox_curve` entry added.
+
 ## hazrd 0.2.0
 
 ### New functions
