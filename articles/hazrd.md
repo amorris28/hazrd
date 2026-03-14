@@ -177,8 +177,10 @@ object (`output = "plot"`, the default) or a tidy data frame
 
 ### Default plot
 
-The default `breaks = c(0.20, 0.80)` splits the cohort into bottom 20%,
-middle 60%, and top 20%:
+The default `intervals` produce four bands — top 5% (0.95–1), top 20%
+(0.80–1), middle 40% (0.30–0.70), and bottom 20% (0–0.20). Bands may
+overlap, which is useful for showing how progressively broader high-risk
+groups compare to the low-risk reference:
 
 ``` r
 phs_km_curve(test_data)
@@ -188,19 +190,36 @@ phs_km_curve(test_data)
 
 ![](hazrd_files/figure-html/km_default-1.png)
 
-### Custom cutpoints
+### Custom overlapping intervals
 
-Pass any numeric vector of percentile cutpoints (strictly in (0, 1)) to
-`breaks`:
+Pass a list of `c(lo, hi)` percentile pairs to `intervals`. Bands can
+overlap freely — each is an independent Kaplan-Meier fit on the
+corresponding subset:
 
 ``` r
-# Quintiles
-phs_km_curve(test_data, breaks = c(0.20, 0.40, 0.60, 0.80))
-#> Warning: Removed 2 rows containing missing values or values outside the scale range
+phs_km_curve(
+  test_data,
+  intervals = list(c(0.95, 1), c(0.80, 1), c(0.00, 0.20))
+)
+#> Warning: Removed 1 row containing missing values or values outside the scale range
 #> (`geom_ribbon()`).
 ```
 
 ![](hazrd_files/figure-html/km_custom-1.png)
+
+### Exclusive bands (legacy `breaks`)
+
+For non-overlapping bands, use `breaks` with `intervals = NULL`. Pass a
+numeric vector of percentile cutpoints (strictly between 0 and 1):
+
+``` r
+# Quintiles
+phs_km_curve(test_data, intervals = NULL, breaks = c(0.20, 0.40, 0.60, 0.80))
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_ribbon()`).
+```
+
+![](hazrd_files/figure-html/km_breaks-1.png)
 
 ### Modifying the ggplot output
 

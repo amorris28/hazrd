@@ -47,10 +47,52 @@
 </div>
 <div class="section level2">
 <h2 id="pre-merge-checklist-dev---main">Pre-merge checklist (dev -&gt; main)<a class="anchor" aria-label="anchor" href="#pre-merge-checklist-dev---main"></a></h2>
-<p>Before merging <code>dev</code> into <code>main</code>, always run these steps in order: 1. <code>devtools::document()</code> — regenerate <code>NAMESPACE</code> and <code>man/</code> Rd files. 2. <code>devtools::check()</code> — must pass with 0 errors, 0 warnings, 0 notes. 3. Render <code>README.md</code> via the Docker container (see instructions above). 4. Commit all changed files (<code>man/</code>, <code>NAMESPACE</code>, <code>README.md</code>) before merging.</p>
-<p>Good example edits to get started - Small bugfix: ensure <code>or_age</code> bounds are handled (see <code>.calc_or_metric</code>) — add test covering an <code>or_age</code> outside observed range. - Add a new C-index method: implement <code>"uno"</code> in <code>.calc_cindex_metric()</code> and add a test and example in <code>R/phs_metrics.R</code> documentation.</p>
+<p>This is the full workflow from issue to merged release. Work is done on <code>dev</code>; <code>main</code> should always be clean and passing.</p>
+<div class="section level3">
+<h3 id="id_1-during-development-on-dev">1. During development (on <code>dev</code>)<a class="anchor" aria-label="anchor" href="#id_1-during-development-on-dev"></a></h3>
+<ul class="task-list"><li><label><input type="checkbox">Issues for the milestone are tagged in GitHub (e.g. milestone <code>0.2.2</code>)</label></li>
+<li><label><input type="checkbox">All feature/fix commits are on <code>dev</code></label></li>
+<li><label><input type="checkbox">A <code>testthat</code> test covers every changed behavior</label></li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_2-documentation-on-dev-before-merge">2. Documentation (on <code>dev</code>, before merge)<a class="anchor" aria-label="anchor" href="#id_2-documentation-on-dev-before-merge"></a></h3>
+<ul class="task-list"><li>
+<p><label><input type="checkbox"><strong>roxygen</strong>: update <code>@param</code>, <code>@return</code>, <code>@examples</code> in <code>R/</code> source for any changed or new exported functions</label></p>
+<ul><li>Never use <code>\%</code> in roxygen comments — use plain text (“percent” or “0-20”) instead; see safety notes above</li>
+</ul></li>
+<li><p><label><input type="checkbox"><strong><code>devtools::document()</code></strong> — regenerate <code>NAMESPACE</code> and all <code>man/</code> Rd files; commit any changed files in <code>man/</code> and <code>NAMESPACE</code></label></p></li>
+<li><p><label><input type="checkbox"><strong><code>NEWS.md</code></strong> — add an entry under the current version heading describing new features, fixes, and breaking changes</label></p></li>
+<li><p><label><input type="checkbox"><strong>Vignette</strong> (<code>vignettes/hazrd.Rmd</code>) — update examples and narrative to reflect any new or changed parameters/behavior</label></p></li>
+<li>
+<p><label><input type="checkbox"><strong><code>README.Rmd</code></strong> — update quick example and installation section if needed; then render via Docker:</label></p>
+<pre><code>docker run --rm -v /path/to/hazrd:/repo my-r-image \
+  Rscript -e 'rmarkdown::render("/repo/README.Rmd", output_file = "/repo/README.md")'</code></pre>
+<p>Commit the updated <code>README.md</code></p>
+</li>
+<li><p><label><input type="checkbox"><strong><code>DESCRIPTION</code></strong> — bump <code>Version:</code> field to the new release number</label></p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_3-final-checks-on-dev-before-merge">3. Final checks (on <code>dev</code>, before merge)<a class="anchor" aria-label="anchor" href="#id_3-final-checks-on-dev-before-merge"></a></h3>
+<ul class="task-list"><li><label><input type="checkbox"><strong><code>devtools::check()</code></strong> — must pass with 0 errors, 0 warnings, 0 notes</label></li>
+<li><label><input type="checkbox"><strong><code>devtools::test()</code></strong> — all tests green</label></li>
+<li><label><input type="checkbox">Commit everything; confirm <code>git status</code> is clean</label></li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_4-merge-and-tag">4. Merge and tag<a class="anchor" aria-label="anchor" href="#id_4-merge-and-tag"></a></h3>
+<ul class="task-list"><li><label><input type="checkbox"><code>git checkout main &amp;&amp; git merge --ff-only dev</code></label></li>
+<li><label><input type="checkbox"><code>git push origin main</code></label></li>
+<li><label><input type="checkbox"><code>git tag vX.Y.Z main &amp;&amp; git push origin vX.Y.Z</code></label></li>
+<li><label><input type="checkbox">Create GitHub release pointing at the tag (use <code>gh release create</code>)</label></li>
+<li><label><input type="checkbox">Close resolved issues (commit messages with <code>Closes #N</code> do this automatically)</label></li>
+</ul></div>
+<div class="section level3">
+<h3 id="id_5-post-merge">5. Post-merge<a class="anchor" aria-label="anchor" href="#id_5-post-merge"></a></h3>
+<ul class="task-list"><li><label><input type="checkbox"><code>git checkout dev</code> — continue future work on <code>dev</code></label></li>
+<li><label><input type="checkbox">Bump <code>DESCRIPTION</code> version to next dev version (e.g. <code>0.2.2.9000</code>) on <code>dev</code></label></li>
+</ul><p>Good example edits to get started - Small bugfix: ensure <code>or_age</code> bounds are handled (see <code>.calc_or_metric</code>) — add test covering an <code>or_age</code> outside observed range. - Add a new C-index method: implement <code>"uno"</code> in <code>.calc_cindex_metric()</code> and add a test and example in <code>R/phs_metrics.R</code> documentation.</p>
 <p>Prompting hints for the AI agent - When you change metric output shape, list the exact column names and show a one-row example tibble so maintainers can verify compatibility. - For bootstrap changes, include a minimal reproducible call of <code>phs_metrics</code> with <code>bootstrap = TRUE</code> and <code>n_boot = 50</code> in tests so CI runs fast.</p>
 <p>If anything in this file is unclear or you’d like more detail (examples of expected inputs, a sample dev/test script, or CI matrix notes), tell me which section and I’ll expand it.</p>
+</div>
 </div>
 
 

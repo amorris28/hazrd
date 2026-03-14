@@ -99,11 +99,14 @@
 <span>  seed      <span class="op">=</span> <span class="fl">42</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Kaplan-Meier plot stratified by PHS percentile (returns a ggplot object)</span></span>
+<span><span class="co"># Kaplan-Meier plot with overlapping intervals (returns a ggplot object)</span></span>
 <span><span class="fu"><a href="reference/phs_km_curve.html">phs_km_curve</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Return tidy data for a custom ggplot</span></span>
-<span><span class="va">km_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/phs_km_curve.html">phs_km_curve</a></span><span class="op">(</span><span class="va">test_data</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.20</span>, <span class="fl">0.40</span>, <span class="fl">0.60</span>, <span class="fl">0.80</span><span class="op">)</span>, output <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># Overlapping intervals — top 5%, top 20%, bottom 20%</span></span>
+<span><span class="fu"><a href="reference/phs_km_curve.html">phs_km_curve</a></span><span class="op">(</span><span class="va">test_data</span>, intervals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.95</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.20</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Legacy exclusive bands via breaks</span></span>
+<span><span class="va">km_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/phs_km_curve.html">phs_km_curve</a></span><span class="op">(</span><span class="va">test_data</span>, intervals <span class="op">=</span> <span class="cn">NULL</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.20</span>, <span class="fl">0.40</span>, <span class="fl">0.60</span>, <span class="fl">0.80</span><span class="op">)</span>, output <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="planned-features">Planned features<a class="anchor" aria-label="anchor" href="#planned-features"></a>
