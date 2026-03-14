@@ -84,11 +84,50 @@ Testing & safety notes for code changes
 
 ## Pre-merge checklist (dev -> main)
 
-Before merging `dev` into `main`, always run these steps in order:
-1. `devtools::document()` — regenerate `NAMESPACE` and `man/` Rd files.
-2. `devtools::check()` — must pass with 0 errors, 0 warnings, 0 notes.
-3. Render `README.md` via the Docker container (see instructions above).
-4. Commit all changed files (`man/`, `NAMESPACE`, `README.md`) before merging.
+This is the full workflow from issue to merged release. Work is done on `dev`;
+`main` should always be clean and passing.
+
+### 1. During development (on `dev`)
+- [ ] Issues for the milestone are tagged in GitHub (e.g. milestone `0.2.2`)
+- [ ] All feature/fix commits are on `dev`
+- [ ] A `testthat` test covers every changed behavior
+
+### 2. Documentation (on `dev`, before merge)
+- [ ] **roxygen**: update `@param`, `@return`, `@examples` in `R/` source for
+  any changed or new exported functions
+  - Never use `\%` in roxygen comments — use plain text ("percent" or "0-20")
+    instead; see safety notes above
+- [ ] **`devtools::document()`** — regenerate `NAMESPACE` and all `man/` Rd files;
+  commit any changed files in `man/` and `NAMESPACE`
+- [ ] **`NEWS.md`** — add an entry under the current version heading describing
+  new features, fixes, and breaking changes
+- [ ] **Vignette** (`vignettes/hazrd.Rmd`) — update examples and narrative to
+  reflect any new or changed parameters/behavior
+- [ ] **`README.Rmd`** — update quick example and installation section if needed;
+  then render via Docker:
+  ```
+  docker run --rm -v /path/to/hazrd:/repo my-r-image \
+    Rscript -e 'rmarkdown::render("/repo/README.Rmd", output_file = "/repo/README.md")'
+  ```
+  Commit the updated `README.md`
+- [ ] **`DESCRIPTION`** — bump `Version:` field to the new release number
+
+### 3. Final checks (on `dev`, before merge)
+- [ ] **`devtools::check()`** — must pass with 0 errors, 0 warnings, 0 notes
+- [ ] **`devtools::test()`** — all tests green
+- [ ] Commit everything; confirm `git status` is clean
+
+### 4. Merge and tag
+- [ ] `git checkout main && git merge --ff-only dev`
+- [ ] `git push origin main`
+- [ ] `git tag vX.Y.Z main && git push origin vX.Y.Z`
+- [ ] Create GitHub release pointing at the tag (use `gh release create`)
+- [ ] Close resolved issues (commit messages with `Closes #N` do this automatically)
+
+### 5. Post-merge
+- [ ] `git checkout dev` — continue future work on `dev`
+- [ ] Bump `DESCRIPTION` version to next dev version (e.g. `0.2.2.9000`) on `dev`
+
 
 Good example edits to get started
 - Small bugfix: ensure `or_age` bounds are handled (see `.calc_or_metric`) —
