@@ -14,7 +14,8 @@ phs_km_curve(
   phs = "phs",
   time = "age",
   event = "status",
-  breaks = c(0.2, 0.8),
+  intervals = list(c(0.95, 1), c(0.8, 1), c(0.3, 0.7), c(0, 0.2)),
+  breaks = NULL,
   ref_data = NULL,
   output = "plot",
   conf_int = TRUE,
@@ -44,10 +45,19 @@ phs_km_curve(
   string or numeric vector; column name or vector of event indicator
   (0/1)
 
+- intervals:
+
+  list of `c(lo, hi)` pairs defining percentile bands, e.g.
+  `list(c(0.80, 1), c(0, 0.20))`. Bands may overlap. Takes precedence
+  over `breaks` when non-`NULL`. Default produces four bands: top 5
+  (0.95-1), top 20 (0.80-1), middle 40 (0.30-0.70), and bottom 20
+  (0-0.20).
+
 - breaks:
 
-  numeric vector of percentile cutpoints strictly in (0, 1); default
-  `c(0.20, 0.80)` (bottom 20% / middle 60% / top 20%)
+  numeric vector of percentile cutpoints strictly in (0, 1) used to form
+  exclusive bands (legacy); ignored when `intervals` is non-`NULL`.
+  Retained for backward compatibility.
 
 - ref_data:
 

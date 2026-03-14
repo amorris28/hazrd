@@ -57,7 +57,8 @@ training-&gt;validation workflow is possible.</p>
 <span>  phs <span class="op">=</span> <span class="st">"phs"</span>,</span>
 <span>  time <span class="op">=</span> <span class="st">"age"</span>,</span>
 <span>  event <span class="op">=</span> <span class="st">"status"</span>,</span>
-<span>  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.8</span><span class="op">)</span>,</span>
+<span>  intervals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.95</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.7</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  breaks <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ref_data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output <span class="op">=</span> <span class="st">"plot"</span>,</span>
 <span>  conf_int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -88,9 +89,17 @@ training-&gt;validation workflow is possible.</p>
 <dd><p>string or numeric vector; column name or vector of event indicator (0/1)</p></dd>
 
 
+<dt id="arg-intervals">intervals<a class="anchor" aria-label="anchor" href="#arg-intervals"></a></dt>
+<dd><p>list of <code>c(lo, hi)</code> pairs defining percentile bands, e.g.
+<code>list(c(0.80, 1), c(0, 0.20))</code>. Bands may overlap. Takes precedence over
+<code>breaks</code> when non-<code>NULL</code>. Default produces four bands:
+top 5 (0.95-1), top 20 (0.80-1), middle 40 (0.30-0.70), and bottom 20 (0-0.20).</p></dd>
+
+
 <dt id="arg-breaks">breaks<a class="anchor" aria-label="anchor" href="#arg-breaks"></a></dt>
-<dd><p>numeric vector of percentile cutpoints strictly in (0, 1);
-default <code>c(0.20, 0.80)</code> (bottom 20% / middle 60% / top 20%)</p></dd>
+<dd><p>numeric vector of percentile cutpoints strictly in (0, 1)
+used to form exclusive bands (legacy); ignored when <code>intervals</code> is non-<code>NULL</code>.
+Retained for backward compatibility.</p></dd>
 
 
 <dt id="arg-ref-data">ref_data<a class="anchor" aria-label="anchor" href="#arg-ref-data"></a></dt>
