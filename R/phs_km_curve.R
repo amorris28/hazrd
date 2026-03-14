@@ -10,8 +10,13 @@
 #' @param phs string or numeric vector; column name or vector of PHS values
 #' @param time string or numeric vector; column name or vector of event time
 #' @param event string or numeric vector; column name or vector of event indicator (0/1)
-#' @param breaks numeric vector of percentile cutpoints strictly in (0, 1);
-#'   default `c(0.20, 0.80)` (bottom 20% / middle 60% / top 20%)
+#' @param intervals list of `c(lo, hi)` pairs defining percentile bands, e.g.
+#'   `list(c(0.80, 1), c(0, 0.20))`. Bands may overlap. Takes precedence over
+#'   `breaks` when non-`NULL`. Default produces four bands:
+#'   95-100\%, 80-100\%, 30-70\%, and 0-20\%.
+#' @param breaks numeric vector of percentile cutpoints strictly in (0, 1)
+#'   used to form exclusive bands (legacy); ignored when `intervals` is non-`NULL`.
+#'   Retained for backward compatibility.
 #' @param ref_data optional data.frame used to compute percentile cutpoints (training reference)
 #' @param output 'plot' (default) or 'data'
 #' @param conf_int logical; include confidence intervals in output/plot
@@ -28,7 +33,8 @@ phs_km_curve <- function(data,
                          phs = "phs",
                          time = "age",
                          event = "status",
-                         breaks = c(0.20, 0.80),
+                         intervals = list(c(0.95, 1), c(0.80, 1), c(0.30, 0.70), c(0, 0.20)),
+                         breaks = NULL,
                          ref_data = NULL,
                    output = "plot",
                    conf_int = TRUE,
@@ -44,8 +50,23 @@ phs_km_curve <- function(data,
       stop("Column '", col, "' not found in data.")
   }
   output <- match.arg(output, c("plot", "data"))
-  if (!is.numeric(breaks) || any(breaks <= 0 | breaks >= 1))
-    stop("'breaks' must be a numeric vector with all values strictly between 0 and 1.")
+
+  # Resolve interval list: intervals takes precedence over breaks
+  if (!is.null(intervals)) {
+    if (!is.list(intervals) ||
+        !all(sapply(intervals, function(iv)
+          is.numeric(iv) && length(iv) == 2 && iv[1] >= 0 && iv[2] <= 1 && iv[1] < iv[2])))
+      stop("'intervals' must be a list of c(lo, hi) vectors with 0 <= lo < hi <= 1.")
+    interval_list <- intervals
+  } else if (!is.null(breaks)) {
+    if (!is.numeric(breaks) || any(breaks <= 0 | breaks >= 1))
+      stop("'breaks' must be a numeric vector with all values strictly between 0 and 1.")
+    cut_bounds <- c(0, sort(unique(breaks)), 1)
+    interval_list <- lapply(seq_len(length(cut_bounds) - 1),
+                            function(i) c(cut_bounds[i], cut_bounds[i + 1]))
+  } else {
+    stop("One of 'intervals' or 'breaks' must be non-NULL.")
+  }
 
   # Resolve inputs (allow passing column names as strings)
   if (is.character(phs) && !is.null(data)) phs_vals <- data[[phs]] else phs_vals <- phs
@@ -53,9 +74,6 @@ phs_km_curve <- function(data,
   if (is.character(event) && !is.null(data)) event_vals <- data[[event]] else event_vals <- event
 
   df <- data.frame(time = time_vals, event = as.integer(event_vals), phs = phs_vals)
-
-  # Decide cutpoints
-  cuts <- sort(unique(breaks))
 
   # Percentile calculation source
   ref_phs <- if (!is.null(ref_data) && is.data.frame(ref_data)) {
@@ -67,25 +85,17 @@ phs_km_curve <- function(data,
   # Compute percentile ranks in [0,1]
   phs_pct <- as.numeric(stats::ecdf(ref_phs)(phs_vals))
 
-  # Build stratum labels and factor
-  cut_bounds <- c(0, cuts, 1)
-  # create human friendly labels like "Bottom 20%", "Middle 60%", "Top 20%"
-  labels <- sapply(seq_along(cut_bounds[-1]), function(i) {
-    lo <- round(cut_bounds[i] * 100)
-    hi <- round(cut_bounds[i+1] * 100)
-    paste0(lo, "-", hi, "%")
-  })
+  # Helper: human-friendly label for an interval
+  make_label <- function(lo, hi) paste0(round(lo * 100), "-", round(hi * 100), "%")
 
-  # Assign percentiles into strata
-  stratum <- cut(phs_pct, breaks = cut_bounds, include.lowest = TRUE, labels = labels, right = FALSE)
-
-  df$stratum <- stratum
-
-  # For each stratum, compute a one-group survfit
-  strata_levels <- levels(df$stratum)
-  out_list <- lapply(strata_levels, function(s) {
-    subdf <- df[df$stratum == s, , drop = FALSE]
+  # For each interval, compute a one-group survfit on the subset
+  out_list <- lapply(interval_list, function(iv) {
+    lo <- iv[1]; hi <- iv[2]
+    upper_mask <- if (hi >= 1) phs_pct <= hi else phs_pct < hi
+    mask <- phs_pct >= lo & upper_mask
+    subdf <- df[mask, , drop = FALSE]
     if (nrow(subdf) == 0) return(NULL)
+    label <- make_label(lo, hi)
     fit <- tryCatch(survival::survfit(survival::Surv(time, event) ~ 1, data = subdf), error = function(e) NULL)
     if (is.null(fit)) return(NULL)
     tib <- data.frame(time = fit$time,
@@ -94,12 +104,20 @@ phs_km_curve <- function(data,
                       conf.high = if (!is.null(fit$upper)) fit$upper else NA_real_,
                       n.risk = if (!is.null(fit$n.risk)) fit$n.risk else NA_integer_,
                       n.event = if (!is.null(fit$n.event)) fit$n.event else NA_integer_)
-    tib$stratum <- s
+    tib$stratum <- label
     tib
   })
 
   out_df <- do.call(rbind, out_list)
   rownames(out_df) <- NULL
+
+  # Preserve user-specified interval ordering in the legend
+  if (!is.null(out_df) && nrow(out_df) > 0) {
+    out_df$stratum <- factor(
+      out_df$stratum,
+      levels = sapply(interval_list, function(iv) make_label(iv[1], iv[2]))
+    )
+  }
 
   # Clamp survival probabilities and CI bounds to [0, 1] to avoid plotting
   # ribbons that extend beyond the valid probability range due to numeric

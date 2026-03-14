@@ -11,9 +11,21 @@ test_that("phs_km_curve output='data' returns a data.frame with required columns
   expect_true(all(c("time", "estimate", "conf.low", "conf.high", "stratum") %in% names(result)))
 })
 
-test_that("phs_km_curve default breaks c(0.20, 0.80) produces exactly 3 strata levels", {
+test_that("phs_km_curve default intervals produce exactly 4 strata levels", {
   result <- phs_km_curve(test_data, output = "data")
-  expect_equal(length(unique(result$stratum)), 3L)
+  expect_equal(length(unique(result$stratum)), 4L)
+})
+
+test_that("phs_km_curve default interval labels match expected order", {
+  result <- phs_km_curve(test_data, output = "data")
+  expect_equal(levels(result$stratum), c("95-100%", "80-100%", "30-70%", "0-20%"))
+})
+
+test_that("phs_km_curve overlapping intervals produce correct subset counts", {
+  result <- phs_km_curve(test_data,
+                         intervals = list(c(0.80, 1), c(0, 0.20)),
+                         output = "data")
+  expect_equal(levels(result$stratum), c("80-100%", "0-20%"))
 })
 
 test_that("phs_km_curve estimate and CI columns are clamped to [0, 1]", {
@@ -23,18 +35,18 @@ test_that("phs_km_curve estimate and CI columns are clamped to [0, 1]", {
   expect_true(all(result$conf.high >= 0 & result$conf.high <= 1, na.rm = TRUE))
 })
 
-test_that("phs_km_curve numeric breaks produce correct number of strata", {
-  result <- phs_km_curve(test_data, breaks = c(0.33, 0.67), output = "data")
+test_that("phs_km_curve breaks= (legacy) produces correct number of strata", {
+  result <- phs_km_curve(test_data, intervals = NULL, breaks = c(0.33, 0.67), output = "data")
   expect_equal(length(unique(result$stratum)), 3L)
 })
 
 test_that("phs_km_curve 3 numeric breaks produce 4 strata", {
-  result <- phs_km_curve(test_data, breaks = c(0.25, 0.50, 0.75), output = "data")
+  result <- phs_km_curve(test_data, intervals = NULL, breaks = c(0.25, 0.50, 0.75), output = "data")
   expect_equal(length(unique(result$stratum)), 4L)
 })
 
 test_that("phs_km_curve 4 numeric breaks produce 5 strata", {
-  result <- phs_km_curve(test_data, breaks = c(0.20, 0.40, 0.60, 0.80), output = "data")
+  result <- phs_km_curve(test_data, intervals = NULL, breaks = c(0.20, 0.40, 0.60, 0.80), output = "data")
   expect_equal(length(unique(result$stratum)), 5L)
 })
 
