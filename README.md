@@ -31,7 +31,7 @@ To get the current development version (may contain unreleased
 features):
 
 ``` r
-devtools::install_github("amorris28/hazrd@0.2.1-dev")
+devtools::install_github("amorris28/hazrd@dev")
 ```
 
 ## Getting started
