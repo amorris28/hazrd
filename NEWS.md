@@ -6,12 +6,15 @@
   C-index, OR, HR_SD). Returns a tidy tibble with one row per metric.
   Supports built-in bootstrapping via `boot::boot()` with `"percentile"`,
   `"bca"`, and `"normal"` CI methods.
-- `phs_km()` — Kaplan-Meier curves stratified by PHS percentile group.
+- `phs_km_curve()` — Kaplan-Meier curves stratified by PHS percentile group.
   Returns a `ggplot` object by default (`output = "plot"`) or a tidy data
-  frame (`output = "data"`). Includes seven stratification presets
-  (`quantile_3`, `quantile_4`, `quantile_5`, `quantile_10`, `clinical`,
-  `binary_80_20`, `binary_top_bottom`) and a `custom_cuts` override.
+  frame (`output = "data"`). Accepts an `intervals` list for overlapping
+  strata (e.g. 95–100 %, 80–100 %) or a `breaks` vector for exclusive bins.
   Supports a `ref_data` argument for train/validation percentile workflows.
+- `phs_cox_curve()` — Cox model-based survival curves at specified PHS
+  percentiles. Fits a Cox PH model with `phs` as the sole predictor and
+  returns smooth predicted curves at user-supplied percentile values.
+  Supports `ref_data` for train/validation workflows.
 
 ## Deprecated functions
 
@@ -23,7 +26,7 @@ replacement call.
 - `get_or()` → use `phs_metrics(data, metrics = "OR", or_age = ...)`
 - `get_cindex()` → use `phs_metrics(data, metrics = "C_index")`
 - `get_hrsd()` → use `phs_metrics(data, metrics = "HR_SD")`
-- `km_curve()` → use `phs_km()`
+- `km_curve()` → use `phs_km_curve()`
 
 ## Removed functions
 

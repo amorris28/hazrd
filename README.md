@@ -13,27 +13,25 @@ intervals, and Kaplan-Meier curves.
 
 ## Installation
 
-### Github
+### Latest release
 
-To install the most recent release from Github, go to the
-[release](https://github.com/amorris28/hazrd/releases) page, scroll down
-to Assets, and download the “Source code (tar.gz)” file. Then, in `R`,
-run:
+Install the current stable release directly from GitHub:
 
 ``` r
-install.packages("hazrd-0.2.0.tar.gz", repos = NULL, type = "source")
+# install.packages("devtools")
+devtools::install_github("amorris28/hazrd")
 ```
 
-### Using `devtools`
+Installing from the default (`main`) branch is equivalent to installing
+the latest tagged release.
 
-For the development version:
+### Development version
 
-``` bash
-git clone git@github.com:amorris28/hazrd.git
-```
+To get the current development version (may contain unreleased
+features):
 
 ``` r
-devtools::install("hazrd")
+devtools::install_github("amorris28/hazrd@0.2.1-dev")
 ```
 
 ## Getting started
