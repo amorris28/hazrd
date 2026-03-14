@@ -59,11 +59,14 @@ phs_metrics(
   seed      = 42
 )
 
-# Kaplan-Meier plot stratified by PHS percentile (returns a ggplot object)
+# Kaplan-Meier plot with overlapping intervals (returns a ggplot object)
 phs_km_curve(test_data)
 
-# Return tidy data for a custom ggplot
-km_data <- phs_km_curve(test_data, breaks = c(0.20, 0.40, 0.60, 0.80), output = "data")
+# Overlapping intervals — top 5%, top 20%, bottom 20%
+phs_km_curve(test_data, intervals = list(c(0.95, 1), c(0.80, 1), c(0, 0.20)))
+
+# Legacy exclusive bands via breaks
+km_data <- phs_km_curve(test_data, intervals = NULL, breaks = c(0.20, 0.40, 0.60, 0.80), output = "data")
 ```
 
 ## Planned features
