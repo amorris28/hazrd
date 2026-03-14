@@ -1,6 +1,6 @@
 Package: hazrd
 Title: Polygenic Hazard Score with Cox Proportional Hazards Model
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: 
     person(given = "Andrew", 
            family = "Morris", 
