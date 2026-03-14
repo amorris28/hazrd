@@ -13,7 +13,7 @@
 #' @param intervals list of `c(lo, hi)` pairs defining percentile bands, e.g.
 #'   `list(c(0.80, 1), c(0, 0.20))`. Bands may overlap. Takes precedence over
 #'   `breaks` when non-`NULL`. Default produces four bands:
-#'   95-100\%, 80-100\%, 30-70\%, and 0-20\%.
+#'   top 5 (0.95-1), top 20 (0.80-1), middle 40 (0.30-0.70), and bottom 20 (0-0.20).
 #' @param breaks numeric vector of percentile cutpoints strictly in (0, 1)
 #'   used to form exclusive bands (legacy); ignored when `intervals` is non-`NULL`.
 #'   Retained for backward compatibility.

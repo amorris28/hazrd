@@ -78,6 +78,17 @@ Testing & safety notes for code changes
   on exact metric name strings.
 - When modifying exported functions, update roxygen comments in `R/` source
   — run `devtools::document()` to regenerate `NAMESPACE` and `man/` files.
+- **Never use `\%` in roxygen `#'` comments** — the backslash doubles in the
+  generated Rd (`\\%`), where `%` then starts an Rd comment and can corrupt
+  the `\arguments{}` block. Use plain text (e.g. "percent" or "0-20") instead.
+
+## Pre-merge checklist (dev -> main)
+
+Before merging `dev` into `main`, always run these steps in order:
+1. `devtools::document()` — regenerate `NAMESPACE` and `man/` Rd files.
+2. `devtools::check()` — must pass with 0 errors, 0 warnings, 0 notes.
+3. Render `README.md` via the Docker container (see instructions above).
+4. Commit all changed files (`man/`, `NAMESPACE`, `README.md`) before merging.
 
 Good example edits to get started
 - Small bugfix: ensure `or_age` bounds are handled (see `.calc_or_metric`) —
