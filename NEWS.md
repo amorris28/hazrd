@@ -1,3 +1,29 @@
+# hazrd 0.2.2
+
+## New features
+
+- New `phs_abs_risk()` function — cumulative incidence (absolute risk) curves
+  stratified by PHS percentile group. Supports `method = "km"` (1 - KM
+  estimate) and `method = "aalen_johansen"` (Aalen-Johansen competing-risk
+  estimator). Returns either a ggplot object or a tidy data frame. Addresses
+  issue #20.
+  - `strata` argument controls percentile grouping via named presets
+    (`"quantile_2"` through `"quantile_5"`, `"classic"`); `custom_cuts`
+    accepts an arbitrary numeric vector of cutpoints.
+  - When `output = "data"` and `time_points` is supplied, the returned tibble
+    has one row per stratum x time_point.
+  - `method = "fine_gray"` is stubbed and will error with an informative
+    message until implemented.
+
+- `phs_km_curve()` now implements the `risk_table` argument — when
+  `risk_table = TRUE` and `output = "plot"`, a numbers-at-risk strip is
+  attached below the curve using the **patchwork** package (added to
+  `Suggests`). Falls back to a warning and the plain plot when patchwork is
+  not installed. Addresses issue #49.
+
+- `phs_abs_risk()` also supports `risk_table = TRUE` with identical behavior
+  to `phs_km_curve()`.
+
 # hazrd 0.2.1
 
 ## New features

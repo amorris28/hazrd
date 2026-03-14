@@ -20,10 +20,12 @@ library(ggplot2)
 ```
 
 `hazrd` provides a consistent API for computing survival-based discrimination
-metrics and visualizing Kaplan-Meier curves stratified by polygenic hazard score
-(PHS). The primary user-facing functions are `phs_metrics()` for statistics,
-`phs_km_curve()` for Kaplan-Meier plots, and `phs_cox_curve()` for Cox
-model-based survival curves at specified PHS percentiles.
+metrics and visualizing Kaplan-Meier and cumulative incidence curves stratified
+by polygenic hazard score (PHS). The primary user-facing functions are
+`phs_metrics()` for statistics, `phs_km_curve()` for Kaplan-Meier plots,
+`phs_cox_curve()` for Cox model-based survival curves at specified PHS
+percentiles, and `phs_abs_risk()` for cumulative incidence (absolute risk)
+curves.
 
 ## Data
 
@@ -225,4 +227,47 @@ Supply specific percentiles via the `percentiles` argument:
 
 ```{r cox_custom}
 phs_cox_curve(test_data, percentiles = c(0.01, 0.10, 0.50, 0.90, 0.99))
+```
+
+## Cumulative incidence curves with `phs_abs_risk()`
+
+`phs_abs_risk()` computes absolute (cumulative incidence) risk curves for
+percentile-stratified groups. The default `method = "km"` plots 1 minus the
+Kaplan-Meier survival estimate on a percentage scale. When competing risks are
+present, `method = "aalen_johansen"` uses the Aalen-Johansen estimator.
+
+The `intervals` argument works exactly like in `phs_km_curve()` — the default
+four bands (top 5%, top 20%, middle 40%, bottom 20%) are used when `intervals`
+is omitted:
+
+```{r abs_default}
+phs_abs_risk(test_data)
+```
+
+### Custom intervals
+
+```{r abs_custom}
+phs_abs_risk(
+  test_data,
+  intervals = list(c(0.80, 1), c(0.00, 0.20))
+)
+```
+
+### Getting estimates at specific time points
+
+Use `output = "data"` with `time_points` to extract a tidy table of estimates
+at specific ages — useful for reporting absolute risk at clinically meaningful
+time points:
+
+```{r abs_timepoints}
+phs_abs_risk(test_data, time_points = c(60, 70, 80), output = "data")
+```
+
+### Risk table
+
+Set `risk_table = TRUE` to attach a numbers-at-risk strip below the plot.
+This requires the **patchwork** package:
+
+```{r abs_risktable, eval=requireNamespace("patchwork", quietly = TRUE)}
+phs_abs_risk(test_data, risk_table = TRUE)
 ```

@@ -136,3 +136,33 @@ test_that("phs_cox_curve conf_int=FALSE omits ribbon layer from plot", {
   expect_true("GeomRibbon" %in% layers_with)
   expect_false("GeomRibbon" %in% layers_without)
 })
+
+
+# ── phs_km_curve() risk table ─────────────────────────────────────────────────
+
+test_that("phs_km_curve risk_table=FALSE returns a plain ggplot", {
+  p <- phs_km_curve(test_data, risk_table = FALSE)
+  expect_s3_class(p, "ggplot")
+})
+
+test_that("phs_km_curve risk_table=TRUE without patchwork warns and returns ggplot", {
+  skip_if(requireNamespace("patchwork", quietly = TRUE),
+          "patchwork is installed; skipping no-patchwork fallback test")
+  expect_warning(
+    result <- phs_km_curve(test_data, risk_table = TRUE),
+    regexp = "patchwork"
+  )
+  expect_s3_class(result, "ggplot")
+})
+
+test_that("phs_km_curve risk_table=TRUE with patchwork returns a patchwork object", {
+  skip_if_not_installed("patchwork")
+  result <- phs_km_curve(test_data, risk_table = TRUE)
+  expect_true(inherits(result, "patchwork"))
+})
+
+test_that("phs_km_curve risk_table=TRUE does not affect output='data'", {
+  result <- phs_km_curve(test_data, risk_table = TRUE, output = "data")
+  expect_s3_class(result, "data.frame")
+  expect_true("n.risk" %in% names(result))
+})

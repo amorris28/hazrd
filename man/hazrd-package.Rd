@@ -6,7 +6,7 @@
 \alias{hazrd-package}
 \title{hazrd: Polygenic Hazard Score with Cox Proportional Hazards Model}
 \description{
-Tools to evaluate and visualize Polygenic Hazard Score (PHS) analyses. Provides a consistent API for computing survival-based discrimination metrics (hazard ratio, C-index, odds ratio, HR per SD), bootstrapped confidence intervals, and Kaplan-Meier curves stratified by PHS percentile group.
+Tools to evaluate and visualize Polygenic Hazard Score (PHS) analyses. Provides a consistent API for computing survival-based discrimination metrics (hazard ratio, C-index, odds ratio, HR per SD), bootstrapped confidence intervals, Kaplan-Meier curves, and cumulative incidence (absolute risk) curves stratified by PHS percentile group.
 }
 \seealso{
 Useful links:
