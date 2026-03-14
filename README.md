@@ -9,7 +9,8 @@ hazrd
 `hazrd` is an R package for evaluating and visualizing Polygenic Hazard
 Score (PHS) analyses. It provides a consistent, tidy-first API for
 computing survival-based discrimination metrics, bootstrapped confidence
-intervals, and Kaplan-Meier curves.
+intervals, Kaplan-Meier curves, and cumulative incidence (absolute risk)
+curves.
 
 ## Installation
 
@@ -59,11 +60,17 @@ phs_metrics(
   seed      = 42
 )
 
-# Kaplan-Meier plot with overlapping intervals (returns a ggplot object)
+# Kaplan-Meier plot — default overlapping intervals
 phs_km_curve(test_data)
 
 # Overlapping intervals — top 5%, top 20%, bottom 20%
 phs_km_curve(test_data, intervals = list(c(0.95, 1), c(0.80, 1), c(0, 0.20)))
+
+# Cumulative incidence (absolute risk) curves
+phs_abs_risk(test_data)
+
+# Absolute risk at specific time points as a tidy table
+phs_abs_risk(test_data, time_points = c(60, 70, 80), output = "data")
 
 # Legacy exclusive bands via breaks
 km_data <- phs_km_curve(test_data, intervals = NULL, breaks = c(0.20, 0.40, 0.60, 0.80), output = "data")
@@ -74,9 +81,6 @@ km_data <- phs_km_curve(test_data, intervals = NULL, breaks = c(0.20, 0.40, 0.60
 The following are on the roadmap for future releases. Contributions
 welcome.
 
-- **`phs_abs_risk()`** — absolute (cumulative incidence) risk curves
-  with competing risk support (`km`, `aalen_johansen`, `fine_gray`
-  methods)
 - **`phs_percentile()`** — compute percentile ranks; optionally relative
   to a reference population via `ref_data`
 - **`phs_cut()`** — assign individuals to percentile strata with
@@ -91,7 +95,5 @@ welcome.
   data (`cindex_method = "uno"` in `phs_metrics()`)
 - **Parallel bootstrap** — `parallel = "multicore"` / `"snow"` via
   `boot::boot()` (argument exists; only `"no"` is currently active)
-- **Risk table** — numbers-at-risk appended below KM curves
-  (`risk_table = TRUE` in `phs_km()`)
 - **Alternative HR methods** — `continuous_point` and `categorical`
   (`hr_method` argument in `phs_metrics()`; stubs exist)
