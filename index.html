@@ -57,20 +57,20 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="section level3">
-<h3 id="github">Github<a class="anchor" aria-label="anchor" href="#github"></a>
+<h3 id="latest-release">Latest release<a class="anchor" aria-label="anchor" href="#latest-release"></a>
 </h3>
-<p>To install the most recent release from Github, go to the <a href="https://github.com/amorris28/hazrd/releases" class="external-link">release</a> page, scroll down to Assets, and download the “Source code (tar.gz)” file. Then, in <code>R</code>, run:</p>
+<p>Install the current stable release directly from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"hazrd-0.2.0.tar.gz"</span>, repos <span class="op">=</span> <span class="cn">NULL</span>, type <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"amorris28/hazrd"</span><span class="op">)</span></span></code></pre></div>
+<p>Installing from the default (<code>main</code>) branch is equivalent to installing the latest tagged release.</p>
 </div>
 <div class="section level3">
-<h3 id="using-devtools">Using <code>devtools</code>
-<a class="anchor" aria-label="anchor" href="#using-devtools"></a>
+<h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
 </h3>
-<p>For the development version:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">git</span> clone git@github.com:amorris28/hazrd.git</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install</span><span class="op">(</span><span class="st">"hazrd"</span><span class="op">)</span></span></code></pre></div>
+<p>To get the current development version (may contain unreleased features):</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"amorris28/hazrd@dev"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -81,7 +81,7 @@
 <div class="section level2">
 <h2 id="quick-example">Quick example<a class="anchor" aria-label="anchor" href="#quick-example"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://amorris28.github.io/hazrd/">hazrd</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Compute HR, C-index, OR, and HR_SD in one call</span></span>

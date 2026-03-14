@@ -10,13 +10,18 @@
   built-in bootstrapping via
   [`boot::boot()`](https://rdrr.io/pkg/boot/man/boot.html) with
   `"percentile"`, `"bca"`, and `"normal"` CI methods.
-- `phs_km()` — Kaplan-Meier curves stratified by PHS percentile group.
-  Returns a `ggplot` object by default (`output = "plot"`) or a tidy
-  data frame (`output = "data"`). Includes seven stratification presets
-  (`quantile_3`, `quantile_4`, `quantile_5`, `quantile_10`, `clinical`,
-  `binary_80_20`, `binary_top_bottom`) and a `custom_cuts` override.
-  Supports a `ref_data` argument for train/validation percentile
+- [`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md)
+  — Kaplan-Meier curves stratified by PHS percentile group. Returns a
+  `ggplot` object by default (`output = "plot"`) or a tidy data frame
+  (`output = "data"`). Accepts an `intervals` list for overlapping
+  strata (e.g. 95–100 %, 80–100 %) or a `breaks` vector for exclusive
+  bins. Supports a `ref_data` argument for train/validation percentile
   workflows.
+- [`phs_cox_curve()`](https://amorris28.github.io/hazrd/reference/phs_cox_curve.md)
+  — Cox model-based survival curves at specified PHS percentiles. Fits a
+  Cox PH model with `phs` as the sole predictor and returns smooth
+  predicted curves at user-supplied percentile values. Supports
+  `ref_data` for train/validation workflows.
 
 ### Deprecated functions
 
@@ -33,7 +38,8 @@ to the replacement call.
 - [`get_hrsd()`](https://amorris28.github.io/hazrd/reference/get_hrsd.md)
   → use `phs_metrics(data, metrics = "HR_SD")`
 - [`km_curve()`](https://amorris28.github.io/hazrd/reference/km_curve.md)
-  → use `phs_km()`
+  → use
+  [`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md)
 
 ### Removed functions
 

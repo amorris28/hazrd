@@ -233,13 +233,13 @@ the survival estimates on to further analysis:
 ``` r
 km_data <- phs_km_curve(test_data, output = "data")
 head(km_data)
-#>       time estimate conf.low conf.high n.risk n.event stratum
-#> 1 42.92288        1        1         1    199       0   0-20%
-#> 2 43.64664        1        1         1    198       0   0-20%
-#> 3 44.88269        1        1         1    197       0   0-20%
-#> 4 47.17180        1        1         1    196       0   0-20%
-#> 5 48.21010        1        1         1    195       0   0-20%
-#> 6 48.52730        1        1         1    194       0   0-20%
+#>       time  estimate  conf.low conf.high n.risk n.event stratum
+#> 1 44.30748 1.0000000 1.0000000 1.0000000     51       0 95-100%
+#> 2 47.04070 0.9800000 0.9419529 1.0000000     50       1 95-100%
+#> 3 48.14581 0.9800000 0.9419529 1.0000000     49       0 95-100%
+#> 4 48.58741 0.9595833 0.9062444 1.0000000     48       1 95-100%
+#> 5 51.75902 0.9391667 0.8747578 1.0000000     47       1 95-100%
+#> 6 52.01547 0.9187500 0.8454998 0.9983463     46       1 95-100%
 ```
 
 The returned data frame has columns `time`, `estimate`, `conf.low`,

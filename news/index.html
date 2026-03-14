@@ -40,7 +40,9 @@
 <ul><li>
 <code><a href="../reference/phs_metrics.html">phs_metrics()</a></code> — single entry point for all discrimination metrics (HR, C-index, OR, HR_SD). Returns a tidy tibble with one row per metric. Supports built-in bootstrapping via <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code> with <code>"percentile"</code>, <code>"bca"</code>, and <code>"normal"</code> CI methods.</li>
 <li>
-<code>phs_km()</code> — Kaplan-Meier curves stratified by PHS percentile group. Returns a <code>ggplot</code> object by default (<code>output = "plot"</code>) or a tidy data frame (<code>output = "data"</code>). Includes seven stratification presets (<code>quantile_3</code>, <code>quantile_4</code>, <code>quantile_5</code>, <code>quantile_10</code>, <code>clinical</code>, <code>binary_80_20</code>, <code>binary_top_bottom</code>) and a <code>custom_cuts</code> override. Supports a <code>ref_data</code> argument for train/validation percentile workflows.</li>
+<code><a href="../reference/phs_km_curve.html">phs_km_curve()</a></code> — Kaplan-Meier curves stratified by PHS percentile group. Returns a <code>ggplot</code> object by default (<code>output = "plot"</code>) or a tidy data frame (<code>output = "data"</code>). Accepts an <code>intervals</code> list for overlapping strata (e.g. 95–100 %, 80–100 %) or a <code>breaks</code> vector for exclusive bins. Supports a <code>ref_data</code> argument for train/validation percentile workflows.</li>
+<li>
+<code><a href="../reference/phs_cox_curve.html">phs_cox_curve()</a></code> — Cox model-based survival curves at specified PHS percentiles. Fits a Cox PH model with <code>phs</code> as the sole predictor and returns smooth predicted curves at user-supplied percentile values. Supports <code>ref_data</code> for train/validation workflows.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="deprecated-functions-0-2-0">Deprecated functions<a class="anchor" aria-label="anchor" href="#deprecated-functions-0-2-0"></a></h3>
@@ -58,7 +60,7 @@
 <code><a href="../reference/get_hrsd.html">get_hrsd()</a></code> → use <code>phs_metrics(data, metrics = "HR_SD")</code>
 </li>
 <li>
-<code><a href="../reference/km_curve.html">km_curve()</a></code> → use <code>phs_km()</code>
+<code><a href="../reference/km_curve.html">km_curve()</a></code> → use <code><a href="../reference/phs_km_curve.html">phs_km_curve()</a></code>
 </li>
 </ul></div>
 <div class="section level3">
