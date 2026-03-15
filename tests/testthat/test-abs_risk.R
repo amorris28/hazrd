@@ -114,25 +114,14 @@ test_that("phs_abs_risk missing column in data errors informatively", {
                regexp = "not found in data")
 })
 
-# ── phs_abs_risk() risk table ─────────────────────────────────────────────────
+# ── phs_risk_table() ─────────────────────────────────────────────────────────
 
-test_that("phs_abs_risk risk_table=FALSE returns a plain ggplot", {
-  p <- phs_abs_risk(test_data, risk_table = FALSE)
-  expect_s3_class(p, "ggplot")
+test_that("phs_risk_table returns a ggplot", {
+  rt <- phs_risk_table(test_data)
+  expect_s3_class(rt, "ggplot")
 })
 
-test_that("phs_abs_risk risk_table=TRUE without patchwork warns and returns ggplot", {
-  skip_if(requireNamespace("patchwork", quietly = TRUE),
-          "patchwork is installed; skipping no-patchwork fallback test")
-  expect_warning(
-    result <- phs_abs_risk(test_data, risk_table = TRUE),
-    regexp = "patchwork"
-  )
-  expect_s3_class(result, "ggplot")
-})
-
-test_that("phs_abs_risk risk_table=TRUE with patchwork returns a patchwork object", {
-  skip_if_not_installed("patchwork")
-  result <- phs_abs_risk(test_data, risk_table = TRUE)
-  expect_true(inherits(result, "patchwork"))
+test_that("phs_risk_table respects intervals argument", {
+  rt <- phs_risk_table(test_data, intervals = list(c(0.80, 1), c(0, 0.20)))
+  expect_s3_class(rt, "ggplot")
 })

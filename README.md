@@ -72,6 +72,10 @@ phs_abs_risk(test_data)
 # Absolute risk at specific time points as a tidy table
 phs_abs_risk(test_data, time_points = c(60, 70, 80), output = "data")
 
+# Numbers-at-risk table combined with the curve
+p <- phs_abs_risk(test_data)
+attach_risk_table(p, test_data)
+
 # Legacy exclusive bands via breaks
 km_data <- phs_km_curve(test_data, intervals = NULL, breaks = c(0.20, 0.40, 0.60, 0.80), output = "data")
 ```

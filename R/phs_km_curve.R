@@ -22,7 +22,6 @@
 #' @param conf_int logical; include confidence intervals in output/plot
 #' @param conf_int_alpha numeric; alpha for confidence ribbons when plotting
 #' @param palette string; name of color palette to use for plots (default: 'hazrd')
-#' @param risk_table logical; if TRUE returns numbers-at-risk in the data output (experimental)
 #' @param ... additional args (reserved)
 #'
 #' @return ggplot object (when output = 'plot') or data.frame (when output = 'data')
@@ -40,7 +39,6 @@ phs_km_curve <- function(data,
                    conf_int = TRUE,
                    conf_int_alpha = 0.15,
                    palette = "hazrd",
-                   risk_table = FALSE,
                    ...) {
 
   # ── input validation ─────────────────────────────────────────────
@@ -158,87 +156,9 @@ phs_km_curve <- function(data,
       ggplot2::scale_fill_brewer(palette = "Set1")
   }
 
-  if (risk_table) {
-    return(.attach_risk_table(p, out_df, x_range = x_range, palette = palette))
-  }
-
   p
 }
 
-# ── Internal: risk table helpers ─────────────────────────────────────────────
+utils::globalVariables(c("estimate", "conf.low", "conf.high", "time", "stratum"))
 
-# For each stratum, look up n.risk at each requested time point using the
-# step-function semantics: at time t, report the n.risk recorded at the
-# last observed event time <= t.  Before the first event, use the largest
-# n.risk in the stratum as a proxy for the initial at-risk count.
-.risk_at_times <- function(out_df, risk_times) {
-  strata_levels <- levels(out_df$stratum)
-  result <- lapply(strata_levels, function(s) {
-    sub <- out_df[out_df$stratum == s, , drop = FALSE]
-    n_at_t <- vapply(risk_times, function(t) {
-      prior_idx <- which(sub$time <= t)
-      if (length(prior_idx) == 0L) {
-        max(sub$n.risk, na.rm = TRUE)
-      } else {
-        sub$n.risk[max(prior_idx)]
-      }
-    }, numeric(1L))
-    data.frame(
-      time    = risk_times,
-      stratum = factor(s, levels = strata_levels),
-      n_risk  = as.integer(round(n_at_t)),
-      stringsAsFactors = FALSE
-    )
-  })
-  do.call(rbind, result)
-}
 
-# Build a ggplot text-table showing at-risk counts per stratum per time point.
-# Strata are listed bottom-to-top (reversed) so the top-most row in the table
-# corresponds to the first legend entry of the survival curve above it.
-.build_risk_table_gg <- function(risk_tbl, x_range, palette = "hazrd") {
-  orig_levels        <- levels(risk_tbl$stratum)
-  risk_tbl$stratum   <- factor(risk_tbl$stratum, levels = rev(orig_levels))
-  p <- ggplot2::ggplot(risk_tbl,
-                       ggplot2::aes(x = time, y = stratum,
-                                    label = n_risk, color = stratum)) +
-    ggplot2::geom_text(size = 3.2, show.legend = FALSE) +
-    ggplot2::scale_x_continuous(limits = x_range) +
-    ggplot2::labs(x = "Time", y = NULL, title = "Number at risk") +
-    ggplot2::theme_minimal() +
-    ggplot2::theme(
-      axis.text.x  = ggplot2::element_blank(),
-      axis.ticks.x = ggplot2::element_blank(),
-      panel.grid   = ggplot2::element_blank(),
-      plot.title   = ggplot2::element_text(size = 9, face = "plain"),
-      plot.margin  = ggplot2::margin(0, 5.5, 5.5, 5.5)
-    )
-  if (identical(palette, "hazrd")) {
-    p <- p + ggplot2::scale_color_brewer(palette = "Set1", drop = FALSE)
-  }
-  p
-}
-
-# Combine a survival/CIF plot with a risk table strip using patchwork.
-# Falls back to returning the plain plot with a warning when patchwork is
-# not installed.
-.attach_risk_table <- function(p_main, out_df, x_range, palette = "hazrd") {
-  if (!requireNamespace("patchwork", quietly = TRUE)) {
-    warning(
-      "Package 'patchwork' is required to display a risk table. ",
-      "Install it with install.packages('patchwork'). ",
-      "Returning the plot without a risk table.",
-      call. = FALSE
-    )
-    return(p_main)
-  }
-  risk_times <- pretty(x_range, n = 5L)
-  risk_times <- risk_times[risk_times >= x_range[1] & risk_times <= x_range[2]]
-  if (length(risk_times) == 0L) risk_times <- x_range
-  risk_tbl <- .risk_at_times(out_df, risk_times)
-  p_risk   <- .build_risk_table_gg(risk_tbl, x_range = x_range, palette = palette)
-  patchwork::wrap_plots(p_main, p_risk, ncol = 1L, heights = c(3, 1))
-}
-
-utils::globalVariables(c("estimate", "conf.low", "conf.high", "time", "stratum",
-                          "percentile", "n_risk"))

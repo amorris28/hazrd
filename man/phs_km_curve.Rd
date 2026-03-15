@@ -16,7 +16,6 @@ phs_km_curve(
   conf_int = TRUE,
   conf_int_alpha = 0.15,
   palette = "hazrd",
-  risk_table = FALSE,
   ...
 )
 }
@@ -47,8 +46,6 @@ Retained for backward compatibility.}
 \item{conf_int_alpha}{numeric; alpha for confidence ribbons when plotting}
 
 \item{palette}{string; name of color palette to use for plots (default: 'hazrd')}
-
-\item{risk_table}{logical; if TRUE returns numbers-at-risk in the data output (experimental)}
 
 \item{...}{additional args (reserved)}
 }

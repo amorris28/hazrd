@@ -126,7 +126,8 @@ This is the full workflow from issue to merged release. Work is done on `dev`;
 
 ### 5. Post-merge
 - [ ] `git checkout dev` — continue future work on `dev`
-- [ ] Bump `DESCRIPTION` version to next dev version (e.g. `0.2.2.9000`) on `dev`
+- [ ] Run `usethis::use_dev_version()` on `dev` to bump `DESCRIPTION` to the next
+  dev version (e.g. `0.2.2` → `0.2.2.9000`); commit the result
 
 
 Good example edits to get started

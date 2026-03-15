@@ -35,9 +35,6 @@
 #' @param conf_int_alpha numeric; transparency for CI ribbons when plotting
 #'   (default 0.15).
 #' @param palette string; color palette name (default `"hazrd"`).
-#' @param risk_table logical; if TRUE and `output = "plot"`, attach a
-#'   numbers-at-risk table below the plot. Requires the
-#'   \pkg{patchwork} package (default FALSE).
 #' @param ... additional arguments (reserved for future use).
 #'
 #' @return A ggplot object when `output = "plot"`, or a tidy data frame when
@@ -82,7 +79,6 @@ phs_abs_risk <- function(
     conf_int        = TRUE,
     conf_int_alpha  = 0.15,
     palette         = "hazrd",
-    risk_table      = FALSE,
     ...) {
 
   # ── input validation ────────────────────────────────────────────────────────
@@ -227,10 +223,6 @@ phs_abs_risk <- function(
     p <- p +
       ggplot2::scale_color_brewer(palette = "Set1") +
       ggplot2::scale_fill_brewer(palette = "Set1")
-  }
-
-  if (risk_table) {
-    return(.attach_risk_table(p, out_df, x_range = x_range, palette = palette))
   }
 
   p

@@ -128,3 +128,5 @@ phs_cox_curve <- function(data,
 
   p
 }
+
+utils::globalVariables(c("percentile", "estimate", "conf.low", "conf.high", "time"))

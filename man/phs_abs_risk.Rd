@@ -18,7 +18,6 @@ phs_abs_risk(
   conf_int = TRUE,
   conf_int_alpha = 0.15,
   palette = "hazrd",
-  risk_table = FALSE,
   ...
 )
 }
@@ -65,10 +64,6 @@ returned.}
 (default 0.15).}
 
 \item{palette}{string; color palette name (default \code{"hazrd"}).}
-
-\item{risk_table}{logical; if TRUE and \code{output = "plot"}, attach a
-numbers-at-risk table below the plot. Requires the
-\pkg{patchwork} package (default FALSE).}
 
 \item{...}{additional arguments (reserved for future use).}
 }

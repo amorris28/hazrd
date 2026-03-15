@@ -265,9 +265,25 @@ phs_abs_risk(test_data, time_points = c(60, 70, 80), output = "data")
 
 ### Risk table
 
-Set `risk_table = TRUE` to attach a numbers-at-risk strip below the plot.
-This requires the **patchwork** package:
+Use `phs_risk_table()` to build a numbers-at-risk strip as a standalone ggplot,
+then combine it with your curve plot using `attach_risk_table()` or patchwork
+directly. This keeps both objects as editable ggplots so you can customise them
+independently before combining.
 
 ```{r abs_risktable, eval=requireNamespace("patchwork", quietly = TRUE)}
-phs_abs_risk(test_data, risk_table = TRUE)
+# Quick usage: let attach_risk_table() build the table from the data
+p <- phs_abs_risk(test_data)
+attach_risk_table(p, test_data)
+```
+
+For publication-ready plots, build and customise each object separately, then
+combine. The `time_points` argument controls at which ages columns appear:
+
+```{r abs_risktable_custom, eval=requireNamespace("patchwork", quietly = TRUE)}
+library(patchwork)
+
+p  <- phs_abs_risk(test_data) + ggplot2::theme_classic()
+rt <- phs_risk_table(test_data, time_points = c(55, 65, 75, 85))
+
+p / rt + plot_layout(heights = c(3, 1))
 ```
