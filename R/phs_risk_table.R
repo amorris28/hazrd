@@ -173,13 +173,12 @@ utils::globalVariables(c("n_risk", "stratum", "time"))
 #' rt <- phs_risk_table(test_data, time_points = c(55, 65, 75, 85))
 #' attach_risk_table(p, rt)
 #'
-#' @importFrom ggplot2 is.ggplot
 #' @export
 attach_risk_table <- function(plot, risk_table, heights = c(3, 1), ...) {
-  if (!ggplot2::is.ggplot(plot))
+  if (!inherits(plot, "ggplot"))
     stop("'plot' must be a ggplot object.")
 
-  if (!ggplot2::is.ggplot(risk_table)) {
+  if (!inherits(risk_table, "ggplot")) {
     if (!is.data.frame(risk_table))
       stop("'risk_table' must be a ggplot object or a data.frame.")
     risk_table <- phs_risk_table(risk_table, ...)
