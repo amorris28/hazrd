@@ -175,7 +175,6 @@ any ggplot2 layers, themes, or scales:
 
 ```{r km_styled}
 phs_km_curve(test_data) +
-  theme_classic(base_size = 13) +
   labs(
     title = "Disease-free Survival by PHS Percentile",
     x     = "Age (years)",
@@ -282,7 +281,7 @@ combine. The `time_points` argument controls at which ages columns appear:
 ```{r abs_risktable_custom, eval=requireNamespace("patchwork", quietly = TRUE)}
 library(patchwork)
 
-p  <- phs_abs_risk(test_data) + ggplot2::theme_classic()
+p  <- phs_abs_risk(test_data)
 rt <- phs_risk_table(test_data, time_points = c(55, 65, 75, 85))
 
 p / rt + plot_layout(heights = c(3, 1))
