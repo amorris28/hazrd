@@ -7,22 +7,23 @@
   estimate) and `method = "aalen_johansen"` (Aalen-Johansen competing-risk
   estimator). Returns either a ggplot object or a tidy data frame. Addresses
   issue #20.
-  - `strata` argument controls percentile grouping via named presets
-    (`"quantile_2"` through `"quantile_5"`, `"classic"`); `custom_cuts`
-    accepts an arbitrary numeric vector of cutpoints.
+  - The `intervals` argument (a list of `c(lo, hi)` percentile pairs) controls
+    stratification, matching the interface of `phs_km_curve()`.
   - When `output = "data"` and `time_points` is supplied, the returned tibble
     has one row per stratum x time_point.
   - `method = "fine_gray"` is stubbed and will error with an informative
     message until implemented.
 
-- `phs_km_curve()` now implements the `risk_table` argument — when
-  `risk_table = TRUE` and `output = "plot"`, a numbers-at-risk strip is
-  attached below the curve using the **patchwork** package (added to
-  `Suggests`). Falls back to a warning and the plain plot when patchwork is
-  not installed. Addresses issue #49.
+- New `phs_risk_table()` function — builds a numbers-at-risk strip as a
+  standalone ggplot object, compatible with any `phs_abs_risk()` or
+  `phs_km_curve()` plot. The `time_points` argument controls at which ages
+  columns appear. Addresses issue #49.
 
-- `phs_abs_risk()` also supports `risk_table = TRUE` with identical behavior
-  to `phs_km_curve()`.
+- New `attach_risk_table()` function — combines a curve plot with a risk table
+  using **patchwork** (added to `Suggests`). Accepts either a pre-built
+  `phs_risk_table()` ggplot or a raw data frame (in which case
+  `phs_risk_table()` is called internally). Errors informatively when
+  patchwork is not installed.
 
 # hazrd 0.2.1
 
