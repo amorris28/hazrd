@@ -60,9 +60,7 @@
 #'   intervals = list(c(0.80, 1), c(0, 0.20)))
 #'
 #' @importFrom survival survfit Surv
-#' @importFrom ggplot2 ggplot aes geom_step geom_ribbon labs
-#'   scale_color_brewer scale_fill_brewer scale_x_continuous
-#'   scale_y_continuous theme_minimal
+#' @importFrom ggplot2 ggplot aes geom_step geom_ribbon labs scale_color_brewer scale_fill_brewer scale_x_continuous scale_y_continuous theme_minimal
 #' @importFrom scales percent_format
 #' @export
 phs_abs_risk <- function(

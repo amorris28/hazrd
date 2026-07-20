@@ -1,6 +1,6 @@
 Package: hazrd
 Title: Polygenic Hazard Score with Cox Proportional Hazards Model
-Version: 0.2.1.9000
+Version: 0.2.2
 Authors@R: 
     person(given = "Andrew", 
            family = "Morris", 
@@ -24,7 +24,6 @@ Imports:
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Suggests: 
     knitr,
     patchwork,
@@ -36,3 +35,4 @@ LazyDataCompression: bzip2
 URL: https://amorris28.github.io/hazrd/
 BugReports: https://github.com/amorris28/hazrd/issues
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0

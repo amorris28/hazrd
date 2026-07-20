@@ -66,9 +66,9 @@ one call. Each element should be a named list with \code{numerator} and
 [lower, upper] percentile boundaries of each band. Cannot be combined
 with \code{hr_numerator}/\code{hr_denominator}. Example:
 \preformatted{hr_pairs = list(
-    list(numerator = c(0.80, 1.00), denominator = c(0.00, 0.20)),
-    list(numerator = c(0.80, 1.00), denominator = c(0.40, 0.60))
-  )}}
+  list(numerator = c(0.80, 1.00), denominator = c(0.00, 0.20)),
+  list(numerator = c(0.80, 1.00), denominator = c(0.40, 0.60))
+)}}
 
 \item{cindex_method}{the method to use for C-index calculation. One of
 \code{"harrell"} (default) or \code{"uno"} (not yet implemented).}
