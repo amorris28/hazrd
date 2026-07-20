@@ -62,14 +62,12 @@ column order; keep that contract when adding new metrics.
 
 Build / test / debug workflows (commands you can run locally) - Install
 dev version: in R: `devtools::install("/path/to/hazrd")` or
-[`devtools::build()`](https://devtools.r-lib.org/reference/build.html)
-then `install.packages(..., repos = NULL, type = "source")`. - Run
-package tests: in R:
-[`devtools::test()`](https://devtools.r-lib.org/reference/test.html) or
-from shell: R -e ‘devtools::test()’ - Run R CMD check: from repo root: R
-CMD check –as-cran . - The repo has a GitHub Action `R-CMD-check.yaml`
-(see badge in `README.md`) — mimic the action’s R versions if
-reproducing CI locally.
+`devtools::build()` then
+`install.packages(..., repos = NULL, type = "source")`. - Run package
+tests: in R: `devtools::test()` or from shell: R -e ‘devtools::test()’ -
+Run R CMD check: from repo root: R CMD check –as-cran . - The repo has a
+GitHub Action `R-CMD-check.yaml` (see badge in `README.md`) — mimic the
+action’s R versions if reproducing CI locally.
 
 Integration points & external deps - Declared imports in `DESCRIPTION`:
 `boot`, `dplyr`, `ggplot2`, `survival`, `tibble`, `tidyr`, `scales`. Use
@@ -84,12 +82,11 @@ Testing & safety notes for code changes - Add unit tests to
 The package uses `testthat` edition 3. - Keep the reported metric names
 stable: tests and `bootstrap` matching rely on exact metric name
 strings. - When modifying exported functions, update roxygen comments in
-`R/` source — run
-[`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
-to regenerate `NAMESPACE` and `man/` files. - **Never use `\%` in
-roxygen `#'` comments** — the backslash doubles in the generated Rd
-(`\\%`), where `%` then starts an Rd comment and can corrupt the
-`\arguments{}` block. Use plain text (e.g. “percent” or “0-20”) instead.
+`R/` source — run `devtools::document()` to regenerate `NAMESPACE` and
+`man/` files. - **Never use `\%` in roxygen `#'` comments** — the
+backslash doubles in the generated Rd (`\\%`), where `%` then starts an
+Rd comment and can corrupt the `\arguments{}` block. Use plain text
+(e.g. “percent” or “0-20”) instead.
 
 ## Pre-merge checklist (dev -\> main)
 
@@ -112,9 +109,8 @@ any changed or new exported functions
 - Never use `\%` in roxygen comments — use plain text (“percent” or
   “0-20”) instead; see safety notes above
 
-**[`devtools::document()`](https://devtools.r-lib.org/reference/document.html)**
-— regenerate `NAMESPACE` and all `man/` Rd files; commit any changed
-files in `man/` and `NAMESPACE`
+**`devtools::document()`** — regenerate `NAMESPACE` and all `man/` Rd
+files; commit any changed files in `man/` and `NAMESPACE`
 
 **`NEWS.md`** — add an entry under the current version heading
 describing new features, fixes, and breaking changes
@@ -134,11 +130,9 @@ Commit the updated `README.md`
 
 ### 3. Final checks (on `dev`, before merge)
 
-**[`devtools::check()`](https://devtools.r-lib.org/reference/check.html)**
-— must pass with 0 errors, 0 warnings, 0 notes
+**`devtools::check()`** — must pass with 0 errors, 0 warnings, 0 notes
 
-**[`devtools::test()`](https://devtools.r-lib.org/reference/test.html)**
-— all tests green
+**`devtools::test()`** — all tests green
 
 Commit everything; confirm `git status` is clean
 
@@ -159,10 +153,8 @@ automatically)
 
 `git checkout dev` — continue future work on `dev`
 
-Run
-[`usethis::use_dev_version()`](https://usethis.r-lib.org/reference/use_version.html)
-on `dev` to bump `DESCRIPTION` to the next dev version (e.g. `0.2.2` →
-`0.2.2.9000`); commit the result
+Run `usethis::use_dev_version()` on `dev` to bump `DESCRIPTION` to the
+next dev version (e.g. `0.2.2` → `0.2.2.9000`); commit the result
 
 Good example edits to get started - Small bugfix: ensure `or_age` bounds
 are handled (see `.calc_or_metric`) — add test covering an `or_age`

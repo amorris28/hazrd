@@ -67,4 +67,7 @@ if (requireNamespace("patchwork", quietly = TRUE)) {
   rt <- phs_risk_table(test_data, time_points = c(55, 65, 75, 85))
   attach_risk_table(p, rt)
 }
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_ribbon()`).
+
 ```

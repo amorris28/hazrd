@@ -399,7 +399,11 @@ you can customise them independently before combining.
 # Quick usage: let attach_risk_table() build the table from the data
 p <- phs_abs_risk(test_data)
 attach_risk_table(p, test_data)
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_ribbon()`).
 ```
+
+![](hazrd_files/figure-html/abs_risktable-1.png)
 
 For publication-ready plots, build and customise each object separately,
 then combine. The `time_points` argument controls at which ages columns
@@ -413,4 +417,8 @@ p  <- phs_abs_risk(test_data)
 rt <- phs_risk_table(test_data, time_points = c(55, 65, 75, 85))
 
 p / rt + plot_layout(heights = c(3, 1))
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_ribbon()`).
 ```
+
+![](hazrd_files/figure-html/abs_risktable_custom-1.png)

@@ -30,7 +30,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/amorris28/hazrd/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/amorris28/hazrd/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
@@ -39,14 +39,13 @@
 <h3 id="new-features-0-2-2">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-2"></a></h3>
 <ul><li>
 <p>New <code><a href="../reference/phs_abs_risk.html">phs_abs_risk()</a></code> function — cumulative incidence (absolute risk) curves stratified by PHS percentile group. Supports <code>method = "km"</code> (1 - KM estimate) and <code>method = "aalen_johansen"</code> (Aalen-Johansen competing-risk estimator). Returns either a ggplot object or a tidy data frame. Addresses issue <a href="https://github.com/amorris28/hazrd/issues/20" class="external-link">#20</a>.</p>
-<ul><li>
-<code>strata</code> argument controls percentile grouping via named presets (<code>"quantile_2"</code> through <code>"quantile_5"</code>, <code>"classic"</code>); <code>custom_cuts</code> accepts an arbitrary numeric vector of cutpoints.</li>
+<ul><li>The <code>intervals</code> argument (a list of <code>c(lo, hi)</code> percentile pairs) controls stratification, matching the interface of <code><a href="../reference/phs_km_curve.html">phs_km_curve()</a></code>.</li>
 <li>When <code>output = "data"</code> and <code>time_points</code> is supplied, the returned tibble has one row per stratum x time_point.</li>
 <li>
 <code>method = "fine_gray"</code> is stubbed and will error with an informative message until implemented.</li>
 </ul></li>
-<li><p><code><a href="../reference/phs_km_curve.html">phs_km_curve()</a></code> now implements the <code>risk_table</code> argument — when <code>risk_table = TRUE</code> and <code>output = "plot"</code>, a numbers-at-risk strip is attached below the curve using the <strong>patchwork</strong> package (added to <code>Suggests</code>). Falls back to a warning and the plain plot when patchwork is not installed. Addresses issue <a href="https://github.com/amorris28/hazrd/issues/49" class="external-link">#49</a>.</p></li>
-<li><p><code><a href="../reference/phs_abs_risk.html">phs_abs_risk()</a></code> also supports <code>risk_table = TRUE</code> with identical behavior to <code><a href="../reference/phs_km_curve.html">phs_km_curve()</a></code>.</p></li>
+<li><p>New <code><a href="../reference/phs_risk_table.html">phs_risk_table()</a></code> function — builds a numbers-at-risk strip as a standalone ggplot object, compatible with any <code><a href="../reference/phs_abs_risk.html">phs_abs_risk()</a></code> or <code><a href="../reference/phs_km_curve.html">phs_km_curve()</a></code> plot. The <code>time_points</code> argument controls at which ages columns appear. Addresses issue <a href="https://github.com/amorris28/hazrd/issues/49" class="external-link">#49</a>.</p></li>
+<li><p>New <code><a href="../reference/attach_risk_table.html">attach_risk_table()</a></code> function — combines a curve plot with a risk table using <strong>patchwork</strong> (added to <code>Suggests</code>). Accepts either a pre-built <code><a href="../reference/phs_risk_table.html">phs_risk_table()</a></code> ggplot or a raw data frame (in which case <code><a href="../reference/phs_risk_table.html">phs_risk_table()</a></code> is called internally). Errors informatively when patchwork is not installed.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -64,7 +63,7 @@
 <div class="section level3">
 <h3 id="documentation-0-2-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-2-1"></a></h3>
 <ul><li>Vignette updated with overlapping intervals examples and <code>breaks</code> legacy usage.</li>
-<li>README installation section updated to use <code><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">devtools::install_github()</a></code>; dev-branch instructions added (<code>@dev</code>).</li>
+<li>README installation section updated to use <code>devtools::install_github()</code>; dev-branch instructions added (<code>@dev</code>).</li>
 <li>
 <code>NEWS.md</code> corrected: function name <code>phs_km</code> -&gt; <code>phs_km_curve</code>, stale preset list removed, <code>phs_cox_curve</code> entry added.</li>
 </ul></div>
@@ -129,7 +128,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

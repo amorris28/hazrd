@@ -12,24 +12,34 @@
   Returns either a ggplot object or a tidy data frame. Addresses issue
   [\#20](https://github.com/amorris28/hazrd/issues/20).
 
-  - `strata` argument controls percentile grouping via named presets
-    (`"quantile_2"` through `"quantile_5"`, `"classic"`); `custom_cuts`
-    accepts an arbitrary numeric vector of cutpoints.
+  - The `intervals` argument (a list of `c(lo, hi)` percentile pairs)
+    controls stratification, matching the interface of
+    [`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md).
   - When `output = "data"` and `time_points` is supplied, the returned
     tibble has one row per stratum x time_point.
   - `method = "fine_gray"` is stubbed and will error with an informative
     message until implemented.
 
-- [`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md)
-  now implements the `risk_table` argument — when `risk_table = TRUE`
-  and `output = "plot"`, a numbers-at-risk strip is attached below the
-  curve using the **patchwork** package (added to `Suggests`). Falls
-  back to a warning and the plain plot when patchwork is not installed.
-  Addresses issue [\#49](https://github.com/amorris28/hazrd/issues/49).
+- New
+  [`phs_risk_table()`](https://amorris28.github.io/hazrd/reference/phs_risk_table.md)
+  function — builds a numbers-at-risk strip as a standalone ggplot
+  object, compatible with any
+  [`phs_abs_risk()`](https://amorris28.github.io/hazrd/reference/phs_abs_risk.md)
+  or
+  [`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md)
+  plot. The `time_points` argument controls at which ages columns
+  appear. Addresses issue
+  [\#49](https://github.com/amorris28/hazrd/issues/49).
 
-- [`phs_abs_risk()`](https://amorris28.github.io/hazrd/reference/phs_abs_risk.md)
-  also supports `risk_table = TRUE` with identical behavior to
-  [`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md).
+- New
+  [`attach_risk_table()`](https://amorris28.github.io/hazrd/reference/attach_risk_table.md)
+  function — combines a curve plot with a risk table using **patchwork**
+  (added to `Suggests`). Accepts either a pre-built
+  [`phs_risk_table()`](https://amorris28.github.io/hazrd/reference/phs_risk_table.md)
+  ggplot or a raw data frame (in which case
+  [`phs_risk_table()`](https://amorris28.github.io/hazrd/reference/phs_risk_table.md)
+  is called internally). Errors informatively when patchwork is not
+  installed.
 
 ## hazrd 0.2.1
 
@@ -54,8 +64,7 @@
 - Vignette updated with overlapping intervals examples and `breaks`
   legacy usage.
 - README installation section updated to use
-  [`devtools::install_github()`](https://devtools.r-lib.org/reference/install-deprecated.html);
-  dev-branch instructions added (`@dev`).
+  `devtools::install_github()`; dev-branch instructions added (`@dev`).
 - `NEWS.md` corrected: function name `phs_km` -\> `phs_km_curve`, stale
   preset list removed, `phs_cox_curve` entry added.
 
