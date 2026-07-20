@@ -87,9 +87,9 @@ phs_metrics(
   `hr_numerator`/`hr_denominator`. Example:
 
       hr_pairs = list(
-          list(numerator = c(0.80, 1.00), denominator = c(0.00, 0.20)),
-          list(numerator = c(0.80, 1.00), denominator = c(0.40, 0.60))
-        )
+        list(numerator = c(0.80, 1.00), denominator = c(0.00, 0.20)),
+        list(numerator = c(0.80, 1.00), denominator = c(0.40, 0.60))
+      )
 
 - cindex_method:
 

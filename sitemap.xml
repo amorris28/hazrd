@@ -8,6 +8,7 @@
 <url><loc>https://amorris28.github.io/hazrd/copilot-instructions.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/index.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/news/index.html</loc></url>
+<url><loc>https://amorris28.github.io/hazrd/reference/attach_risk_table.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/reference/get_cindex.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/reference/get_hr.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/reference/get_hrsd.html</loc></url>
@@ -15,10 +16,12 @@
 <url><loc>https://amorris28.github.io/hazrd/reference/hazrd-package.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/reference/index.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/reference/km_curve.html</loc></url>
+<url><loc>https://amorris28.github.io/hazrd/reference/phs_abs_risk.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/reference/phs_cox_curve.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/reference/phs_input_example.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/reference/phs_km_curve.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/reference/phs_metrics.html</loc></url>
+<url><loc>https://amorris28.github.io/hazrd/reference/phs_risk_table.html</loc></url>
 <url><loc>https://amorris28.github.io/hazrd/reference/test_data.html</loc></url>
 </urlset>
 

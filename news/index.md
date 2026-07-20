@@ -1,5 +1,36 @@
 # Changelog
 
+## hazrd 0.2.2
+
+### New features
+
+- New
+  [`phs_abs_risk()`](https://amorris28.github.io/hazrd/reference/phs_abs_risk.md)
+  function — cumulative incidence (absolute risk) curves stratified by
+  PHS percentile group. Supports `method = "km"` (1 - KM estimate) and
+  `method = "aalen_johansen"` (Aalen-Johansen competing-risk estimator).
+  Returns either a ggplot object or a tidy data frame. Addresses issue
+  [\#20](https://github.com/amorris28/hazrd/issues/20).
+
+  - `strata` argument controls percentile grouping via named presets
+    (`"quantile_2"` through `"quantile_5"`, `"classic"`); `custom_cuts`
+    accepts an arbitrary numeric vector of cutpoints.
+  - When `output = "data"` and `time_points` is supplied, the returned
+    tibble has one row per stratum x time_point.
+  - `method = "fine_gray"` is stubbed and will error with an informative
+    message until implemented.
+
+- [`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md)
+  now implements the `risk_table` argument — when `risk_table = TRUE`
+  and `output = "plot"`, a numbers-at-risk strip is attached below the
+  curve using the **patchwork** package (added to `Suggests`). Falls
+  back to a warning and the plain plot when patchwork is not installed.
+  Addresses issue [\#49](https://github.com/amorris28/hazrd/issues/49).
+
+- [`phs_abs_risk()`](https://amorris28.github.io/hazrd/reference/phs_abs_risk.md)
+  also supports `risk_table = TRUE` with identical behavior to
+  [`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md).
+
 ## hazrd 0.2.1
 
 ### New features
@@ -23,7 +54,8 @@
 - Vignette updated with overlapping intervals examples and `breaks`
   legacy usage.
 - README installation section updated to use
-  `devtools::install_github()`; dev-branch instructions added (`@dev`).
+  [`devtools::install_github()`](https://devtools.r-lib.org/reference/install-deprecated.html);
+  dev-branch instructions added (`@dev`).
 - `NEWS.md` corrected: function name `phs_km` -\> `phs_km_curve`, stale
   preset list removed, `phs_cox_curve` entry added.
 
@@ -70,10 +102,11 @@ to the replacement call.
 
 ### Removed functions
 
-- `create_lookup_table()` — superseded by the upcoming `phs_abs_risk()`.
+- `create_lookup_table()` — superseded by the upcoming
+  [`phs_abs_risk()`](https://amorris28.github.io/hazrd/reference/phs_abs_risk.md).
 - `cum_inc()` — out of scope for the package API.
 - `get_phs_age()` — internal helper; will be re-exposed via
-  `phs_abs_risk()`.
+  [`phs_abs_risk()`](https://amorris28.github.io/hazrd/reference/phs_abs_risk.md).
 
 ### Bug fixes
 

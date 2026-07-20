@@ -1,19 +1,23 @@
 # Getting started with hazrd
 
 ``` r
+
 library(hazrd)
 library(ggplot2)
 ```
 
 `hazrd` provides a consistent API for computing survival-based
-discrimination metrics and visualizing Kaplan-Meier curves stratified by
-polygenic hazard score (PHS). The primary user-facing functions are
+discrimination metrics and visualizing Kaplan-Meier and cumulative
+incidence curves stratified by polygenic hazard score (PHS). The primary
+user-facing functions are
 [`phs_metrics()`](https://amorris28.github.io/hazrd/reference/phs_metrics.md)
 for statistics,
 [`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md)
-for Kaplan-Meier plots, and
+for Kaplan-Meier plots,
 [`phs_cox_curve()`](https://amorris28.github.io/hazrd/reference/phs_cox_curve.md)
-for Cox model-based survival curves at specified PHS percentiles.
+for Cox model-based survival curves at specified PHS percentiles, and
+[`phs_abs_risk()`](https://amorris28.github.io/hazrd/reference/phs_abs_risk.md)
+for cumulative incidence (absolute risk) curves.
 
 ## Data
 
@@ -25,6 +29,7 @@ censored).
 Here is our test data included in the package.
 
 ``` r
+
 head(test_data)
 #>          phs      age status
 #> 1  0.8425735 67.95011      1
@@ -46,6 +51,7 @@ are passed as strings and default to `"phs"`, `"age"`, and `"status"`.
 ### All core metrics in one call
 
 ``` r
+
 metrics <- phs_metrics(
   test_data,
   metrics  = c("HR", "C_index", "OR", "HR_SD"),
@@ -74,6 +80,7 @@ computes `HR[80-100]_[0-20]` — the ratio of the top 20% to the bottom
 change the bands:
 
 ``` r
+
 phs_metrics(test_data, metrics = "HR", hr_numerator = 0.90, hr_denominator = 0.10)
 #> # A tibble: 1 × 9
 #>   metric      estimate conf_low conf_high    se n_numerator n_denominator method
@@ -85,6 +92,7 @@ phs_metrics(test_data, metrics = "HR", hr_numerator = 0.90, hr_denominator = 0.1
 For multiple HRs in one call, supply `hr_pairs`:
 
 ``` r
+
 phs_metrics(
   test_data,
   metrics  = "HR",
@@ -107,6 +115,7 @@ The OR is computed from Kaplan-Meier survival estimates at a specific
 age. `or_age` accepts a vector; one row is returned per age:
 
 ``` r
+
 phs_metrics(test_data, metrics = "OR", or_age = c(65, 70, 75))
 #> # A tibble: 3 × 9
 #>   metric      estimate conf_low conf_high    se n_numerator n_denominator method
@@ -123,6 +132,7 @@ Set `bootstrap = TRUE` to populate `conf_low`, `conf_high`, and `se`.
 Use a small `n_boot` for speed during development:
 
 ``` r
+
 phs_metrics(
   test_data,
   metrics   = c("HR", "C_index", "HR_SD"),
@@ -146,6 +156,7 @@ Column names are passed as strings, making
 straightforward to use with non-standard data frames:
 
 ``` r
+
 test_data2 <- with(test_data, data.frame(
   score     = phs,
   diagnosis_age = age,
@@ -183,6 +194,7 @@ overlap, which is useful for showing how progressively broader high-risk
 groups compare to the low-risk reference:
 
 ``` r
+
 phs_km_curve(test_data)
 #> Warning: Removed 2 rows containing missing values or values outside the scale range
 #> (`geom_ribbon()`).
@@ -197,6 +209,7 @@ overlap freely — each is an independent Kaplan-Meier fit on the
 corresponding subset:
 
 ``` r
+
 phs_km_curve(
   test_data,
   intervals = list(c(0.95, 1), c(0.80, 1), c(0.00, 0.20))
@@ -213,6 +226,7 @@ For non-overlapping bands, use `breaks` with `intervals = NULL`. Pass a
 numeric vector of percentile cutpoints (strictly between 0 and 1):
 
 ``` r
+
 # Quintiles
 phs_km_curve(test_data, intervals = NULL, breaks = c(0.20, 0.40, 0.60, 0.80))
 #> Warning: Removed 2 rows containing missing values or values outside the scale range
@@ -228,8 +242,8 @@ returns a standard `ggplot` object that can be extended with any ggplot2
 layers, themes, or scales:
 
 ``` r
+
 phs_km_curve(test_data) +
-  theme_classic(base_size = 13) +
   labs(
     title = "Disease-free Survival by PHS Percentile",
     x     = "Age (years)",
@@ -250,6 +264,7 @@ Use `output = "data"` when you want to build a fully custom plot or pass
 the survival estimates on to further analysis:
 
 ``` r
+
 km_data <- phs_km_curve(test_data, output = "data")
 head(km_data)
 #>       time  estimate  conf.low conf.high n.risk n.event stratum
@@ -266,6 +281,7 @@ The returned data frame has columns `time`, `estimate`, `conf.low`,
 directly with ggplot2:
 
 ``` r
+
 ggplot(km_data, aes(x = time, y = estimate,
                     ymin = conf.low, ymax = conf.high,
                     color = stratum, fill = stratum)) +
@@ -292,6 +308,7 @@ percentiles. Unlike
 these are smooth model-based predictions, not empirical group estimates.
 
 ``` r
+
 phs_cox_curve(test_data)
 ```
 
@@ -300,7 +317,100 @@ phs_cox_curve(test_data)
 Supply specific percentiles via the `percentiles` argument:
 
 ``` r
+
 phs_cox_curve(test_data, percentiles = c(0.01, 0.10, 0.50, 0.90, 0.99))
 ```
 
 ![](hazrd_files/figure-html/cox_custom-1.png)
+
+## Cumulative incidence curves with `phs_abs_risk()`
+
+[`phs_abs_risk()`](https://amorris28.github.io/hazrd/reference/phs_abs_risk.md)
+computes absolute (cumulative incidence) risk curves for
+percentile-stratified groups. The default `method = "km"` plots 1 minus
+the Kaplan-Meier survival estimate on a percentage scale. When competing
+risks are present, `method = "aalen_johansen"` uses the Aalen-Johansen
+estimator.
+
+The `intervals` argument works exactly like in
+[`phs_km_curve()`](https://amorris28.github.io/hazrd/reference/phs_km_curve.md)
+— the default four bands (top 5%, top 20%, middle 40%, bottom 20%) are
+used when `intervals` is omitted:
+
+``` r
+
+phs_abs_risk(test_data)
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_ribbon()`).
+```
+
+![](hazrd_files/figure-html/abs_default-1.png)
+
+### Custom intervals
+
+``` r
+
+phs_abs_risk(
+  test_data,
+  intervals = list(c(0.80, 1), c(0.00, 0.20))
+)
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_ribbon()`).
+```
+
+![](hazrd_files/figure-html/abs_custom-1.png)
+
+### Getting estimates at specific time points
+
+Use `output = "data"` with `time_points` to extract a tidy table of
+estimates at specific ages — useful for reporting absolute risk at
+clinically meaningful time points:
+
+``` r
+
+phs_abs_risk(test_data, time_points = c(60, 70, 80), output = "data")
+#>    time stratum risk_estimate    conf.low  conf.high n.risk n.event
+#> 1    60 95-100%    0.24707317 0.115293115 0.35922415     37       1
+#> 2    70 95-100%    0.63219092 0.464673706 0.74728773     17       0
+#> 3    80 95-100%    0.84077529 0.670551926 0.92304551      5       0
+#> 4    60 80-100%    0.20254505 0.142786038 0.25813808    142       1
+#> 5    70 80-100%    0.45628313 0.376124061 0.52614292     86       0
+#> 6    80 80-100%    0.79133234 0.709948858 0.84988098     24       0
+#> 7    60  30-70%    0.07625721 0.048644740 0.10306824    308       0
+#> 8    70  30-70%    0.17768594 0.134482438 0.21873287    217       1
+#> 9    80  30-70%    0.39959810 0.330699268 0.46140438     95       1
+#> 10   60   0-20%    0.02859979 0.003548203 0.05302157    161       0
+#> 11   70   0-20%    0.08894279 0.043071252 0.13261543    120       0
+#> 12   80   0-20%    0.17165947 0.100210141 0.23743525     65       0
+```
+
+### Risk table
+
+Use
+[`phs_risk_table()`](https://amorris28.github.io/hazrd/reference/phs_risk_table.md)
+to build a numbers-at-risk strip as a standalone ggplot, then combine it
+with your curve plot using
+[`attach_risk_table()`](https://amorris28.github.io/hazrd/reference/attach_risk_table.md)
+or patchwork directly. This keeps both objects as editable ggplots so
+you can customise them independently before combining.
+
+``` r
+
+# Quick usage: let attach_risk_table() build the table from the data
+p <- phs_abs_risk(test_data)
+attach_risk_table(p, test_data)
+```
+
+For publication-ready plots, build and customise each object separately,
+then combine. The `time_points` argument controls at which ages columns
+appear:
+
+``` r
+
+library(patchwork)
+
+p  <- phs_abs_risk(test_data)
+rt <- phs_risk_table(test_data, time_points = c(55, 65, 75, 85))
+
+p / rt + plot_layout(heights = c(3, 1))
+```

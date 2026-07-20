@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Getting started with hazrd • hazrd</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Getting started with hazrd">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hazrd</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,7 +29,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item"><a class="nav-link" href="../articles/hazrd.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/hazrd.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
@@ -54,7 +54,7 @@
       <h1>Getting started with hazrd</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/amorris28/hazrd/blob/v0.2.1/vignettes/hazrd.Rmd" class="external-link"><code>vignettes/hazrd.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/amorris28/hazrd/blob/HEAD/vignettes/hazrd.Rmd" class="external-link"><code>vignettes/hazrd.Rmd</code></a></small>
       <div class="d-none name"><code>hazrd.Rmd</code></div>
     </div>
 
@@ -64,12 +64,13 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://amorris28.github.io/hazrd/">hazrd</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <p><code>hazrd</code> provides a consistent API for computing
-survival-based discrimination metrics and visualizing Kaplan-Meier
-curves stratified by polygenic hazard score (PHS). The primary
-user-facing functions are <code><a href="../reference/phs_metrics.html">phs_metrics()</a></code> for statistics,
-<code><a href="../reference/phs_km_curve.html">phs_km_curve()</a></code> for Kaplan-Meier plots, and
+survival-based discrimination metrics and visualizing Kaplan-Meier and
+cumulative incidence curves stratified by polygenic hazard score (PHS).
+The primary user-facing functions are <code><a href="../reference/phs_metrics.html">phs_metrics()</a></code> for
+statistics, <code><a href="../reference/phs_km_curve.html">phs_km_curve()</a></code> for Kaplan-Meier plots,
 <code><a href="../reference/phs_cox_curve.html">phs_cox_curve()</a></code> for Cox model-based survival curves at
-specified PHS percentiles.</p>
+specified PHS percentiles, and <code><a href="../reference/phs_abs_risk.html">phs_abs_risk()</a></code> for
+cumulative incidence (absolute risk) curves.</p>
 <div class="section level2">
 <h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
 </h2>
@@ -273,7 +274,6 @@ object that can be extended with any ggplot2 layers, themes, or
 scales:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/phs_km_curve.html">phs_km_curve</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">13</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Disease-free Survival by PHS Percentile"</span>,</span>
 <span>    x     <span class="op">=</span> <span class="st">"Age (years)"</span>,</span>
@@ -337,6 +337,82 @@ argument:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/phs_cox_curve.html">phs_cox_curve</a></span><span class="op">(</span><span class="va">test_data</span>, percentiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.10</span>, <span class="fl">0.50</span>, <span class="fl">0.90</span>, <span class="fl">0.99</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="hazrd_files/figure-html/cox_custom-1.png" class="r-plt" alt="" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="cumulative-incidence-curves-with-phs_abs_risk">Cumulative incidence curves with <code>phs_abs_risk()</code><a class="anchor" aria-label="anchor" href="#cumulative-incidence-curves-with-phs_abs_risk"></a>
+</h2>
+<p><code><a href="../reference/phs_abs_risk.html">phs_abs_risk()</a></code> computes absolute (cumulative incidence)
+risk curves for percentile-stratified groups. The default
+<code>method = "km"</code> plots 1 minus the Kaplan-Meier survival
+estimate on a percentage scale. When competing risks are present,
+<code>method = "aalen_johansen"</code> uses the Aalen-Johansen
+estimator.</p>
+<p>The <code>intervals</code> argument works exactly like in
+<code><a href="../reference/phs_km_curve.html">phs_km_curve()</a></code> — the default four bands (top 5%, top 20%,
+middle 40%, bottom 20%) are used when <code>intervals</code> is
+omitted:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/phs_abs_risk.html">phs_abs_risk</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 2 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_ribbon()`).</span></span></code></pre></div>
+<p><img src="hazrd_files/figure-html/abs_default-1.png" class="r-plt" alt="" width="700"></p>
+<div class="section level3">
+<h3 id="custom-intervals">Custom intervals<a class="anchor" aria-label="anchor" href="#custom-intervals"></a>
+</h3>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/phs_abs_risk.html">phs_abs_risk</a></span><span class="op">(</span></span>
+<span>  <span class="va">test_data</span>,</span>
+<span>  intervals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.00</span>, <span class="fl">0.20</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 1 row containing missing values or values outside the scale range</span></span>
+<span><span class="co">#&gt; (`geom_ribbon()`).</span></span></code></pre></div>
+<p><img src="hazrd_files/figure-html/abs_custom-1.png" class="r-plt" alt="" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="getting-estimates-at-specific-time-points">Getting estimates at specific time points<a class="anchor" aria-label="anchor" href="#getting-estimates-at-specific-time-points"></a>
+</h3>
+<p>Use <code>output = "data"</code> with <code>time_points</code> to
+extract a tidy table of estimates at specific ages — useful for
+reporting absolute risk at clinically meaningful time points:</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/phs_abs_risk.html">phs_abs_risk</a></span><span class="op">(</span><span class="va">test_data</span>, time_points <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">70</span>, <span class="fl">80</span><span class="op">)</span>, output <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    time stratum risk_estimate    conf.low  conf.high n.risk n.event</span></span>
+<span><span class="co">#&gt; 1    60 95-100%    0.24707317 0.115293115 0.35922415     37       1</span></span>
+<span><span class="co">#&gt; 2    70 95-100%    0.63219092 0.464673706 0.74728773     17       0</span></span>
+<span><span class="co">#&gt; 3    80 95-100%    0.84077529 0.670551926 0.92304551      5       0</span></span>
+<span><span class="co">#&gt; 4    60 80-100%    0.20254505 0.142786038 0.25813808    142       1</span></span>
+<span><span class="co">#&gt; 5    70 80-100%    0.45628313 0.376124061 0.52614292     86       0</span></span>
+<span><span class="co">#&gt; 6    80 80-100%    0.79133234 0.709948858 0.84988098     24       0</span></span>
+<span><span class="co">#&gt; 7    60  30-70%    0.07625721 0.048644740 0.10306824    308       0</span></span>
+<span><span class="co">#&gt; 8    70  30-70%    0.17768594 0.134482438 0.21873287    217       1</span></span>
+<span><span class="co">#&gt; 9    80  30-70%    0.39959810 0.330699268 0.46140438     95       1</span></span>
+<span><span class="co">#&gt; 10   60   0-20%    0.02859979 0.003548203 0.05302157    161       0</span></span>
+<span><span class="co">#&gt; 11   70   0-20%    0.08894279 0.043071252 0.13261543    120       0</span></span>
+<span><span class="co">#&gt; 12   80   0-20%    0.17165947 0.100210141 0.23743525     65       0</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="risk-table">Risk table<a class="anchor" aria-label="anchor" href="#risk-table"></a>
+</h3>
+<p>Use <code><a href="../reference/phs_risk_table.html">phs_risk_table()</a></code> to build a numbers-at-risk strip as
+a standalone ggplot, then combine it with your curve plot using
+<code><a href="../reference/attach_risk_table.html">attach_risk_table()</a></code> or patchwork directly. This keeps both
+objects as editable ggplots so you can customise them independently
+before combining.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Quick usage: let attach_risk_table() build the table from the data</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phs_abs_risk.html">phs_abs_risk</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/attach_risk_table.html">attach_risk_table</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">test_data</span><span class="op">)</span></span></code></pre></div>
+<p>For publication-ready plots, build and customise each object
+separately, then combine. The <code>time_points</code> argument controls
+at which ages columns appear:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phs_abs_risk.html">phs_abs_risk</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span>
+<span><span class="va">rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phs_risk_table.html">phs_risk_table</a></span><span class="op">(</span><span class="va">test_data</span>, time_points <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">55</span>, <span class="fl">65</span>, <span class="fl">75</span>, <span class="fl">85</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span> <span class="op">/</span> <span class="va">rt</span> <span class="op">+</span> <span class="fu">plot_layout</span><span class="op">(</span>heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

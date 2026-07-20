@@ -3,8 +3,8 @@
 Tools to evaluate and visualize Polygenic Hazard Score (PHS) analyses.
 Provides a consistent API for computing survival-based discrimination
 metrics (hazard ratio, C-index, odds ratio, HR per SD), bootstrapped
-confidence intervals, and Kaplan-Meier curves stratified by PHS
-percentile group.
+confidence intervals, Kaplan-Meier curves, and cumulative incidence
+(absolute risk) curves stratified by PHS percentile group.
 
 ## See also
 
@@ -17,3 +17,7 @@ Useful links:
 ## Author
 
 **Maintainer**: Andrew Morris <andrewmorris@mailbox.org>
+
+Authors:
+
+- Andrew Morris <andrewmorris@mailbox.org>

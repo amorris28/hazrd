@@ -3,7 +3,8 @@
 `hazrd` is an R package for evaluating and visualizing Polygenic Hazard
 Score (PHS) analyses. It provides a consistent, tidy-first API for
 computing survival-based discrimination metrics, bootstrapped confidence
-intervals, and Kaplan-Meier curves.
+intervals, Kaplan-Meier curves, and cumulative incidence (absolute risk)
+curves.
 
 ## Installation
 
@@ -12,6 +13,7 @@ intervals, and Kaplan-Meier curves.
 Install the current stable release directly from GitHub:
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("amorris28/hazrd")
 ```
@@ -25,6 +27,7 @@ To get the current development version (may contain unreleased
 features):
 
 ``` r
+
 devtools::install_github("amorris28/hazrd@dev")
 ```
 
@@ -36,6 +39,7 @@ website](https://amorris28.github.io/hazrd/).
 ## Quick example
 
 ``` r
+
 library(hazrd)
 
 # Compute HR, C-index, OR, and HR_SD in one call
@@ -53,11 +57,21 @@ phs_metrics(
   seed      = 42
 )
 
-# Kaplan-Meier plot with overlapping intervals (returns a ggplot object)
+# Kaplan-Meier plot — default overlapping intervals
 phs_km_curve(test_data)
 
 # Overlapping intervals — top 5%, top 20%, bottom 20%
 phs_km_curve(test_data, intervals = list(c(0.95, 1), c(0.80, 1), c(0, 0.20)))
+
+# Cumulative incidence (absolute risk) curves
+phs_abs_risk(test_data)
+
+# Absolute risk at specific time points as a tidy table
+phs_abs_risk(test_data, time_points = c(60, 70, 80), output = "data")
+
+# Numbers-at-risk table combined with the curve
+p <- phs_abs_risk(test_data)
+attach_risk_table(p, test_data)
 
 # Legacy exclusive bands via breaks
 km_data <- phs_km_curve(test_data, intervals = NULL, breaks = c(0.20, 0.40, 0.60, 0.80), output = "data")
@@ -68,9 +82,6 @@ km_data <- phs_km_curve(test_data, intervals = NULL, breaks = c(0.20, 0.40, 0.60
 The following are on the roadmap for future releases. Contributions
 welcome.
 
-- **`phs_abs_risk()`** — absolute (cumulative incidence) risk curves
-  with competing risk support (`km`, `aalen_johansen`, `fine_gray`
-  methods)
 - **`phs_percentile()`** — compute percentile ranks; optionally relative
   to a reference population via `ref_data`
 - **`phs_cut()`** — assign individuals to percentile strata with
@@ -87,8 +98,6 @@ welcome.
 - **Parallel bootstrap** — `parallel = "multicore"` / `"snow"` via
   [`boot::boot()`](https://rdrr.io/pkg/boot/man/boot.html) (argument
   exists; only `"no"` is currently active)
-- **Risk table** — numbers-at-risk appended below KM curves
-  (`risk_table = TRUE` in `phs_km()`)
 - **Alternative HR methods** — `continuous_point` and `categorical`
   (`hr_method` argument in
   [`phs_metrics()`](https://amorris28.github.io/hazrd/reference/phs_metrics.md);
@@ -98,6 +107,8 @@ welcome.
 
 ## All functions
 
+- [`attach_risk_table()`](https://amorris28.github.io/hazrd/reference/attach_risk_table.md)
+  : Attach a numbers-at-risk table below a curve plot
 - [`get_cindex()`](https://amorris28.github.io/hazrd/reference/get_cindex.md)
   : Deprecated: use phs_metrics() instead
 - [`get_hr()`](https://amorris28.github.io/hazrd/reference/get_hr.md) :
@@ -108,6 +119,9 @@ welcome.
   Deprecated: use phs_metrics() instead
 - [`km_curve()`](https://amorris28.github.io/hazrd/reference/km_curve.md)
   : Deprecated: use phs_km() instead
+- [`phs_abs_risk()`](https://amorris28.github.io/hazrd/reference/phs_abs_risk.md)
+  : Cumulative incidence (absolute risk) curves stratified by PHS
+  percentile
 - [`phs_cox_curve()`](https://amorris28.github.io/hazrd/reference/phs_cox_curve.md)
   : Cox model survival curves at specified PHS percentiles
 - [`phs_input_example`](https://amorris28.github.io/hazrd/reference/phs_input_example.md)
@@ -116,6 +130,8 @@ welcome.
   : Kaplan-Meier curves stratified by PHS percentile
 - [`phs_metrics()`](https://amorris28.github.io/hazrd/reference/phs_metrics.md)
   : Calculate evaluation metrics for Polygenic Hazard Scores
+- [`phs_risk_table()`](https://amorris28.github.io/hazrd/reference/phs_risk_table.md)
+  : Numbers-at-risk table for PHS percentile-stratified groups
 - [`test_data`](https://amorris28.github.io/hazrd/reference/test_data.md)
   : PHS Test Data
 

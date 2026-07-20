@@ -21,7 +21,6 @@ phs_km_curve(
   conf_int = TRUE,
   conf_int_alpha = 0.15,
   palette = "hazrd",
-  risk_table = FALSE,
   ...
 )
 ```
@@ -79,11 +78,6 @@ phs_km_curve(
 - palette:
 
   string; name of color palette to use for plots (default: 'hazrd')
-
-- risk_table:
-
-  logical; if TRUE returns numbers-at-risk in the data output
-  (experimental)
 
 - ...:
 
